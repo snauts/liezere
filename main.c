@@ -178,6 +178,18 @@ static void put_dash(char c, byte x, byte y) {
     }
 }
 
+static void put_check(char c, byte x, byte y) {
+    static const byte small_check[] = { 0x28, 0x10 };
+    static const byte large_check[] = { 0x24, 0x18 };
+
+    if (c & 0x20) {
+	put_diacritic(small_check, x, y - 1);
+    }
+    else {
+	put_diacritic(large_check, x, y - 2);
+    }
+}
+
 static void put_str(const char *msg, byte x, byte y) {
     while (*msg != 0) {
 	char symbol = *(msg++);
@@ -186,6 +198,9 @@ static void put_str(const char *msg, byte x, byte y) {
 	}
 	else if (symbol == '`') {
 	    put_dash(*msg, x, y);
+	}
+	else if (symbol == '~') {
+	    put_check(*msg, x, y);
 	}
 	else {
 	    if (x > 0) x -= leading(symbol);
@@ -198,7 +213,7 @@ static void put_str(const char *msg, byte x, byte y) {
 static void show_title(void) {
     put_str("Liezere", 16, 16);
     put_str("AaCcEeGgIiKkLlNnSsUuZz", 16, 32);
-    put_str("`A`aCc`E`eGg`I`iKkLlNnSs`U`uZz", 16, 48);
+    put_str("`A`a~C~c`E`eG~g`I`iKkLlNn~S~s`U`u~Z~z", 16, 48);
     memset(COLOUR(0x00), 5, 0x300);
 }
 
