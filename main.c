@@ -190,6 +190,16 @@ static void put_check(char c, byte x, byte y) {
     }
 }
 
+static void put_tick(char c, byte x, byte y) {
+    static const byte tick[] = { 0x08, 0x10 };
+
+    if (c & 0x20) x--;
+
+    if (c == 'k') x--;
+
+    put_diacritic(tick, x, y + 7);
+}
+
 static void put_str(const char *msg, byte x, byte y) {
     while (*msg != 0) {
 	char symbol = *(msg++);
@@ -202,6 +212,9 @@ static void put_str(const char *msg, byte x, byte y) {
 	else if (symbol == '~') {
 	    put_check(*msg, x, y);
 	}
+	else if (symbol == '^') {
+	    put_tick(*msg, x, y);
+	}
 	else {
 	    if (x > 0) x -= leading(symbol);
 	    put_char(symbol, x, y);
@@ -213,7 +226,7 @@ static void put_str(const char *msg, byte x, byte y) {
 static void show_title(void) {
     put_str("Liezere", 16, 16);
     put_str("AaCcEeGgIiKkLlNnSsUuZz", 16, 32);
-    put_str("`A`a~C~c`E`eG~g`I`iKkLlNn~S~s`U`u~Z~z", 16, 48);
+    put_str("`A`a~C~c`E`e^G~g`I`i^K^k^L^l^N^n~S~s`U`u~Z~z", 16, 48);
     memset(COLOUR(0x00), 5, 0x300);
 }
 
