@@ -1,0 +1,5 @@
+liezere*
+*.asm
+*.lst
+*.sym
+*.o
