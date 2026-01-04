@@ -118,6 +118,17 @@ static void put_char(char symbol, byte x, byte y) {
     }
 }
 
+static void put_diacritic(byte *addr, byte x, byte y) {
+    byte shift = x & 7;
+    byte offset = x >> 3;
+    for (byte i = 0; i < 2; i++) {
+	byte data = *addr++;
+	byte *ptr = map_y[y + i] + offset;
+	ptr[0] |= (data >> shift);
+	ptr[1] |= (data << (8 - shift));
+    }
+}
+
 static byte char_mask(char symbol) {
     byte mask = 0;
     byte *addr = FONT_ADDRESS + (symbol << 3);
@@ -149,11 +160,32 @@ static byte trailing(char symbol) {
     return 8 - i;
 }
 
+static void put_dash(char c, byte x, byte y) {
+    static const byte small_dash[] = { 0x00, 0x38 };
+    static const byte large_dash[] = { 0x3c, 0x00 };
+
+    if (c == 'i') {
+	put_diacritic(small_dash, x - 1, y);
+    }
+    else if (c == 'I') {
+	put_diacritic(small_dash, x, y - 2);
+    }
+    else if (c & 0x20) {
+	put_diacritic(small_dash, x, y - 1);
+    }
+    else {
+	put_diacritic(large_dash, x, y - 1);
+    }
+}
+
 static void put_str(const char *msg, byte x, byte y) {
     while (*msg != 0) {
 	char symbol = *(msg++);
 	if (symbol == ' ') {
 	    x = x + 4;
+	}
+	else if (symbol == '`') {
+	    put_dash(*msg, x, y);
 	}
 	else {
 	    if (x > 0) x -= leading(symbol);
@@ -165,6 +197,8 @@ static void put_str(const char *msg, byte x, byte y) {
 
 static void show_title(void) {
     put_str("Liezere", 16, 16);
+    put_str("AaCcEeGgIiKkLlNnSsUuZz", 16, 32);
+    put_str("`A`aCc`E`eGg`I`iKkLlNnSs`U`uZz", 16, 48);
     memset(COLOUR(0x00), 5, 0x300);
 }
 
