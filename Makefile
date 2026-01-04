@@ -1,0 +1,38 @@
+ARCH ?= -mz80
+
+MAKE := make --no-print-directory
+SIZE := ls -l liezere.tap | cut -d " " -f 5
+
+CFLAGS += --nostdinc --nostdlib --no-std-crt0
+CFLAGS += --code-loc $(CODE) --data-loc $(DATA)
+
+LFLAGS += -n -m -i -b _CODE=$(CODE) -b _DATA=$(DATA)
+
+SRC := main.c
+OBJ := $(subst .c,.o,$(SRC))
+
+all:	msg zxs
+	@echo liezere build done
+	@echo zxs tape size $(shell $(SIZE))
+
+msg:
+	@echo building liezere
+
+zxs:
+	@$(MAKE) CODE=0x8000 DATA=0x7000 TYPE=-DZXS prg
+	@bin2tap -b liezere.bin
+
+%.o: %.c main.h
+	@echo compile source file $<
+	@sdcc $(ARCH) $(CFLAGS) $(TYPE) -c $< -o $@
+
+prg: $(OBJ)
+	@sdld $(LFLAGS) liezere.ihx $(OBJ)
+	@hex2bin liezere.ihx > /dev/null
+
+fuse: zxs
+	@echo running fuse emulator...
+	@fuse --machine 128 --no-confirm-actions liezere.tap >/dev/null
+
+clean:
+	rm -f pcx-dump liezere* *.asm *.lst *.sym *.o
