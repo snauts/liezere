@@ -218,12 +218,56 @@ static void put_str(const char *msg, byte x, byte y) {
     }
 }
 
+static void *decompress(byte *dst, const byte *src) {
+    while (*src) {
+        byte n = *src & 0x7f;
+        if (*(src++) & 0x80) {
+	    while (n-- > 0) {
+		*dst = *(dst - *src);
+		dst++;
+	    }
+	    src++;
+        }
+        else {
+	    while (n-- > 0) {
+		*(dst++) = *(src++);
+	    }
+        }
+    }
+    return dst;
+}
+
+static void show_image(const byte *src, byte x, byte y) {
+    byte *ptr = STAGING_AREA;
+    decompress(ptr, src + 2);
+
+    byte w = src[0];
+    byte h = src[1] << 3;
+
+    y = y << 3;
+
+    for (byte i = 0; i < h; i++) {
+	byte *dst = map_y[y + i] + x;
+	memcpy(dst, ptr, w);
+	ptr += w;
+    }
+
+    byte *dst = COLOUR(y << 2) + x;
+    for (byte i = 0; i < h; i += 8) {
+	memcpy(dst, ptr, w);
+	dst += 0x20;
+	ptr += w;
+    }
+}
+
 static void show_title(void) {
     put_str("Liezere", 16, 16);
     put_str("AaCcEeGgIiKkLlNnSsUuZz", 16, 32);
     put_str("`A`a~C~c`E`e^G~g`I`i^K^k^L^l^N^n~S~s`U`u~Z~z", 16, 48);
     put_str("~Saurslie~zu Dzelzce^l~s", 16, 64);
     memset(COLOUR(0x00), 5, 0x300);
+    show_image(title, 16, 12);
+    show_image(title, 24, 16);
 }
 
 void reset(void) {
@@ -232,5 +276,5 @@ void reset(void) {
     precalculate();
     clear_screen();
     show_title();
-    while (1) { }
+    for (;;) { }
 }

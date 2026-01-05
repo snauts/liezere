@@ -15,3 +15,4 @@ typedef unsigned short word;
 
 #define SCREEN(x)	PTR(0x4000 + (x))
 #define COLOUR(x)	PTR(0x5800 + (x))
+#define STAGING_AREA	PTR(0x5b00)

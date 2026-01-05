@@ -26,6 +26,8 @@ zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7000 TYPE=-DZXS prg
 	@bin2tap -b liezere.bin
 
+main.o: data.h
+
 %.o: %.c main.h
 	@echo compile source file $<
 	@sdcc $(ARCH) $(CFLAGS) $(TYPE) -c $< -o $@

@@ -118,10 +118,15 @@ static unsigned char *read_pcx(const char *file) {
     return pixels;
 }
 
+static void image_dimensions(void) {
+    printf(" 0x%02x, 0x%02x,\n", header.w / 8, header.h / 8);
+}
+
 static void compress_and_save(const char *name, void *buf, int length) {
     unsigned char dst[estimate(length)];
     int size = compress(dst, buf, length);
     printf("const byte %s[] = {\n", name);
+    if (option == 'i') image_dimensions();
     dump_buffer(dst, size, 1);
     printf("};\n");
 }
