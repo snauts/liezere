@@ -1,4 +1,5 @@
 #include "main.h"
+#include "data.h"
 
 void start_up(void) __naked {
     __asm__("di");

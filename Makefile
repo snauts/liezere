@@ -1,7 +1,7 @@
 ARCH ?= -mz80
 
 MAKE := make --no-print-directory
-SIZE := ls -l liezere.tap | cut -d " " -f 5
+SIZE := ls -l liezere.bin | cut -d " " -f 5
 
 CFLAGS += --nostdinc --nostdlib --no-std-crt0
 CFLAGS += --code-loc $(CODE) --data-loc $(DATA)
@@ -13,13 +13,14 @@ OBJ := $(subst .c,.o,$(SRC))
 
 all:	msg zxs
 	@echo liezere build done
-	@echo zxs tape size $(shell $(SIZE))
+	@echo binary size $(shell $(SIZE))
 
 msg:
 	@echo building liezere
 
 pcx:
 	@gcc pcx-dump.c lz.c -Wall -o pcx-dump
+	@./pcx-dump -i title.pcx > data.h
 
 zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7000 TYPE=-DZXS prg
@@ -38,4 +39,4 @@ fuse: zxs
 	@fuse --machine 128 --no-confirm-actions liezere.tap >/dev/null
 
 clean:
-	rm -f pcx-dump liezere* *.asm *.lst *.sym *.o
+	rm -f pcx-dump data.h liezere* *.asm *.lst *.sym *.o
