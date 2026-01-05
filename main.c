@@ -106,7 +106,7 @@ static void clear_screen(void) {
     out_fe(0);
 }
 
-static void put_symbol(byte *addr, byte x, byte y, byte n) {
+static void put_symbol(const byte *addr, byte x, byte y, byte n) {
     byte shift = x & 7;
     byte offset = x >> 3;
     for (byte i = 0; i < n; i++) {
@@ -121,8 +121,8 @@ static void put_char(char symbol, byte x, byte y) {
     put_symbol(FONT_ADDRESS + (symbol << 3), x, y, 8);
 }
 
-static void put_diacritic(byte *addr, byte x, byte y) {
-    put_symbol(addr, x, y, 2);
+static void put_diacritic(const byte *addr, byte x, byte y) {
+    put_symbol(addr, x, y, 3);
 }
 
 static byte char_mask(char symbol) {
@@ -156,27 +156,28 @@ static byte trailing(char symbol) {
     return 8 - i;
 }
 
+#define LOWER_CASE(c) ((c) & 0x20)
+
 static void put_dash(char c, byte x, byte y) {
-    static const byte small_dash[] = { 0x00, 0x38 };
-    static const byte large_dash[] = { 0x3c, 0x00 };
+    static const byte dash[] = { 0x3c, 0x00, 0x00, 0x38, 0x00, 0x00, 0x70 };
+    const byte *ptr = dash;
 
     if (c == 'i') {
-	put_diacritic(small_dash, x - 1, y);
+	ptr += 4;
     }
     else if (c == 'I') {
-	put_diacritic(small_dash, x, y - 2);
+	ptr += 3;
     }
-    else if (c & 0x20) {
-	put_diacritic(small_dash, x, y - 1);
+    else if (LOWER_CASE(c)) {
+	ptr += 2;
     }
-    else {
-	put_diacritic(large_dash, x, y - 1);
-    }
+
+    put_diacritic(ptr, x, y - 1);
 }
 
 static void put_check(char c, byte x, byte y) {
-    static const byte small_check[] = { 0x28, 0x10 };
-    static const byte large_check[] = { 0x24, 0x18 };
+    static const byte small_check[] = { 0x00, 0x28, 0x10 };
+    static const byte large_check[] = { 0x24, 0x18, 0x00 };
 
     if (c & 0x20) {
 	put_diacritic(small_check, x, y - 1);
@@ -187,7 +188,7 @@ static void put_check(char c, byte x, byte y) {
 }
 
 static void put_tick(char c, byte x, byte y) {
-    static const byte tick[] = { 0x08, 0x10 };
+    static const byte tick[] = { 0x08, 0x10, 0x00 };
 
     if (c & 0x20) x--;
 
