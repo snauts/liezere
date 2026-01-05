@@ -281,9 +281,26 @@ static byte read_1_or_2(void) {
     return ~in_key(0xf7) & 3;
 }
 
+static void animate_line(void) {
+    for (byte y = 0; y < 34; y++) {
+	byte *ptr = map_y[y] + 22;
+	*ptr ^= 0x10;
+    }
+}
+
 static void wait_1_or_2(void) {
+    byte ticks = 0;
     last_input = read_1_or_2();
-    while (!input_change(read_1_or_2())) { }
+    while (!input_change(read_1_or_2())) {
+	if (vblank) {
+	    vblank = 0;
+	    ticks++;
+	}
+	if (ticks == 5) {
+	    animate_line();
+	    ticks = 0;
+	}
+    }
     use_joy = last_input & 2;
 }
 
