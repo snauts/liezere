@@ -12,6 +12,7 @@ typedef unsigned short word;
 #define WORD(addr)	(* (volatile word *) (addr))
 #define SIZE(array)	(sizeof(array) / sizeof(*(array)))
 #define PTR(addr)	((byte *) (addr))
+#define BIT(pos)	(1 << (pos))
 
 #define SCREEN(x)	PTR(0x4000 + (x))
 #define COLOUR(x)	PTR(0x5800 + (x))

@@ -347,10 +347,37 @@ static const Frame apkaime[] = {
     { .img = NULL },
 };
 
+#define PIXEL(x, y) BYTE(map_y[y] + (x >> 3))
+
+static byte is_white(byte x, byte y) {
+    word offset = ((y & ~7) << 2) + (x >> 3);
+    return BYTE(COLOUR(offset)) == 0x47;
+}
+
+static byte get_pixel(byte x, byte y) {
+    return PIXEL(x, y) & BIT(x & 7);
+}
+
+static void set_pixel(byte x, byte y) {
+    PIXEL(x, y) ^= BIT(x & 7);
+}
+
+static byte good_spot(byte x, byte y) {
+    return is_white(x, y) && get_pixel(x, y);
+}
+
 static void show_lake(void) {
     show_image(ezers, 0, 0);
     show_series(apkaime);
-    for (;;) { }
+    seed = 0xfeed;
+    for (;;) {
+	word r = random();
+	byte x = r & 0xff;
+	byte y = r >> 8;
+	if (good_spot(x, y)) {
+	    set_pixel(x, y);
+	}
+    }
 }
 
 static void show_title(void) {
