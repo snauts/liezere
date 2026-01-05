@@ -18,6 +18,9 @@ all:	msg zxs
 msg:
 	@echo building liezere
 
+pcx:
+	@gcc pcx-dump.c lz.c -Wall -o pcx-dump
+
 zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7000 TYPE=-DZXS prg
 	@bin2tap -b liezere.bin
@@ -26,7 +29,7 @@ zxs:
 	@echo compile source file $<
 	@sdcc $(ARCH) $(CFLAGS) $(TYPE) -c $< -o $@
 
-prg: $(OBJ)
+prg: pcx $(OBJ)
 	@sdld $(LFLAGS) liezere.ihx $(OBJ)
 	@hex2bin liezere.ihx > /dev/null
 
