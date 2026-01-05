@@ -288,7 +288,7 @@ static void wait_1_or_2(void) {
 }
 
 static void show_title(void) {
-    show_image(title, 0, 2);
+    show_image(title, 0, 0);
     put_str("1 - Klaviat`ura", 88, 96);
     put_str("2 - D~zoistiks", 88, 112);
     memset(COLOUR(0x140), 0x47, 0x100);
