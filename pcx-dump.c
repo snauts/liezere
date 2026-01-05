@@ -165,19 +165,22 @@ static unsigned char consume_pixels(unsigned char *buf, unsigned char on) {
     return ret;
 }
 
-static int default_color = 5;
 static unsigned short on_pixel(unsigned char *buf, int i, int w) {
+    static unsigned char prev_n = 0;
+    static unsigned char prev_p = 0;
     unsigned char pixel = buf[i];
     for (int y = 0; y < 8; y++) {
 	for (int x = 0; x < 8; x++) {
 	    unsigned char next = buf[i + x];
 	    if (next != pixel) {
+		prev_n = next;
+		prev_p = pixel;
 		return encode_pixel(next, pixel);
 	    }
 	}
 	i += w;
     }
-    return pixel == 0 ? default_color : pixel;
+    return encode_pixel(pixel == prev_p ? prev_n : prev_p, pixel);
 }
 
 static int image_size(void) {
