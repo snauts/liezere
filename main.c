@@ -187,7 +187,7 @@ static void put_check(char c, byte x, byte y) {
 static void put_tick(char c, byte x, byte y) {
     static const byte tick[] = { 0x08, 0x10, 0x00 };
 
-    if (c & 0x20) x--;
+    if (LOWER_CASE(c)) x--;
 
     if (c == 'k') x--;
 
