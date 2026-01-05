@@ -288,10 +288,10 @@ static void wait_1_or_2(void) {
 }
 
 static void show_title(void) {
-    put_str("Liezere", 104, 16);
+    show_image(title, 0, 2);
     put_str("1 - Klaviat`ura", 88, 96);
     put_str("2 - D~zoistiks", 88, 112);
-    memset(COLOUR(0x00), 0x47, 0x300);
+    memset(COLOUR(0x140), 0x47, 0x100);
     wait_1_or_2();
 }
 
