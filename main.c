@@ -106,11 +106,10 @@ static void clear_screen(void) {
     out_fe(0);
 }
 
-static void put_char(char symbol, byte x, byte y) {
+static void put_symbol(byte *addr, byte x, byte y, byte n) {
     byte shift = x & 7;
     byte offset = x >> 3;
-    byte *addr = FONT_ADDRESS + (symbol << 3);
-    for (byte i = 0; i < 8; i++) {
+    for (byte i = 0; i < n; i++) {
 	byte data = *addr++;
 	byte *ptr = map_y[y + i] + offset;
 	ptr[0] |= (data >> shift);
@@ -118,15 +117,12 @@ static void put_char(char symbol, byte x, byte y) {
     }
 }
 
+static void put_char(char symbol, byte x, byte y) {
+    put_symbol(FONT_ADDRESS + (symbol << 3), x, y, 8);
+}
+
 static void put_diacritic(byte *addr, byte x, byte y) {
-    byte shift = x & 7;
-    byte offset = x >> 3;
-    for (byte i = 0; i < 2; i++) {
-	byte data = *addr++;
-	byte *ptr = map_y[y + i] + offset;
-	ptr[0] |= (data >> shift);
-	ptr[1] |= (data << (8 - shift));
-    }
+    put_symbol(addr, x, y, 2);
 }
 
 static byte char_mask(char symbol) {
@@ -227,6 +223,7 @@ static void show_title(void) {
     put_str("Liezere", 16, 16);
     put_str("AaCcEeGgIiKkLlNnSsUuZz", 16, 32);
     put_str("`A`a~C~c`E`e^G~g`I`i^K^k^L^l^N^n~S~s`U`u~Z~z", 16, 48);
+    put_str("~Saurslie~zu Dzelzce^l~s", 16, 64);
     memset(COLOUR(0x00), 5, 0x300);
 }
 
