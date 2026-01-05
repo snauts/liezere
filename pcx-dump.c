@@ -166,8 +166,8 @@ static unsigned char consume_pixels(unsigned char *buf, unsigned char on) {
 }
 
 static unsigned short on_pixel(unsigned char *buf, int i, int w) {
-    static unsigned char prev_n = 0;
-    static unsigned char prev_p = 0;
+    static unsigned char prev_n = 0x00;
+    static unsigned char prev_p = 0x47;
     unsigned char pixel = buf[i];
     for (int y = 0; y < 8; y++) {
 	for (int x = 0; x < 8; x++) {
