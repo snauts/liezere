@@ -268,19 +268,31 @@ static void show_image(const byte *src, byte x, byte y) {
     }
 }
 
-static void show_title(void) {
-    put_str("Liezere", 16, 16);
-    put_str("AaCcEeGgIiKkLlNnSsUuZz", 16, 32);
-    put_str("`A`a~C~c`E`e^G~g`I`i^K^k^L^l^N^n~S~s`U`u~Z~z", 16, 48);
-    put_str("~Saurslie~zu Dzelzce^l~s", 16, 64);
-    memset(COLOUR(0x00), 5, 0x300);
+static byte use_joy;
+static byte last_input;
 
-    seed = 1;
-    for (;;) {
-	byte x = 0x06 + (random() & 0xf);
-	byte y = 0x0c + (random() & 0x7);
-	show_image(title, x, y);
-    }
+static byte input_change(byte input) {
+    byte change = input & (input ^ last_input);
+    last_input = input;
+    return change;
+}
+
+static byte read_1_or_2(void) {
+    return ~in_key(0xf7) & 3;
+}
+
+static void wait_1_or_2(void) {
+    last_input = read_1_or_2();
+    while (!input_change(read_1_or_2())) { }
+    use_joy = last_input & 2;
+}
+
+static void show_title(void) {
+    put_str("Liezere", 104, 16);
+    put_str("1 - Klaviat`ura", 88, 96);
+    put_str("2 - D~zoistiks", 88, 112);
+    memset(COLOUR(0x00), 0x47, 0x300);
+    wait_1_or_2();
 }
 
 void reset(void) {
@@ -289,5 +301,5 @@ void reset(void) {
     precalculate();
     clear_screen();
     show_title();
-    for (;;) { }
+    reset();
 }
