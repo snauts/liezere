@@ -304,8 +304,52 @@ static void wait_1_or_2(void) {
     use_joy = last_input & 2;
 }
 
+typedef struct {
+    const byte *img;
+    byte x, y;
+} Frame;
+
+static void show_series(const Frame *series) {
+    while (series->img) {
+	show_image(series->img, series->x, series->y);
+	series++;
+    }
+}
+
+static const Frame apkaime[] = {
+    { .img = puduris1, .x = 2,  .y = 14 },
+    { .img = puduris1, .x = 5,  .y = 11 },
+    { .img = puduris1, .x = 7,  .y = 22 },
+    { .img = puduris1, .x = 10, .y = 10 },
+    { .img = puduris1, .x = 16, .y = 8  },
+    { .img = puduris1, .x = 18, .y = 4  },
+    { .img = puduris1, .x = 22, .y = 18 },
+    { .img = puduris2, .x = 0,  .y = 17 },
+    { .img = puduris2, .x = 15, .y = 22 },
+    { .img = puduris2, .x = 20, .y = 21 },
+    { .img = puduris2, .x = 29, .y = 3  },
+    { .img = puduris2, .x = 30, .y = 8  },
+    { .img = puduris2, .x = 30, .y = 13 },
+    { .img = niedres,  .x = 2,  .y = 19 },
+    { .img = niedres,  .x = 7,  .y = 15 },
+    { .img = niedres,  .x = 8,  .y = 14 },
+    { .img = niedres,  .x = 8,  .y = 14 },
+    { .img = niedres,  .x = 12, .y = 13 },
+    { .img = niedres,  .x = 13, .y = 22 },
+    { .img = niedres,  .x = 20, .y = 7  },
+    { .img = niedres,  .x = 21, .y = 10 },
+    { .img = niedres,  .x = 21, .y = 17 },
+    { .img = niedres,  .x = 23, .y = 4  },
+    { .img = niedres,  .x = 26, .y = 1  },
+    { .img = niedres,  .x = 30, .y = 7  },
+    { .img = niedres,  .x = 30, .y = 11 },
+    { .img = niedres,  .x = 30, .y = 21 },
+    { .img = NULL },
+};
+
 static void show_lake(void) {
     show_image(ezers, 0, 0);
+    show_series(apkaime);
     for (;;) { }
 }
 

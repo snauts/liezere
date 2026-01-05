@@ -22,6 +22,9 @@ pcx:
 	@gcc pcx-dump.c lz.c -Wall -o pcx-dump
 	@./pcx-dump -i title.pcx > data.h
 	@./pcx-dump -i ezers.pcx >> data.h
+	@./pcx-dump -i puduris1.pcx >> data.h
+	@./pcx-dump -i puduris2.pcx >> data.h
+	@./pcx-dump -i niedres.pcx >> data.h
 
 zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7800 prg
