@@ -304,6 +304,11 @@ static void wait_1_or_2(void) {
     use_joy = last_input & 2;
 }
 
+static void show_lake(void) {
+    show_image(ezers, 0, 0);
+    for (;;) { }
+}
+
 static void show_title(void) {
     show_image(title, 0, 0);
     put_str("1 - Klaviat`ura", 88, 96);
@@ -318,5 +323,7 @@ void reset(void) {
     precalculate();
     clear_screen();
     show_title();
+    clear_screen();
+    show_lake();
     reset();
 }

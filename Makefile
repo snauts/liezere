@@ -21,9 +21,10 @@ msg:
 pcx:
 	@gcc pcx-dump.c lz.c -Wall -o pcx-dump
 	@./pcx-dump -i title.pcx > data.h
+	@./pcx-dump -i ezers.pcx >> data.h
 
 zxs:
-	@$(MAKE) CODE=0x8000 DATA=0x7000 TYPE=-DZXS prg
+	@$(MAKE) CODE=0x8000 DATA=0x7800 prg
 	@bin2tap -b liezere.bin
 
 main.o: data.h
