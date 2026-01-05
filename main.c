@@ -8,6 +8,7 @@ void start_up(void) __naked {
 
 static volatile byte vblank;
 static byte *map_y[192];
+static word seed;
 
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
@@ -76,6 +77,13 @@ void memcpy(void *dst, const void *src, word len) __naked {
     __asm__("done:");
     __asm__("jp (iy)");
     dst; src; len;
+}
+
+static word random(void) {
+    seed ^= seed << 7;
+    seed ^= seed >> 9;
+    seed ^= seed << 8;
+    return seed;
 }
 
 static void setup_system(void) {
@@ -266,8 +274,13 @@ static void show_title(void) {
     put_str("`A`a~C~c`E`e^G~g`I`i^K^k^L^l^N^n~S~s`U`u~Z~z", 16, 48);
     put_str("~Saurslie~zu Dzelzce^l~s", 16, 64);
     memset(COLOUR(0x00), 5, 0x300);
-    show_image(title, 16, 12);
-    show_image(title, 24, 16);
+
+    seed = 1;
+    for (;;) {
+	byte x = 0x06 + (random() & 0xf);
+	byte y = 0x0c + (random() & 0x7);
+	show_image(title, x, y);
+    }
 }
 
 void reset(void) {
