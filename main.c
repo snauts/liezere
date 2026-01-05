@@ -176,15 +176,12 @@ static void put_dash(char c, byte x, byte y) {
 }
 
 static void put_check(char c, byte x, byte y) {
-    static const byte small_check[] = { 0x00, 0x28, 0x10 };
-    static const byte large_check[] = { 0x24, 0x18, 0x00 };
+    static const byte check[] = { 0x24, 0x18, 0x00, 0x28, 0x10 };
+    const byte *ptr = check;
 
-    if (c & 0x20) {
-	put_diacritic(small_check, x, y - 1);
-    }
-    else {
-	put_diacritic(large_check, x, y - 2);
-    }
+    if (LOWER_CASE(c)) ptr += 2;
+
+    put_diacritic(ptr, x, y - 2);
 }
 
 static void put_tick(char c, byte x, byte y) {
