@@ -99,6 +99,17 @@ static word random(void) {
     return seed;
 }
 
+static word mul(byte x, byte y) {
+    word r = 0;
+    word n = x;
+    for (int i = 0; i < 8; i++) {
+        if (y & 1) r += n;
+        y = y >> 1;
+        n = n << 1;
+    }
+    return r;
+}
+
 static void setup_system(void) {
     byte top = (byte) ((IRQ_BASE >> 8) - 1);
     word jmp_addr = (top << 8) | top;
