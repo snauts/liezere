@@ -348,6 +348,7 @@ static const Frame apkaime[] = {
 };
 
 #define PIXEL(x, y) BYTE(map_y[y] + (x >> 3))
+#define PMASK(pos) (0x80 >> (pos))
 
 static byte is_white(byte x, byte y) {
     word offset = ((y & ~7) << 2) + (x >> 3);
@@ -355,11 +356,11 @@ static byte is_white(byte x, byte y) {
 }
 
 static byte get_pixel(byte x, byte y) {
-    return PIXEL(x, y) & BIT(x & 7);
+    return PIXEL(x, y) & PMASK(x & 7);
 }
 
 static void set_pixel(byte x, byte y) {
-    PIXEL(x, y) ^= BIT(x & 7);
+    PIXEL(x, y) ^= PMASK(x & 7);
 }
 
 static byte good_spot(byte x, byte y) {
