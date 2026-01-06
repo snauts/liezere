@@ -449,22 +449,34 @@ static void put_time(void) {
     put_digit(10, 2, 0);
 }
 
-static void advance_time(void) {
-    minute = inc10(minute);
-    if (minute == 0x60) {
-	hour = inc10(hour);
-	minute = 0;
+static void advance_time(byte amount) {
+    while (amount-- > 0) {
+	minute = inc10(minute);
+	if (minute == 0x60) {
+	    hour = inc10(hour);
+	    minute = 0;
+	}
     }
     put_time();
 }
 
-static void move_cursor(void) {
-    byte button = read_input();
+static byte holes;
+static byte hole_map[128];
+
+static byte visited(byte x, byte y) {
+    byte *ptr = hole_map;
+    for (byte i = 0; i < holes; i++) {
+	if (x == *(ptr++) && y == *(ptr++)) {
+	    return true;
+	}
+    }
+    return false;
+}
 
 static void set_cursor(byte x, byte y) {
     draw_cursor();
-    if (good_spot(x, y)) {
-	advance_time();
+    if (good_spot(x, y) || visited(x, y)) {
+	advance_time(1);
 	cursor_x = x;
 	cursor_y = y;
     }
@@ -521,6 +533,15 @@ static void walk_lake(void) {
     draw_cursor();
 }
 
+static void drill_hole(void) {
+    if (!visited(cursor_x, cursor_y)) {
+	hole_map[holes++] = cursor_x;
+	hole_map[holes++] = cursor_y;
+	set_pixel(cursor_x, cursor_y);
+	advance_time(5);
+    }
+}
+
 static void show_lake(void) {
     show_image(ezers, 0, 0);
     show_series(apkaime);
@@ -528,7 +549,7 @@ static void show_lake(void) {
 
     while (not_late()) {
 	walk_lake();
-	set_pixel(cursor_x, cursor_y);
+	drill_hole();
     }
 }
 
@@ -536,6 +557,7 @@ static void init_variables(void) {
     last_input = read_input();
     reset_cursor();
     seed = 0xfeed;
+    holes = 0;
 }
 
 static void show_title(void) {
