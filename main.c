@@ -422,10 +422,14 @@ static const int8 cursor[] = {
 static byte cursor_x;
 static byte cursor_y;
 
+static byte cursor_frame;
+
+static byte steps;
+static byte holes;
+static byte hole_map[192];
+
 static byte minute;
 static byte hour;
-
-static byte cursor_frame;
 
 static void draw_cursor(void) {
     const int8 *dir = cursor + (cursor_frame & 0xf);
@@ -434,6 +438,8 @@ static void draw_cursor(void) {
 }
 
 static void reset_cursor(void) {
+    steps = 0;
+    holes = 0;
     cursor_x = 8;
     cursor_y = 180;
     cursor_frame = 0;
@@ -471,9 +477,6 @@ static void advance_time(byte amount) {
     put_time();
 }
 
-static byte holes;
-static byte hole_map[128];
-
 static byte visited(byte x, byte y) {
     byte *ptr = hole_map;
     for (byte i = 0; i < holes; i++) {
@@ -487,7 +490,10 @@ static byte visited(byte x, byte y) {
 static void set_cursor(byte x, byte y) {
     draw_cursor();
     if (good_spot(x, y) || visited(x, y)) {
-	advance_time(1);
+	if (++steps == 4) {
+	    advance_time(1);
+	    steps = 0;
+	}
 	cursor_x = x;
 	cursor_y = y;
     }
@@ -568,7 +574,6 @@ static void init_variables(void) {
     last_input = read_input();
     reset_cursor();
     seed = 0xfeed;
-    holes = 0;
 }
 
 static void show_title(void) {
