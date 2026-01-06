@@ -29,6 +29,7 @@ pcx:
 	@./pcx-dump -i egle1.pcx >> data.h
 	@./pcx-dump -i egle2.pcx >> data.h
 	@./pcx-dump -i egle3.pcx >> data.h
+	@./pcx-dump -i urbis.pcx >> data.h
 
 zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7800 prg
