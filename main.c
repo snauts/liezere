@@ -416,8 +416,6 @@ static void reset_cursor(void) {
     cursor_x = 8;
     cursor_y = 180;
     cursor_frame = 0;
-
-    draw_cursor();
 }
 
 static void move_cursor(void) {
@@ -425,31 +423,27 @@ static void move_cursor(void) {
 
     draw_cursor();
 
-    if ((button & CTRL_UP) && cursor_y > 1) {
-	cursor_y--;
+    if (button & CTRL_UP) {
+	if (cursor_y > 0x01) cursor_y--;
     }
-    else if ((button & CTRL_DOWN) && cursor_y < 190) {
-	cursor_y++;
+    else if (button & CTRL_DOWN) {
+	if (cursor_y < 0xbe) cursor_y++;
     }
-    else if ((button & CTRL_LEFT) && cursor_x > 1) {
-	cursor_x--;
+    else if (button & CTRL_LEFT) {
+	if (cursor_x > 0x01) cursor_x--;
     }
-    else if ((button & CTRL_RIGHT) && cursor_x < 254) {
-	cursor_x++;
+    else if (button & CTRL_RIGHT) {
+	if (cursor_x < 0xfe) cursor_x++;
     }
 
     draw_cursor();
 }
 
-static void show_lake(void) {
-    show_image(ezers, 0, 0);
-    show_series(apkaime);
-
-    reset_cursor();
-
+static void walk_lake(void) {
     byte ticks = 0;
 
-    do {
+    draw_cursor();
+    while (!fire_asserted()) {
 	if (vblank) {
 	    move_cursor();
 	    if (++ticks == 2) {
@@ -461,11 +455,22 @@ static void show_lake(void) {
 	    vblank = 0;
 	}
     }
-    while (!fire_asserted());
+    draw_cursor();
+}
+
+static void show_lake(void) {
+    show_image(ezers, 0, 0);
+    show_series(apkaime);
+
+    for (;;) {
+	walk_lake();
+	set_pixel(cursor_x, cursor_y);
+    }
 }
 
 static void init_variables(void) {
     last_input = read_input();
+    reset_cursor();
     seed = 0xfeed;
 }
 
