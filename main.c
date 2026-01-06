@@ -412,28 +412,32 @@ static void draw_cursor(void) {
     set_pixel(cursor_x + dir[2], cursor_y + dir[3]);
 }
 
-static void delay(byte ticks) {
-    while (ticks-- > 0) wait_vblank();
-}
+static void reset_cursor(void) {
+    cursor_x = 8;
+    cursor_y = 180;
+    cursor_frame = 0;
 
-#define HOME_X	8
-#define HOME_Y	180
+    draw_cursor();
+}
 
 static void show_lake(void) {
     show_image(ezers, 0, 0);
     show_series(apkaime);
 
-    cursor_x = HOME_X;
-    cursor_y = HOME_Y;
-    cursor_frame = 0;
+    reset_cursor();
 
-    draw_cursor();
+    byte ticks = 0;
 
     do {
-	draw_cursor();
-	cursor_frame += 4;
-	draw_cursor();
-	delay(2);
+	if (vblank) {
+	    if (++ticks == 2) {
+		draw_cursor();
+		cursor_frame += 4;
+		draw_cursor();
+		ticks = 0;
+	    }
+	    vblank = 0;
+	}
     }
     while (!fire_asserted());
 }
