@@ -374,9 +374,15 @@ static const int8 cursor[] = {
     1,  1, -1, -1,
 };
 
-static void draw_cursor(int8 *dir, byte x, byte y) {
-    set_pixel(x + dir[0], y + dir[1]);
-    set_pixel(x + dir[2], y + dir[3]);
+static byte cursor_x;
+static byte cursor_y;
+
+static byte cursor_frame;
+
+static void draw_cursor(void) {
+    const int8 *dir = cursor + (cursor_frame & 0xf);
+    set_pixel(cursor_x + dir[0], cursor_y + dir[1]);
+    set_pixel(cursor_x + dir[2], cursor_y + dir[3]);
 }
 
 static void delay(byte ticks) {
@@ -389,20 +395,23 @@ static void delay(byte ticks) {
 static void show_lake(void) {
     show_image(ezers, 0, 0);
     show_series(apkaime);
-    seed = 0xfeed;
 
-    byte x = HOME_X;
-    byte y = HOME_Y;
-    byte frame = 0;
+    cursor_x = HOME_X;
+    cursor_y = HOME_Y;
+    cursor_frame = 0;
 
-    draw_cursor(cursor, x, y);
+    draw_cursor();
 
     for (;;) {
-	draw_cursor(cursor + (frame & 0xf), x, y);
-	frame += 4;
-	draw_cursor(cursor + (frame & 0xf), x, y);
+	draw_cursor();
+	cursor_frame += 4;
+	draw_cursor();
 	delay(2);
     }
+}
+
+static void init_variables(void) {
+    seed = 0xfeed;
 }
 
 static void show_title(void) {
@@ -417,6 +426,7 @@ void reset(void) {
     SETUP_STACK();
     setup_system();
     precalculate();
+    init_variables();
     clear_screen();
     show_title();
     clear_screen();
