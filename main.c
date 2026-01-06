@@ -14,6 +14,12 @@ static word seed;
 #define FONT_ADDRESS	PTR(0x3c00)
 #define IRQ_BASE	0xfe00
 
+#define	CTRL_FIRE	0x10
+#define	CTRL_UP		0x08
+#define	CTRL_DOWN	0x04
+#define	CTRL_LEFT	0x02
+#define	CTRL_RIGHT	0x01
+
 static void interrupt(void) __naked {
     __asm__("di");
     __asm__("push af");
@@ -367,6 +373,27 @@ static byte good_spot(byte x, byte y) {
     return is_white(x, y) && get_pixel(x, y);
 }
 
+static byte read_QAOP(void) {
+    byte ret = 0;
+    byte hit = in_key(0x7f);
+    ret |= hit & (hit >> 2);
+    ret <<= 1;
+    ret |= (in_key(0xfb) & 1);
+    ret <<= 1;
+    ret |= (in_key(0xfd) & 1);
+    ret <<= 2;
+    ret |= (in_key(0xdf) & 3);
+    return ~ret;
+}
+
+static byte read_input(void) {
+    return use_joy ? in_joy(0) : read_QAOP();
+}
+
+static byte fire_asserted(void) {
+    return input_change(read_input()) & CTRL_FIRE;
+}
+
 static const int8 cursor[] = {
     0,  1,  0, -1,
     1, -1, -1,  1,
@@ -402,15 +429,17 @@ static void show_lake(void) {
 
     draw_cursor();
 
-    for (;;) {
+    do {
 	draw_cursor();
 	cursor_frame += 4;
 	draw_cursor();
 	delay(2);
     }
+    while (!fire_asserted());
 }
 
 static void init_variables(void) {
+    last_input = read_input();
     seed = 0xfeed;
 }
 
@@ -426,10 +455,10 @@ void reset(void) {
     SETUP_STACK();
     setup_system();
     precalculate();
-    init_variables();
     clear_screen();
     show_title();
     clear_screen();
+    init_variables();
     show_lake();
     reset();
 }
