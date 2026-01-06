@@ -481,11 +481,15 @@ static void move_cursor(void) {
     draw_cursor();
 }
 
+static byte not_late(void) {
+    return hour < 0x16;
+}
+
 static void walk_lake(void) {
     byte ticks = 0;
 
     draw_cursor();
-    while (!fire_asserted()) {
+    while (not_late()) {
 	if (vblank) {
 	    move_cursor();
 	    if (++ticks == 2) {
@@ -496,6 +500,9 @@ static void walk_lake(void) {
 	    }
 	    vblank = 0;
 	}
+	if (fire_asserted()) {
+	    break;
+	}
     }
     draw_cursor();
 }
@@ -505,7 +512,7 @@ static void show_lake(void) {
     show_series(apkaime);
     put_time();
 
-    for (;;) {
+    while (not_late()) {
 	walk_lake();
 	set_pixel(cursor_x, cursor_y);
     }
