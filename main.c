@@ -15,6 +15,7 @@ static word seed;
 #define IRQ_BASE	0xfe00
 
 #define	CTRL_FIRE	0x10
+#define	CTRL_DIR	0x0f
 #define	CTRL_UP		0x08
 #define	CTRL_DOWN	0x04
 #define	CTRL_LEFT	0x02
@@ -64,6 +65,12 @@ void __sdcc_call_iy(void) __naked {
 
 void __sdcc_call_hl(void) __naked {
     __asm__("jp (hl)");
+}
+
+static byte inc10(byte a) __naked {
+    __asm__("inc a"); a;
+    __asm__("daa");
+    __asm__("ret");
 }
 
 void memset(byte *ptr, byte data, word len) {
@@ -404,6 +411,9 @@ static const int8 cursor[] = {
 static byte cursor_x;
 static byte cursor_y;
 
+static byte minute;
+static byte hour;
+
 static byte cursor_frame;
 
 static void draw_cursor(void) {
@@ -416,6 +426,36 @@ static void reset_cursor(void) {
     cursor_x = 8;
     cursor_y = 180;
     cursor_frame = 0;
+    minute = 0;
+    hour = 9;
+}
+
+static void put_digit(byte digit, byte x, byte y) {
+    byte *addr = FONT_ADDRESS;
+    addr += (('0' + digit) << 3);
+    for (byte i = 0; i < 8; i++) {
+	BYTE(map_y[y + i] + x) = *addr++;
+    }
+}
+
+static void put_num(byte num, byte x, byte y) {
+    put_digit(num >> 4, x, y);
+    put_digit(num & 0xf, x + 1, y);
+}
+
+static void put_time(void) {
+    put_num(hour, 0, 0);
+    put_num(minute, 3, 0);
+    put_digit(10, 2, 0);
+}
+
+static void advance_time(void) {
+    minute = inc10(minute);
+    if (minute == 0x60) {
+	hour = inc10(hour);
+	minute = 0;
+    }
+    put_time();
 }
 
 static void move_cursor(void) {
@@ -435,6 +475,8 @@ static void move_cursor(void) {
     else if (button & CTRL_RIGHT) {
 	if (cursor_x < 0xfe) cursor_x++;
     }
+
+    if (button & CTRL_DIR) advance_time();
 
     draw_cursor();
 }
@@ -461,6 +503,7 @@ static void walk_lake(void) {
 static void show_lake(void) {
     show_image(ezers, 0, 0);
     show_series(apkaime);
+    put_time();
 
     for (;;) {
 	walk_lake();
