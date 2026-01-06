@@ -367,17 +367,41 @@ static byte good_spot(byte x, byte y) {
     return is_white(x, y) && get_pixel(x, y);
 }
 
+static const int8 cursor[] = {
+    0,  1,  0, -1,
+    1, -1, -1,  1,
+    1,  0, -1,  0,
+    1,  1, -1, -1,
+};
+
+static void draw_cursor(int8 *dir, byte x, byte y) {
+    set_pixel(x + dir[0], y + dir[1]);
+    set_pixel(x + dir[2], y + dir[3]);
+}
+
+static void delay(byte ticks) {
+    while (ticks-- > 0) wait_vblank();
+}
+
+#define HOME_X	8
+#define HOME_Y	180
+
 static void show_lake(void) {
     show_image(ezers, 0, 0);
     show_series(apkaime);
     seed = 0xfeed;
+
+    byte x = HOME_X;
+    byte y = HOME_Y;
+    byte frame = 0;
+
+    draw_cursor(cursor, x, y);
+
     for (;;) {
-	word r = random();
-	byte x = r & 0xff;
-	byte y = r >> 8;
-	if (good_spot(x, y)) {
-	    set_pixel(x, y);
-	}
+	draw_cursor(cursor + (frame & 0xf), x, y);
+	frame += 4;
+	draw_cursor(cursor + (frame & 0xf), x, y);
+	delay(2);
     }
 }
 
