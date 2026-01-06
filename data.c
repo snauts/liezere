@@ -1,0 +1,87 @@
+#include "main.h"
+
+extern const byte puduris1[];
+extern const byte puduris2[];
+extern const byte niedres[];
+
+const Frame apkaime[] = {
+    { .img = puduris1, .x = 2,  .y = 14 },
+    { .img = puduris1, .x = 5,  .y = 11 },
+    { .img = puduris1, .x = 7,  .y = 22 },
+    { .img = puduris1, .x = 10, .y = 10 },
+    { .img = puduris1, .x = 16, .y = 8  },
+    { .img = puduris1, .x = 18, .y = 4  },
+    { .img = puduris1, .x = 22, .y = 18 },
+    { .img = puduris2, .x = 0,  .y = 17 },
+    { .img = puduris2, .x = 15, .y = 22 },
+    { .img = puduris2, .x = 20, .y = 21 },
+    { .img = puduris2, .x = 29, .y = 3  },
+    { .img = puduris2, .x = 30, .y = 8  },
+    { .img = puduris2, .x = 30, .y = 13 },
+    { .img = niedres,  .x = 2,  .y = 19 },
+    { .img = niedres,  .x = 7,  .y = 15 },
+    { .img = niedres,  .x = 8,  .y = 14 },
+    { .img = niedres,  .x = 8,  .y = 14 },
+    { .img = niedres,  .x = 12, .y = 13 },
+    { .img = niedres,  .x = 13, .y = 22 },
+    { .img = niedres,  .x = 20, .y = 7  },
+    { .img = niedres,  .x = 21, .y = 10 },
+    { .img = niedres,  .x = 21, .y = 17 },
+    { .img = niedres,  .x = 23, .y = 4  },
+    { .img = niedres,  .x = 26, .y = 1  },
+    { .img = niedres,  .x = 30, .y = 7  },
+    { .img = niedres,  .x = 30, .y = 11 },
+    { .img = niedres,  .x = 30, .y = 21 },
+    { .img = NULL },
+};
+
+extern const byte egle1[];
+extern const byte egle2[];
+extern const byte egle3[];
+extern const byte krasts[];
+
+const Frame horizonts[] = {
+    { .img = egle2,  .x = 0,  .y = 2  },
+    { .img = egle3,  .x = 1,  .y = 2  },
+    { .img = egle1,  .x = 2,  .y = 3  },
+    { .img = egle2,  .x = 3,  .y = 2  },
+    { .img = egle3,  .x = 4,  .y = 2  },
+    { .img = egle2,  .x = 5,  .y = 2  },
+    { .img = egle1,  .x = 6,  .y = 1  },
+    { .img = egle3,  .x = 7,  .y = 2  },
+    { .img = egle1,  .x = 8,  .y = 3  },
+    { .img = egle2,  .x = 9,  .y = 2  },
+    { .img = egle3,  .x = 10, .y = 2  },
+    { .img = egle2,  .x = 11, .y = 2  },
+    { .img = egle3,  .x = 12, .y = 2  },
+    { .img = egle1,  .x = 13, .y = 3  },
+    { .img = egle2,  .x = 14, .y = 2  },
+    { .img = egle1,  .x = 15, .y = 1  },
+    { .img = egle3,  .x = 16, .y = 2  },
+    { .img = egle2,  .x = 17, .y = 2  },
+    { .img = egle3,  .x = 18, .y = 2  },
+    { .img = egle1,  .x = 19, .y = 3  },
+    { .img = egle2,  .x = 20, .y = 2  },
+    { .img = egle3,  .x = 21, .y = 2  },
+    { .img = egle1,  .x = 22, .y = 3  },
+    { .img = egle2,  .x = 23, .y = 2  },
+    { .img = egle3,  .x = 24, .y = 2  },
+    { .img = egle1,  .x = 25, .y = 3  },
+    { .img = egle1,  .x = 26, .y = 3  },
+    { .img = egle2,  .x = 27, .y = 2  },
+    { .img = egle1,  .x = 28, .y = 1  },
+    { .img = egle3,  .x = 29, .y = 2  },
+    { .img = egle2,  .x = 30, .y = 2  },
+    { .img = egle3,  .x = 31, .y = 2  },
+    { .img = krasts, .x = 0,  .y = 13 },
+    { .img = krasts, .x = 3,  .y = 13 },
+    { .img = krasts, .x = 7,  .y = 13 },
+    { .img = krasts, .x = 11, .y = 13 },
+    { .img = krasts, .x = 13, .y = 13 },
+    { .img = krasts, .x = 17, .y = 13 },
+    { .img = krasts, .x = 18, .y = 13 },
+    { .img = krasts, .x = 22, .y = 13 },
+    { .img = krasts, .x = 25, .y = 13 },
+    { .img = krasts, .x = 28, .y = 13 },
+    { .img = NULL },
+};

@@ -10,6 +10,9 @@ static volatile byte vblank;
 static byte *map_y[192];
 static word seed;
 
+extern const Frame horizonts[];
+extern const Frame apkaime[];
+
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
 #define IRQ_BASE	0xfe00
@@ -328,48 +331,12 @@ static void wait_1_or_2(void) {
     use_joy = last_input & 2;
 }
 
-typedef struct {
-    const byte *img;
-    byte x, y;
-} Frame;
-
 static void show_series(const Frame *series) {
     while (series->img) {
 	show_image(series->img, series->x, series->y);
 	series++;
     }
 }
-
-static const Frame apkaime[] = {
-    { .img = puduris1, .x = 2,  .y = 14 },
-    { .img = puduris1, .x = 5,  .y = 11 },
-    { .img = puduris1, .x = 7,  .y = 22 },
-    { .img = puduris1, .x = 10, .y = 10 },
-    { .img = puduris1, .x = 16, .y = 8  },
-    { .img = puduris1, .x = 18, .y = 4  },
-    { .img = puduris1, .x = 22, .y = 18 },
-    { .img = puduris2, .x = 0,  .y = 17 },
-    { .img = puduris2, .x = 15, .y = 22 },
-    { .img = puduris2, .x = 20, .y = 21 },
-    { .img = puduris2, .x = 29, .y = 3  },
-    { .img = puduris2, .x = 30, .y = 8  },
-    { .img = puduris2, .x = 30, .y = 13 },
-    { .img = niedres,  .x = 2,  .y = 19 },
-    { .img = niedres,  .x = 7,  .y = 15 },
-    { .img = niedres,  .x = 8,  .y = 14 },
-    { .img = niedres,  .x = 8,  .y = 14 },
-    { .img = niedres,  .x = 12, .y = 13 },
-    { .img = niedres,  .x = 13, .y = 22 },
-    { .img = niedres,  .x = 20, .y = 7  },
-    { .img = niedres,  .x = 21, .y = 10 },
-    { .img = niedres,  .x = 21, .y = 17 },
-    { .img = niedres,  .x = 23, .y = 4  },
-    { .img = niedres,  .x = 26, .y = 1  },
-    { .img = niedres,  .x = 30, .y = 7  },
-    { .img = niedres,  .x = 30, .y = 11 },
-    { .img = niedres,  .x = 30, .y = 21 },
-    { .img = NULL },
-};
 
 #define PIXEL(x, y) BYTE(map_y[y] + (x >> 3))
 #define PMASK(pos) (0x80 >> (pos))
@@ -559,6 +526,14 @@ static void drill_hole(void) {
     }
 }
 
+static void show_forest(void) {
+    clear_screen();
+    memset(COLOUR(0), 0x28, 0x80);
+    memset(COLOUR(0x1c0), 0x78, 0x140);
+    show_series(horizonts);
+    for (;;) { }
+}
+
 static void show_lake(void) {
     show_image(ezers, 0, 0);
     show_series(apkaime);
@@ -567,6 +542,7 @@ static void show_lake(void) {
     while (not_late()) {
 	walk_lake();
 	drill_hole();
+	show_forest();
     }
 }
 
