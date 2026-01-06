@@ -420,6 +420,27 @@ static void reset_cursor(void) {
     draw_cursor();
 }
 
+static void move_cursor(void) {
+    byte button = read_input();
+
+    draw_cursor();
+
+    if ((button & CTRL_UP) && cursor_y > 1) {
+	cursor_y--;
+    }
+    else if ((button & CTRL_DOWN) && cursor_y < 190) {
+	cursor_y++;
+    }
+    else if ((button & CTRL_LEFT) && cursor_x > 1) {
+	cursor_x--;
+    }
+    else if ((button & CTRL_RIGHT) && cursor_x < 254) {
+	cursor_x++;
+    }
+
+    draw_cursor();
+}
+
 static void show_lake(void) {
     show_image(ezers, 0, 0);
     show_series(apkaime);
@@ -430,6 +451,7 @@ static void show_lake(void) {
 
     do {
 	if (vblank) {
+	    move_cursor();
 	    if (++ticks == 2) {
 		draw_cursor();
 		cursor_frame += 4;
