@@ -490,7 +490,7 @@ static byte visited(byte x, byte y) {
 static void set_cursor(byte x, byte y) {
     draw_cursor();
     if (good_spot(x, y) || visited(x, y)) {
-	if (++steps == 4) {
+	if (++steps == 3) {
 	    advance_time(1);
 	    steps = 0;
 	}
