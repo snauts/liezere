@@ -461,24 +461,38 @@ static void advance_time(void) {
 static void move_cursor(void) {
     byte button = read_input();
 
+static void set_cursor(byte x, byte y) {
     draw_cursor();
+    if (good_spot(x, y)) {
+	advance_time();
+	cursor_x = x;
+	cursor_y = y;
+    }
+    draw_cursor();
+}
+
+static void move_cursor(void) {
+    byte button = read_input();
+    byte x = cursor_x;
+    byte y = cursor_y;
 
     if (button & CTRL_UP) {
-	if (cursor_y > 0x01) cursor_y--;
+	y--;
     }
     else if (button & CTRL_DOWN) {
-	if (cursor_y < 0xbe) cursor_y++;
+	y++;
     }
     else if (button & CTRL_LEFT) {
-	if (cursor_x > 0x01) cursor_x--;
+	x--;
     }
     else if (button & CTRL_RIGHT) {
-	if (cursor_x < 0xfe) cursor_x++;
+	x++;
+    }
+    else {
+	return;
     }
 
-    if (button & CTRL_DIR) advance_time();
-
-    draw_cursor();
+    set_cursor(x, y);
 }
 
 static byte not_late(void) {
