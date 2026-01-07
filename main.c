@@ -644,7 +644,7 @@ static void clear_tip(void) {
 }
 
 static byte fish_bite(void) {
-    byte ticks = 15;
+    byte ticks = 20;
     show_image(copene3, 16, 0);
     while (ticks > 0) {
 	if (asserted(CTRL_UP)) {
