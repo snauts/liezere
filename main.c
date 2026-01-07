@@ -549,7 +549,7 @@ static void animate_drill(void) {
 }
 
 static void drill_hole(void) {
-    if (!visited(cursor_x, cursor_y)) {
+    if (!visited(cursor_x, cursor_y) && not_late()) {
 	*(hole_end++) = cursor_x;
 	*(hole_end++) = cursor_y;
 	show_forest();
@@ -627,7 +627,7 @@ static byte wait_jerk(byte state) {
 }
 
 static void jerking(void) {
-    for (;;) {
+    while (not_late()) {
 	wait_jerk(CTRL_FIRE);
 	wait_vblank();
 	draw_tip(COPENE2);
@@ -657,7 +657,9 @@ static void fishing(void) {
 	show_lake();
 	walk_lake();
 	drill_hole();
-	show_ice();
+	if (not_late()) {
+	    show_ice();
+	}
     }
 }
 
