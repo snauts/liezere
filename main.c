@@ -25,6 +25,8 @@ extern const Frame apkaime[];
 #define	CTRL_LEFT	0x02
 #define	CTRL_RIGHT	0x01
 
+#define	IMAGE_DATA(x)	((x) + 2)
+
 static void interrupt(void) __naked {
     __asm__("di");
     __asm__("push af");
@@ -275,7 +277,7 @@ static void *decompress(byte *dst, const byte *src) {
 
 static void show_image(const byte *src, byte x, byte y) {
     byte *ptr = STAGING_AREA;
-    decompress(ptr, src + 2);
+    decompress(ptr, IMAGE_DATA(src));
 
     byte w = src[0];
     byte h = src[1] << 3;
@@ -572,6 +574,17 @@ static void show_lake(void) {
     put_time();
 }
 
+#define COPENE1 (STAGING_AREA + 0x100)
+#define COPENE2 (STAGING_AREA + 0x200)
+
+static void draw_tip(byte *ptr) {
+    for (byte i = 0; i < 16; i++) {
+	byte *dst = map_y[i] + 16;
+	memcpy(dst, ptr, 3);
+	ptr += 3;
+    }
+}
+
 static void starting_line(void) {
     for (byte y = 16; y <= 152; y += 4) {
 	set_pixel(128, y);
@@ -605,11 +618,13 @@ static void fishing_line(void) {
 static void jerking(void) {
     for (;;) {
 	wait_asserted(CTRL_FIRE);
+	wait_vblank();
+	draw_tip(COPENE2);
 	fishing_line();
-	show_image(copene2, 16, 0);
 	wait_asserted(CTRL_FIRE);
+	wait_vblank();
+	draw_tip(COPENE1);
 	fishing_line();
-	show_image(copene1, 16, 0);
 	advance_time(1);
     }
 }
@@ -617,6 +632,8 @@ static void jerking(void) {
 static void show_ice(void) {
     clear_screen();
     memset(COLOUR(0), 0x7d, 0x300);
+    decompress(COPENE1, IMAGE_DATA(copene1));
+    decompress(COPENE2, IMAGE_DATA(copene2));
     show_image(hole, 12, 19);
     show_image(copene1, 16, 0);
     starting_line();
