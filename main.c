@@ -638,13 +638,13 @@ static void clear_tip(void) {
 
     byte *ptr = SCREEN(0x50);
     for (byte i = 0; i < 8; i++) {
-	*ptr = i & 3 ? 0x00 : 0x80;
+	BYTE(ptr) = i & 3 ? 0x00 : 0x80;
 	ptr += 0x100;
     }
 }
 
 static byte fish_bite(void) {
-    byte ticks = 20;
+    byte ticks = 25;
     show_image(copene3, 16, 0);
     while (ticks > 0) {
 	if (asserted(CTRL_UP)) {
@@ -695,8 +695,8 @@ static void show_ice(void) {
     memset(COLOUR(0x20), 0x7d, 0x2e0);
     decompress(COPENE1, IMAGE_DATA(copene1));
     decompress(COPENE2, IMAGE_DATA(copene2));
-    show_image(hole, 12, 19);
     show_image(copene1, 16, 0);
+    show_image(hole, 12, 19);
     starting_line();
     put_time();
 
