@@ -8,6 +8,7 @@ void start_up(void) __naked {
 
 static volatile byte vblank;
 static byte *map_y[192];
+static byte *line[96];
 static word seed;
 
 extern const Frame horizonts[];
@@ -577,25 +578,38 @@ static void starting_line(void) {
     }
 }
 
-static void fishing_line(void) {
+static byte *line_addr(byte y) {
+    return map_y[y] + 16;
+}
+
+static void init_fishing_line(void) {
+    byte **ptr = line;
+    memset(line, 0, sizeof(line));
     for (byte y = 16; y <= 152; y += 2) {
-	set_pixel(128, y);
+	*(ptr++) = line_addr(y);
     }
     for (byte y = 162; y <= 167; y++) {
-	set_pixel(128, y);
+	*(ptr++) = line_addr(y);
     }
-    set_pixel(128, 157);
-    set_pixel(128, 158);
+    *(ptr++) = line_addr(157);
+    *(ptr++) = line_addr(158);
+}
+
+static void fishing_line(void) {
+    byte **ptr = line;
+    while (*ptr != NULL) {
+	**(ptr++) ^= 0x80;
+    }
 }
 
 static void jerking(void) {
     for (;;) {
 	wait_asserted(CTRL_FIRE);
+	fishing_line();
 	show_image(copene2, 16, 0);
-	fishing_line();
 	wait_asserted(CTRL_FIRE);
-	show_image(copene1, 16, 0);
 	fishing_line();
+	show_image(copene1, 16, 0);
 	advance_time(1);
     }
 }
@@ -621,6 +635,7 @@ static void fishing(void) {
 
 static void init_variables(void) {
     last_input = read_input();
+    init_fishing_line();
     reset_cursor();
     seed = 0xfeed;
 }
