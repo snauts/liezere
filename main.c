@@ -540,10 +540,10 @@ static void show_forest(void) {
 static void animate_drill(void) {
     for (byte i = 0; i < 5; i++) {
 	advance_time(1);
-	show_image(urbis, 13, 8);
+	show_image(urbis, 14, 8);
 	wait_asserted(CTRL_LEFT);
-	show_image(swirl, 13, 10);
-	show_image(drill, 15, 15);
+	show_image(swirl, 14, 10);
+	show_image(drill, 16, 15);
 	wait_asserted(CTRL_RIGHT);
     }
 }
