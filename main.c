@@ -375,8 +375,16 @@ static byte read_input(void) {
     return use_joy ? in_joy(0) : read_QAOP();
 }
 
-static byte fire_asserted(void) {
-    return input_change(read_input()) & CTRL_FIRE;
+static byte asserted(byte ctrl) {
+    return input_change(read_input()) & ctrl;
+}
+
+static byte wait_asserted(byte ctrl) {
+    byte ticks = 0;
+    while (!asserted(ctrl)) {
+	ticks++;
+    }
+    return ticks;
 }
 
 static const int8 cursor[] = {
@@ -510,20 +518,11 @@ static void walk_lake(void) {
 	    }
 	    vblank = 0;
 	}
-	if (fire_asserted()) {
+	if (asserted(CTRL_FIRE)) {
 	    break;
 	}
     }
     draw_cursor();
-}
-
-static void drill_hole(void) {
-    if (!visited(cursor_x, cursor_y)) {
-	hole_map[holes++] = cursor_x;
-	hole_map[holes++] = cursor_y;
-	set_pixel(cursor_x, cursor_y);
-	advance_time(5);
-    }
 }
 
 static void show_forest(void) {
@@ -531,7 +530,27 @@ static void show_forest(void) {
     memset(COLOUR(0), 0x28, 0x80);
     memset(COLOUR(0x1c0), 0x78, 0x140);
     show_series(horizonts);
-    for (;;) { }
+}
+
+static void animate_drill(void) {
+    for (byte i = 0; i < 5; i++) {
+	advance_time(1);
+	show_image(urbis, 13, 8);
+	wait_asserted(CTRL_LEFT);
+	show_image(swirl, 13, 10);
+	show_image(drill, 15, 15);
+	wait_asserted(CTRL_RIGHT);
+    }
+}
+
+static void drill_hole(void) {
+    if (!visited(cursor_x, cursor_y)) {
+	hole_map[holes++] = cursor_x;
+	hole_map[holes++] = cursor_y;
+	set_pixel(cursor_x, cursor_y);
+	show_forest();
+	animate_drill();
+    }
 }
 
 static void show_lake(void) {
@@ -542,7 +561,6 @@ static void show_lake(void) {
     while (not_late()) {
 	walk_lake();
 	drill_hole();
-	show_forest();
     }
 }
 
