@@ -571,11 +571,20 @@ static void show_lake(void) {
     put_time();
 }
 
+static void show_ice(void) {
+    clear_screen();
+    memset(COLOUR(0), 0x78, 0x300);
+    show_image(hole, 12, 19);
+    put_time();
+    for (;;) { }
+}
+
 static void fishing(void) {
     while (not_late()) {
 	show_lake();
 	walk_lake();
 	drill_hole();
+	show_ice();
     }
 }
 
