@@ -615,13 +615,24 @@ static void fishing_line(void) {
     }
 }
 
+static byte wait_jerk(byte state) {
+    byte ticks = 0;
+    while ((read_input() & CTRL_FIRE) != state) {
+	if (vblank && ticks < 255) {
+	    vblank = 0;
+	    ticks++;
+	}
+    }
+    return ticks;
+}
+
 static void jerking(void) {
     for (;;) {
-	wait_asserted(CTRL_FIRE);
+	wait_jerk(CTRL_FIRE);
 	wait_vblank();
 	draw_tip(COPENE2);
 	fishing_line();
-	wait_asserted(CTRL_FIRE);
+	wait_jerk(0);
 	wait_vblank();
 	draw_tip(COPENE1);
 	fishing_line();
