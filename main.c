@@ -669,7 +669,7 @@ static void jerk_tip(byte *img, byte dir) {
     fishing_line();
 }
 
-static void jerking(void) {
+static byte jerk_fish(void) {
     byte ticks = 0;
 
     reset_jerk();
@@ -682,10 +682,11 @@ static void jerking(void) {
 	    ticks = 0;
 	}
 
-	if (--jerk_amount == 0 && fish_bite()) {
-	    break;
+	if (--jerk_amount == 0) {
+	    if (fish_bite()) return true;
 	}
     }
+    return false;
 }
 
 static void show_ice(void) {
@@ -698,7 +699,12 @@ static void show_ice(void) {
     show_image(copene1, 16, 0);
     starting_line();
     put_time();
-    jerking();
+
+    if (jerk_fish()) {
+	clear_screen();
+	show_forest();
+	for (;;) { }
+    }
 }
 
 static void fishing(void) {
