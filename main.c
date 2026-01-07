@@ -400,7 +400,7 @@ static byte cursor_y;
 static byte cursor_frame;
 
 static byte steps;
-static byte holes;
+static byte *hole_end;
 static byte hole_map[192];
 
 static byte minute;
@@ -414,10 +414,10 @@ static void draw_cursor(void) {
 
 static void reset_cursor(void) {
     steps = 0;
-    holes = 0;
     cursor_x = 8;
     cursor_y = 180;
     cursor_frame = 0;
+    hole_end = hole_map;
     minute = 0;
     hour = 9;
 }
@@ -454,7 +454,7 @@ static void advance_time(byte amount) {
 
 static byte visited(byte x, byte y) {
     byte *ptr = hole_map;
-    for (byte i = 0; i < holes; i++) {
+    while (ptr != hole_end) {
 	if (x == *(ptr++) && y == *(ptr++)) {
 	    return true;
 	}
@@ -545,20 +545,33 @@ static void animate_drill(void) {
 
 static void drill_hole(void) {
     if (!visited(cursor_x, cursor_y)) {
-	hole_map[holes++] = cursor_x;
-	hole_map[holes++] = cursor_y;
-	set_pixel(cursor_x, cursor_y);
+	*(hole_end++) = cursor_x;
+	*(hole_end++) = cursor_y;
 	show_forest();
 	animate_drill();
     }
 }
 
+static void draw_holes(void) {
+    byte *ptr = hole_map;
+    while (ptr != hole_end) {
+	byte x = *(ptr++);
+	byte y = *(ptr++);
+	set_pixel(x, y);
+    }
+}
+
 static void show_lake(void) {
+    clear_screen();
     show_image(ezers, 0, 0);
     show_series(apkaime);
+    draw_holes();
     put_time();
+}
 
+static void fishing(void) {
     while (not_late()) {
+	show_lake();
 	walk_lake();
 	drill_hole();
     }
@@ -586,6 +599,6 @@ void reset(void) {
     show_title();
     clear_screen();
     init_variables();
-    show_lake();
+    fishing();
     reset();
 }
