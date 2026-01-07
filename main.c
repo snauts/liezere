@@ -626,23 +626,72 @@ static byte wait_jerk(byte state) {
     return ticks;
 }
 
+static byte jerk_amount;
+
+static void reset_jerk(void) {
+    jerk_amount = 15 + (random() & 0xf);
+}
+
+static void clear_tip(void) {
+    draw_tip(COPENE1);
+    BYTE(COLOUR(0x50)) = 0x7d;
+
+    byte *ptr = SCREEN(0x50);
+    for (byte i = 0; i < 8; i++) {
+	*ptr = i & 3 ? 0x00 : 0x80;
+	ptr += 0x100;
+    }
+}
+
+static byte fish_bite(void) {
+    byte ticks = 15;
+    show_image(copene3, 16, 0);
+    while (ticks > 0) {
+	if (asserted(CTRL_UP)) {
+	    return true;
+	}
+	if (vblank) {
+	    vblank = 0;
+	    ticks--;
+	}
+    }
+    clear_tip();
+    reset_jerk();
+    return false;
+}
+
+static void jerk_tip(byte *img, byte dir) {
+    if (wait_jerk(dir) > 10) {
+	reset_jerk();
+    }
+    wait_vblank();
+    draw_tip(img);
+    fishing_line();
+}
+
 static void jerking(void) {
+    byte ticks = 0;
+
+    reset_jerk();
     while (not_late()) {
-	wait_jerk(CTRL_FIRE);
-	wait_vblank();
-	draw_tip(COPENE2);
-	fishing_line();
-	wait_jerk(0);
-	wait_vblank();
-	draw_tip(COPENE1);
-	fishing_line();
-	advance_time(1);
+	jerk_tip(COPENE2, CTRL_FIRE);
+	jerk_tip(COPENE1, 0);
+
+	if (++ticks >= 5) {
+	    advance_time(1);
+	    ticks = 0;
+	}
+
+	if (--jerk_amount == 0 && fish_bite()) {
+	    break;
+	}
     }
 }
 
 static void show_ice(void) {
     clear_screen();
-    memset(COLOUR(0), 0x7d, 0x300);
+    memset(COLOUR(0x00), 0x78, 0x20);
+    memset(COLOUR(0x20), 0x7d, 0x2e0);
     decompress(COPENE1, IMAGE_DATA(copene1));
     decompress(COPENE2, IMAGE_DATA(copene2));
     show_image(hole, 12, 19);
