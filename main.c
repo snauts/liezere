@@ -571,12 +571,43 @@ static void show_lake(void) {
     put_time();
 }
 
+static void starting_line(void) {
+    for (byte y = 16; y <= 152; y += 4) {
+	set_pixel(128, y);
+    }
+}
+
+static void fishing_line(void) {
+    for (byte y = 16; y <= 152; y += 2) {
+	set_pixel(128, y);
+    }
+    for (byte y = 162; y <= 167; y++) {
+	set_pixel(128, y);
+    }
+    set_pixel(128, 157);
+    set_pixel(128, 158);
+}
+
+static void jerking(void) {
+    for (;;) {
+	wait_asserted(CTRL_FIRE);
+	show_image(copene2, 16, 0);
+	fishing_line();
+	wait_asserted(CTRL_FIRE);
+	show_image(copene1, 16, 0);
+	fishing_line();
+	advance_time(1);
+    }
+}
+
 static void show_ice(void) {
     clear_screen();
-    memset(COLOUR(0), 0x78, 0x300);
+    memset(COLOUR(0), 0x7d, 0x300);
     show_image(hole, 12, 19);
+    show_image(copene1, 16, 0);
+    starting_line();
     put_time();
-    for (;;) { }
+    jerking();
 }
 
 static void fishing(void) {

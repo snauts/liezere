@@ -33,6 +33,8 @@ pcx:
 	@./pcx-dump -i swirl.pcx >> data.h
 	@./pcx-dump -i drill.pcx >> data.h
 	@./pcx-dump -i hole.pcx >> data.h
+	@./pcx-dump -i copene1.pcx >> data.h
+	@./pcx-dump -i copene2.pcx >> data.h
 
 zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7800 prg
