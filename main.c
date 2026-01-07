@@ -454,8 +454,10 @@ static void advance_time(byte amount) {
 
 static byte visited(byte x, byte y) {
     byte *ptr = hole_map;
-    while (ptr != hole_end) {
-	if (x == *(ptr++) && y == *(ptr++)) {
+    while (ptr < hole_end) {
+	byte hole_x = *(ptr++);
+	byte hole_y = *(ptr++);
+	if (x == hole_x && y == hole_y) {
 	    return true;
 	}
     }
@@ -554,7 +556,7 @@ static void drill_hole(void) {
 
 static void draw_holes(void) {
     byte *ptr = hole_map;
-    while (ptr != hole_end) {
+    while (ptr < hole_end) {
 	byte x = *(ptr++);
 	byte y = *(ptr++);
 	set_pixel(x, y);
