@@ -505,6 +505,20 @@ static void set_cursor(byte x, byte y) {
     draw_cursor();
 }
 
+static byte difference(byte x, byte y) {
+    return x > y ? x - y : y - x;
+}
+
+static word half_square(byte n) {
+    return mul(n, n) >> 1;
+}
+
+static byte distance(void) {
+    byte dx = difference(fish_x, cursor_x);
+    byte dy = difference(fish_y, cursor_y);
+    return (half_square(dx) + half_square(dy)) >> 8;
+}
+
 static void move_cursor(void) {
     byte button = read_input();
     byte x = cursor_x;
