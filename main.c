@@ -656,9 +656,9 @@ static void fishing_line(void) {
     }
 }
 
-static byte wait_jerk(byte state) {
+static byte wait_button(byte button, byte state) {
     byte ticks = 0;
-    while ((read_input() & CTRL_FIRE) != state) {
+    while ((read_input() & button) != state) {
 	if (vblank && ticks < 255) {
 	    vblank = 0;
 	    ticks++;
@@ -702,7 +702,7 @@ static byte fish_bite(void) {
 }
 
 static void jerk_tip(byte *img, byte dir) {
-    if (wait_jerk(dir) > 10) {
+    if (wait_button(CTRL_FIRE, gdir) > 10) {
 	reset_jerk();
     }
     out_fe(dir ? 0x10 : 0);
