@@ -180,7 +180,9 @@ static unsigned short on_pixel(unsigned char *buf, int i, int w) {
 	}
 	i += w;
     }
-    return encode_pixel(pixel == prev_p ? prev_n : prev_p, pixel);
+    unsigned char other = pixel == prev_p ? prev_n : prev_p;
+    if (pixel != 0) other = other & ~0x40;
+    return encode_pixel(other, pixel);
 }
 
 static int image_size(void) {
