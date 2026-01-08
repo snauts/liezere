@@ -1,6 +1,11 @@
 #include "main.h"
 #include "data.h"
 
+#define JERK_INTERVAL	10
+#define BITE_INTERVAL	25
+#define PULL_FAST	20
+#define PULL_SLOW	60
+
 void start_up(void) __naked {
     __asm__("di");
     __asm__("jp _reset");
@@ -656,12 +661,14 @@ static void fishing_line(void) {
     }
 }
 
-static byte wait_button(byte button, byte state) {
+static byte wait_button(byte button, byte state, byte cutoff) {
     byte ticks = 0;
     while ((read_input() & button) != state) {
 	if (vblank && ticks < 255) {
 	    vblank = 0;
-	    ticks++;
+	    if (++ticks == cutoff) {
+		return cutoff;
+	    }
 	}
     }
     return ticks;
@@ -685,7 +692,7 @@ static void clear_tip(void) {
 }
 
 static byte fish_bite(void) {
-    byte ticks = 25;
+    byte ticks = BITE_INTERVAL;
     show_image(copene3, 16, 0);
     while (ticks > 0) {
 	if (asserted(CTRL_UP)) {
@@ -702,7 +709,7 @@ static byte fish_bite(void) {
 }
 
 static void jerk_tip(byte *img, byte dir) {
-    if (wait_button(CTRL_FIRE, dir) > 10) {
+    if (wait_button(CTRL_FIRE, dir, 0) > JERK_INTERVAL) {
 	reset_jerk();
     }
     out_fe(dir ? 0x10 : 0);
@@ -731,21 +738,54 @@ static byte jerk_fish(void) {
     return false;
 }
 
+static void draw_fish(byte fish) {
+    static const byte * const table[] = {
+	NULL, mormene, ruffe, asaris, makans
+    };
+    if (fish > 0) show_image(table[fish], 18, 12);
+}
+
+static void moment_of_truth(byte fish, byte x, const char *str) {
+    put_str(str, x, 64);
+    memset(COLOUR(0x100), 5, 0x20);
+    show_image(velk1, 13, 11);
+    show_image(aukla2, 15, 14);
+    show_image(loms, 15, 11);
+    draw_fish(fish);
+
+    wait_asserted(CTRL_FIRE);
+}
+
+static byte wait_pull(byte button, byte fast) {
+    byte ticks = wait_button(button, button, PULL_SLOW);
+    if (fast && ticks <= PULL_FAST) {
+	advance_time(3);
+	moment_of_truth(0, 48, "P`ar`ak stauji vilki, p`arr`avi auklu!");
+	return true;
+    }
+    if (ticks >= PULL_SLOW) {
+	moment_of_truth(1, 52, "P`ar`ak l`eni vilki, nor`av`as maita!");
+	return true;
+    }
+    return false;
+}
+
 static byte pull_fish(void) {
     clear_screen();
     show_forest();
     for (byte i = 0; i < 5; i++) {
 	advance_time(1);
 	show_image(velk1, 13, 11);
-	delay(25);
+	if (wait_pull(CTRL_LEFT, i)) {
+	    return false;
+	}
 	show_image(velk2, 14, 12);
 	show_image(aukla1, 15, 16);
-	delay(25);
+	if (wait_pull(CTRL_RIGHT, 1)) {
+	    return false;
+	}
     }
-    show_image(velk1, 13, 11);
-    show_image(aukla2, 15, 14);
-    show_image(loms, 15, 11);
-    wait_asserted(CTRL_FIRE);
+    moment_of_truth(2, 92, "N`ikul`igs ^k`isis!");
     return false;
 }
 

@@ -41,6 +41,10 @@ pcx:
 	@./pcx-dump -i aukla1.pcx >> data.h
 	@./pcx-dump -i aukla2.pcx >> data.h
 	@./pcx-dump -i loms.pcx >> data.h
+	@./pcx-dump -i ruffe.pcx >> data.h
+	@./pcx-dump -i asaris.pcx >> data.h
+	@./pcx-dump -i makans.pcx >> data.h
+	@./pcx-dump -i mormene.pcx >> data.h
 
 zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7800 prg
