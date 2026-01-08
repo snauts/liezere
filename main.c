@@ -170,8 +170,12 @@ static void clear_block(byte y, byte h) {
     }
 }
 
+static void reset_attributes(byte color) {
+    memset(COLOUR(0), color, 0x300);
+}
+
 static void clear_screen(void) {
-    memset(COLOUR(0), 0x00, 0x300);
+    reset_attributes(0);
     clear_block(0, 192);
     out_fe(0);
 }
@@ -906,9 +910,22 @@ static void init_variables(void) {
     fish_y = 128;
 }
 
+static void update_seed(byte some) {
+    seed = (seed << 5) | (some & 0x1f);
+}
+
+static void day1_intro(void) {
+    seed = 1;
+    reset_attributes(5);
+    show_image(panel_1a, 0, 0);
+    put_str("Klau, d~zeki, negribat br`ivlaik`a", 64, 22);
+    put_str("atbraukt pie manis uz laukiem?", 64, 34);
+    update_seed(wait_asserted(CTRL_FIRE));
+}
+
 static void show_tutorial(void) {
     clear_screen();
-    memset(COLOUR(0), 5, 0x300);
+    reset_attributes(5);
     decompress(STAGING_AREA, IMAGE_DATA(symbols));
     put_str("Lai saglab`atu motiv`aciju iet cop`et,", 32, 8);
     put_str("katru dienu j`ano^ker lielais makans.", 32, 20);
@@ -943,6 +960,7 @@ void reset(void) {
     show_title();
     clear_screen();
     init_variables();
+    day1_intro();
     fishing();
     reset();
 }

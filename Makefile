@@ -47,6 +47,7 @@ pcx:
 	@./pcx-dump -i makans.pcx >> data.h
 	@./pcx-dump -i mormene.pcx >> data.h
 	@./pcx-dump -i symbols.pcx >> data.h
+	@./pcx-dump -i panel_1a.pcx >> data.h
 
 zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7800 prg
