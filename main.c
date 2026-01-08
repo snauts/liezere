@@ -688,6 +688,7 @@ static void jerk_tip(byte *img, byte dir) {
     if (wait_jerk(dir) > 10) {
 	reset_jerk();
     }
+    out_fe(dir ? 0x10 : 0);
     wait_vblank();
     draw_tip(img);
     fishing_line();
