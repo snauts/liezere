@@ -700,6 +700,7 @@ static void pull_fish(void) {
 	show_image(velk1, 13, 11);
 	delay(25);
 	show_image(velk2, 14, 12);
+	show_image(aukla, 15, 16);
 	delay(25);
     }
 }

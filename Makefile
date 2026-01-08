@@ -38,6 +38,7 @@ pcx:
 	@./pcx-dump -i copene3.pcx >> data.h
 	@./pcx-dump -i velk1.pcx >> data.h
 	@./pcx-dump -i velk2.pcx >> data.h
+	@./pcx-dump -i aukla.pcx >> data.h
 	@./pcx-dump -i loms.pcx >> data.h
 
 zxs:
