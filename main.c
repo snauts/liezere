@@ -774,15 +774,15 @@ static byte wait_pull(byte button, byte fast) {
 
 static byte report_fish(word distance) {
     if (distance < 4) {
-	moment_of_truth(4, 92, "N`ikul`igs ^k`isis!");
+	moment_of_truth(4, 64, "Jopcik, vot tas ir makans!");
 	return true;
     }
     else if (distance < 1000) {
-	moment_of_truth(3, 92, "Parasts asaris!");
+	moment_of_truth(3, 92, "Parasts asaris.");
 	return false;
     }
     else {
-	moment_of_truth(2, 92, "N`ikul`igs ^k`isis!");
+	moment_of_truth(2, 92, "N`ikul`igs ^k`isis.");
 	return false;
     }
 }
