@@ -799,17 +799,31 @@ static byte wait_pull(byte button, byte fast) {
     return false;
 }
 
+void update_num(char *str, byte num) {
+    byte dec = 0;
+    while (num >= 10) {
+	num -= 10;
+	dec++;
+    }
+    str[0] = '0' + dec;
+    str[1] = '0' + num;
+}
+
 static byte report_fish(word distance) {
-    if (distance < 2) {
+    if (distance <= 1) {
 	moment_of_truth(5, 64, "Jopcik, vot tas ir makans!");
 	return true;
     }
-    else if (distance < 40) {
-	moment_of_truth(4, 92, "Norm`als asaris.");
+    else if (distance <= 40) {
+	const char *str = "Asaris k`a asaris. ( 100g )";
+	update_num((void *) str + 22, 40 - distance);
+	moment_of_truth(4, 64, str);
 	return false;
     }
-    else if (distance < 80) {
-	moment_of_truth(3, 92, "Tas jau asar`itis.");
+    else if (distance <= 80) {
+	const char *str = "Tas jau asar`itis. ( 60g )";
+	update_num((void *) str + 21, 140 - distance);
+	moment_of_truth(3, 64, str);
 	return false;
     }
     else {
