@@ -1,6 +1,7 @@
 #include "main.h"
 #include "data.h"
 
+#define MOVE_COOLDOWN	5
 #define JERK_INTERVAL	10
 #define BITE_INTERVAL	25
 #define PULL_FAST	20
@@ -438,6 +439,7 @@ static byte steps;
 static byte *hole_end;
 static byte hole_map[192];
 
+static byte cooldown;
 static byte minute;
 static byte hour;
 
@@ -453,6 +455,7 @@ static void reset_cursor(void) {
     cursor_y = 180;
     cursor_frame = 0;
     hole_end = hole_map;
+    cooldown = 0;
     minute = 0;
     hour = 9;
 }
@@ -569,10 +572,16 @@ static void move_cursor(void) {
 	x++;
     }
     else {
+	cooldown = 0;
 	return;
     }
 
-    set_cursor(x, y);
+    if (cooldown == 0 || cooldown > MOVE_COOLDOWN) {
+	set_cursor(x, y);
+    }
+    if (cooldown <= MOVE_COOLDOWN) {
+	cooldown++;
+    }
 }
 
 static byte not_late(void) {
