@@ -120,6 +120,24 @@ static word mul(byte x, byte y) {
     return r;
 }
 
+static void beep(byte p) {
+    byte c = 0;
+    vblank = 0;
+    while (!vblank) {
+	out_fe((c >> 3) & 0x10);
+	c += p;
+    }
+    out_fe(0x00);
+}
+
+static void swoosh(int8 f, int8 n, int8 s) {
+    wait_vblank();
+    while (n-- > 0) {
+	beep(f);
+	f += s;
+    }
+}
+
 static void setup_system(void) {
     byte top = (byte) ((IRQ_BASE >> 8) - 1);
     word jmp_addr = (top << 8) | top;
@@ -546,9 +564,11 @@ static void animate_drill(void) {
 	advance_time(1);
 	show_image(urbis, 14, 8);
 	wait_asserted(CTRL_LEFT);
+	swoosh(1, 4, 1);
 	show_image(swirl, 14, 10);
 	show_image(drill, 16, 15);
 	wait_asserted(CTRL_RIGHT);
+	swoosh(4, 3, -1);
     }
 }
 
