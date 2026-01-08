@@ -42,6 +42,7 @@ pcx:
 	@./pcx-dump -i aukla2.pcx >> data.h
 	@./pcx-dump -i loms.pcx >> data.h
 	@./pcx-dump -i ruffe.pcx >> data.h
+	@./pcx-dump -i perch.pcx >> data.h
 	@./pcx-dump -i asaris.pcx >> data.h
 	@./pcx-dump -i makans.pcx >> data.h
 	@./pcx-dump -i mormene.pcx >> data.h

@@ -516,14 +516,41 @@ static byte difference(byte x, byte y) {
     return x > y ? x - y : y - x;
 }
 
-static word half_square(byte n) {
-    return mul(n, n) >> 1;
+static word square(byte value) {
+    return mul(value, value);
 }
 
-static word distance(void) {
+static word half_square(byte n) {
+    return square(n) >> 1;
+}
+
+static byte bisect(word value, byte a, byte b) {
+    if (a == b) {
+	return a;
+    }
+    else {
+	byte middle = a + ((b - a) >> 1);
+
+	if (value < square(middle)) {
+	    return bisect(value, a, middle);
+	}
+	if (middle > a) {
+	    return bisect(value, middle, b);
+	}
+	else {
+	    return b;
+	}
+    }
+}
+
+static byte sqrt(word value) {
+    return bisect(value, 0, 255) - 1;
+}
+
+static byte distance(void) {
     byte dx = difference(fish_x, cursor_x);
     byte dy = difference(fish_y, cursor_y);
-    return half_square(dx) + half_square(dy);
+    return sqrt(half_square(dx) + half_square(dy));
 }
 
 static void move_cursor(void) {
@@ -742,7 +769,7 @@ static byte jerk_fish(void) {
 
 static void draw_fish(byte fish) {
     static const byte * const table[] = {
-	NULL, mormene, ruffe, asaris, makans
+	NULL, mormene, ruffe, perch, asaris, makans
     };
     if (fish > 0) show_image(table[fish], 18, 12);
 }
@@ -773,12 +800,16 @@ static byte wait_pull(byte button, byte fast) {
 }
 
 static byte report_fish(word distance) {
-    if (distance < 4) {
-	moment_of_truth(4, 64, "Jopcik, vot tas ir makans!");
+    if (distance < 2) {
+	moment_of_truth(5, 64, "Jopcik, vot tas ir makans!");
 	return true;
     }
-    else if (distance < 1000) {
-	moment_of_truth(3, 92, "Parasts asaris.");
+    else if (distance < 40) {
+	moment_of_truth(4, 92, "Norm`als asaris.");
+	return false;
+    }
+    else if (distance < 80) {
+	moment_of_truth(3, 92, "Tas jau asar`itis.");
 	return false;
     }
     else {
