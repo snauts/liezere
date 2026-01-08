@@ -465,6 +465,8 @@ static void draw_cursor(void) {
 
 static void reset_cursor(void) {
     steps = 0;
+    fish_x = 0;
+    fish_y = 0;
     cursor_x = 8;
     cursor_y = 180;
     cursor_frame = 0;
@@ -662,11 +664,26 @@ static void draw_holes(void) {
     }
 }
 
+static byte valid_fish(void) {
+    return good_spot(fish_x, fish_y);
+}
+
+static void put_fish(void) {
+    if (hole_end == hole_map) {
+	do {
+	    word r = random();
+	    fish_x = r & 0xff;
+	    fish_y = r >> 8;
+	} while (!valid_fish());
+    }
+}
+
 static void show_lake(void) {
     clear_screen();
     show_image(ezers, 0, 0);
     show_series(apkaime);
     draw_holes();
+    put_fish();
     put_time();
 }
 
@@ -905,9 +922,6 @@ static void init_variables(void) {
     last_input = read_input();
     init_fishing_line();
     reset_cursor();
-    seed = 0xfeed;
-    fish_x = 128;
-    fish_y = 128;
 }
 
 static void update_seed(byte some) {
