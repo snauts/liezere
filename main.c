@@ -702,7 +702,7 @@ static byte fish_bite(void) {
 }
 
 static void jerk_tip(byte *img, byte dir) {
-    if (wait_button(CTRL_FIRE, gdir) > 10) {
+    if (wait_button(CTRL_FIRE, dir) > 10) {
 	reset_jerk();
     }
     out_fe(dir ? 0x10 : 0);
