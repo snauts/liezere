@@ -731,10 +731,11 @@ static byte jerk_fish(void) {
     return false;
 }
 
-static void pull_fish(void) {
+static byte pull_fish(void) {
     clear_screen();
     show_forest();
     for (byte i = 0; i < 5; i++) {
+	advance_time(1);
 	show_image(velk1, 13, 11);
 	delay(25);
 	show_image(velk2, 14, 12);
@@ -744,10 +745,11 @@ static void pull_fish(void) {
     show_image(velk1, 13, 11);
     show_image(aukla2, 15, 14);
     show_image(loms, 15, 11);
-    for (;;) { }
+    wait_asserted(CTRL_FIRE);
+    return false;
 }
 
-static void show_ice(void) {
+static byte ice_fish(void) {
     clear_screen();
     memset(COLOUR(0x00), 0x78, 0x20);
     memset(COLOUR(0x20), 0x7d, 0x2e0);
@@ -758,20 +760,23 @@ static void show_ice(void) {
     starting_line();
     put_time();
 
-    if (jerk_fish()) {
-	pull_fish();
-    }
+    return jerk_fish() && pull_fish();
 }
 
-static void fishing(void) {
+static byte catch_fish(void) {
+    return not_late() && ice_fish();
+}
+
+static byte fishing(void) {
     while (not_late()) {
 	show_lake();
 	walk_lake();
 	drill_hole();
-	if (not_late()) {
-	    show_ice();
+	if (catch_fish()) {
+	    return true;
 	}
     }
+    return false;
 }
 
 static void init_variables(void) {
