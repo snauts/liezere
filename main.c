@@ -520,10 +520,6 @@ static word square(byte value) {
     return mul(value, value);
 }
 
-static word half_square(byte n) {
-    return square(n) >> 1;
-}
-
 static byte bisect(word value, byte a, byte b) {
     if (a == b) {
 	return a;
@@ -548,9 +544,11 @@ static byte sqrt(word value) {
 }
 
 static byte distance(void) {
-    byte dx = difference(fish_x, cursor_x);
-    byte dy = difference(fish_y, cursor_y);
-    return sqrt(half_square(dx) + half_square(dy));
+    word a = square(difference(fish_x, cursor_x));
+    word b = square(difference(fish_y, cursor_y));
+    word c = a + b;
+
+    return (c >= a && c >= b) ? sqrt(c) : 255;
 }
 
 static void move_cursor(void) {
@@ -816,13 +814,13 @@ static byte report_fish(word distance) {
     }
     else if (distance <= 40) {
 	const char *str = "Asaris k`a asaris. ( 100g )";
-	update_num((void *) str + 22, 40 - distance);
+	update_num((void *) (str + 22), 40 - distance);
 	moment_of_truth(4, 64, str);
 	return false;
     }
     else if (distance <= 80) {
 	const char *str = "Tas jau asar`itis. ( 60g )";
-	update_num((void *) str + 21, 140 - distance);
+	update_num((void *) (str + 21), 140 - distance);
 	moment_of_truth(3, 64, str);
 	return false;
     }
