@@ -807,7 +807,7 @@ void update_num(char *str, byte num) {
     str[1] = '0' + num;
 }
 
-static byte report_fish(word distance) {
+static byte report_fish(byte distance) {
     if (distance <= 1) {
 	moment_of_truth(5, 64, "Jopcik, vot tas ir makans!");
 	return true;
