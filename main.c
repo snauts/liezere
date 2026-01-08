@@ -513,10 +513,10 @@ static word half_square(byte n) {
     return mul(n, n) >> 1;
 }
 
-static byte distance(void) {
+static word distance(void) {
     byte dx = difference(fish_x, cursor_x);
     byte dy = difference(fish_y, cursor_y);
-    return (half_square(dx) + half_square(dy)) >> 8;
+    return half_square(dx) + half_square(dy);
 }
 
 static void move_cursor(void) {
