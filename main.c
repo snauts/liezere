@@ -9,6 +9,7 @@
 #define WALK_TIME	3
 #define JERK_TIME	5
 
+void reset(void);
 void start_up(void) __naked {
     __asm__("di");
     __asm__("jp _reset");
@@ -263,6 +264,11 @@ static void put_tick(char c, byte x, byte y) {
     put_diacritic(tick, x, y + 7);
 }
 
+static byte special_symbol(char c, byte x, byte y) {
+    put_symbol(STAGING_AREA + ((c - '0') << 3), x, y, 8);
+    return 8;
+}
+
 static void put_str(const char *msg, byte x, byte y) {
     while (*msg != 0) {
 	char symbol = *(msg++);
@@ -277,6 +283,9 @@ static void put_str(const char *msg, byte x, byte y) {
 	}
 	else if (symbol == '^') {
 	    put_tick(*msg, x, y);
+	}
+	else if (symbol == '&') {
+	    x += special_symbol(*(msg++), x, y);
 	}
 	else {
 	    if (x > 0) x -= leading(symbol);
@@ -900,8 +909,19 @@ static void init_variables(void) {
 static void show_tutorial(void) {
     clear_screen();
     memset(COLOUR(0), 5, 0x300);
+    decompress(STAGING_AREA, IMAGE_DATA(symbols));
     put_str("Lai saglab`atu motiv`aciju iet cop`et,", 32, 8);
     put_str("katru dienu j`ano^ker lielais makans.", 32, 20);
+    put_str("1. Valk`aties pa ezeru Q&0 A&1 O&2 P&3", 32, 48);
+    put_str("2. Izv`el`eties copes vietu SPACE", 32, 60);
+    put_str("3. Izurbt caurumu led`u O&2 P&3", 32, 72);
+    put_str("4. ^Gorg`at mormeni var ar SPACE", 32, 84);
+    put_str("Zivis ne^kersies, ja l`eni ~gorg`as", 46, 96);
+    put_str("5. Lai piecirstu zivi j`aspie~z Q&0", 32, 108);
+    put_str("6. Izvilkt zivi var spie~zot O&2 P&3", 32, 120);
+    put_str("Velkot p`ar`ak `atri p`artr`uks aukla", 46, 132);
+    put_str("Velkot p`ar`ak l`eni zivs aizies", 46, 144);
+    put_str("Jo liek`aka zivs, jo tuv`ak t`a makanam", 32, 172);
     wait_asserted(CTRL_FIRE);
     reset();
 }
