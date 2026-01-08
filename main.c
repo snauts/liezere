@@ -419,6 +419,9 @@ static const int8 cursor[] = {
     1,  1, -1, -1,
 };
 
+static byte fish_x;
+static byte fish_y;
+
 static byte cursor_x;
 static byte cursor_y;
 
@@ -762,6 +765,8 @@ static void init_variables(void) {
     init_fishing_line();
     reset_cursor();
     seed = 0xfeed;
+    fish_x = 128;
+    fish_y = 128;
 }
 
 static void show_title(void) {
