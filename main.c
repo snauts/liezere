@@ -337,8 +337,8 @@ static byte input_change(byte input) {
     return change;
 }
 
-static byte read_1_or_2(void) {
-    return ~in_key(0xf7) & 3;
+static byte read_123(void) {
+    return ~in_key(0xf7) & 7;
 }
 
 static void animate_line(void) {
@@ -348,10 +348,10 @@ static void animate_line(void) {
     }
 }
 
-static void wait_1_or_2(void) {
+static byte wait_123(void) {
     byte ticks = 0;
-    last_input = read_1_or_2();
-    while (!input_change(read_1_or_2())) {
+    last_input = read_123();
+    while (!input_change(read_123())) {
 	if (vblank) {
 	    vblank = 0;
 	    ticks++;
@@ -362,6 +362,7 @@ static void wait_1_or_2(void) {
 	}
     }
     use_joy = last_input & 2;
+    return last_input;
 }
 
 static void show_series(const Frame *series) {
@@ -896,12 +897,22 @@ static void init_variables(void) {
     fish_y = 128;
 }
 
+static void show_tutorial(void) {
+    clear_screen();
+    memset(COLOUR(0), 5, 0x300);
+    put_str("Lai saglab`atu motiv`aciju iet cop`et,", 32, 8);
+    put_str("katru dienu j`ano^ker lielais makans.", 32, 20);
+    wait_asserted(CTRL_FIRE);
+    reset();
+}
+
 static void show_title(void) {
     show_image(title, 0, 0);
     put_str("1 - Klaviat`ura", 88, 96);
     put_str("2 - D~zoistiks", 88, 112);
+    put_str("3 - Pam`ac`iba", 88, 128);
     memset(COLOUR(0x140), 0x47, 0x100);
-    wait_1_or_2();
+    if (wait_123() & 4) show_tutorial();
 }
 
 void reset(void) {
