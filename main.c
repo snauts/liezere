@@ -924,25 +924,35 @@ static void init_variables(void) {
     reset_cursor();
 }
 
-static void update_seed(byte some) {
+static void wait_and_update_seed(void) {
+    byte some = wait_asserted(CTRL_FIRE);
     seed = (seed << 5) | (some & 0x1f);
 }
 
-static void day1_intro(void) {
-    seed = 1;
-    reset_attributes(5);
+static void day1(void) {
     show_image(panel_1a, 0, 0);
     put_str("Klau, d~zeki, negribat br`ivlaik`a", 64, 22);
     put_str("atbraukt pie manis uz laukiem?", 64, 34);
-    update_seed(wait_asserted(CTRL_FIRE));
+    wait_and_update_seed();
 
     show_image(panel_1b, 22, 8);
     put_str("S`uds jaut`ajums, bet kur tas ir?", 8, 90);
-    update_seed(wait_asserted(CTRL_FIRE));
+    wait_and_update_seed();
 
     show_image(panel_1c, 8, 16);
     put_str("LIEZER`E!", 128, 154);
-    update_seed(wait_asserted(CTRL_FIRE));
+    wait_and_update_seed();
+}
+
+static void show_panel(byte num) {
+    seed = 1;
+    clear_screen();
+    reset_attributes(5);
+    typedef void (*Function)(void);
+    static const Function const table[] = {
+	NULL, &day1,
+    };
+    table[num]();
 }
 
 static void show_tutorial(void) {
@@ -982,7 +992,7 @@ void reset(void) {
     show_title();
     clear_screen();
     init_variables();
-    day1_intro();
+    show_panel(1);
     fishing();
     reset();
 }
