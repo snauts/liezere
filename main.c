@@ -5,6 +5,8 @@
 #define BITE_INTERVAL	25
 #define PULL_FAST	20
 #define PULL_SLOW	60
+#define WALK_TIME	3
+#define JERK_TIME	5
 
 void start_up(void) __naked {
     __asm__("di");
@@ -500,7 +502,7 @@ static byte visited(byte x, byte y) {
 static void set_cursor(byte x, byte y) {
     draw_cursor();
     if (good_spot(x, y) || visited(x, y)) {
-	if (++steps == 3) {
+	if (++steps == WALK_TIME) {
 	    advance_time(1);
 	    steps = 0;
 	}
@@ -726,7 +728,7 @@ static byte jerk_fish(void) {
 	jerk_tip(COPENE2, CTRL_FIRE);
 	jerk_tip(COPENE1, 0);
 
-	if (++ticks >= 5) {
+	if (++ticks >= JERK_TIME) {
 	    advance_time(1);
 	    ticks = 0;
 	}
