@@ -456,6 +456,7 @@ static byte hole_map[192];
 static byte cooldown;
 static byte minute;
 static byte hour;
+static byte day;
 
 static void draw_cursor(void) {
     const int8 *dir = cursor + (cursor_frame & 0xf);
@@ -921,7 +922,7 @@ static byte fishing(void) {
 static void init_variables(void) {
     last_input = read_input();
     init_fishing_line();
-    reset_cursor();
+    day = 1;
 }
 
 static void wait_and_update_seed(void) {
@@ -944,13 +945,23 @@ static void day1(void) {
     wait_and_update_seed();
 }
 
+static void game_fail(void) {
+    put_str("Izg`a~san`as!", 96, 64);
+    wait_and_update_seed();
+}
+
+static void game_done(void) {
+    put_str("Uzvara!", 96, 64);
+    wait_and_update_seed();
+}
+
 static void show_panel(byte num) {
     seed = 1;
     clear_screen();
     reset_attributes(5);
     typedef void (*Function)(void);
     static const Function const table[] = {
-	NULL, &day1,
+	&game_fail, &day1, &day1, &day1, &game_done,
     };
     table[num]();
 }
@@ -984,6 +995,19 @@ static void show_title(void) {
     if (wait_123() & 4) show_tutorial();
 }
 
+static void game_loop(void) {
+    while (day <= 3) {
+	show_panel(day);
+	reset_cursor();
+	if (!fishing()) {
+	    day = 0;
+	    break;
+	}
+	day++;
+    }
+    show_panel(day);
+}
+
 void reset(void) {
     SETUP_STACK();
     setup_system();
@@ -992,7 +1016,6 @@ void reset(void) {
     show_title();
     clear_screen();
     init_variables();
-    show_panel(1);
-    fishing();
+    game_loop();
     reset();
 }
