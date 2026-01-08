@@ -696,13 +696,16 @@ static byte jerk_fish(void) {
 static void pull_fish(void) {
     clear_screen();
     show_forest();
-    for (;;) {
+    for (byte i = 0; i < 5; i++) {
 	show_image(velk1, 13, 11);
 	delay(25);
 	show_image(velk2, 14, 12);
 	show_image(aukla, 15, 16);
 	delay(25);
     }
+    show_image(velk1, 13, 11);
+    show_image(loms, 15, 11);
+    for (;;) { }
 }
 
 static void show_ice(void) {
