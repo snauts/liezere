@@ -921,6 +921,14 @@ static void day1_intro(void) {
     put_str("Klau, d~zeki, negribat br`ivlaik`a", 64, 22);
     put_str("atbraukt pie manis uz laukiem?", 64, 34);
     update_seed(wait_asserted(CTRL_FIRE));
+
+    show_image(panel_1b, 22, 8);
+    put_str("S`uds jaut`ajums, bet kur tas ir?", 8, 90);
+    update_seed(wait_asserted(CTRL_FIRE));
+
+    show_image(panel_1c, 8, 16);
+    put_str("LIEZER`E!", 128, 154);
+    update_seed(wait_asserted(CTRL_FIRE));
 }
 
 static void show_tutorial(void) {
