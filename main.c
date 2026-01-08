@@ -51,6 +51,10 @@ static void wait_vblank(void) {
     while (!vblank) { }
 }
 
+static void delay(byte ticks) {
+    while (ticks-- > 0) { wait_vblank(); }
+}
+
 static byte in_key(byte a) {
     __asm__("in a, (#0xfe)");
     return a;
@@ -689,6 +693,17 @@ static byte jerk_fish(void) {
     return false;
 }
 
+static void pull_fish(void) {
+    clear_screen();
+    show_forest();
+    for (;;) {
+	show_image(velk1, 13, 11);
+	delay(25);
+	show_image(velk2, 14, 12);
+	delay(25);
+    }
+}
+
 static void show_ice(void) {
     clear_screen();
     memset(COLOUR(0x00), 0x78, 0x20);
@@ -701,9 +716,7 @@ static void show_ice(void) {
     put_time();
 
     if (jerk_fish()) {
-	clear_screen();
-	show_forest();
-	for (;;) { }
+	pull_fish();
     }
 }
 
