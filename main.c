@@ -632,11 +632,11 @@ static void animate_drill(void) {
 	advance_time(1);
 	show_image(urbis, 14, 8);
 	wait_asserted(CTRL_LEFT);
-	swoosh(1, 4, 1);
+	swoosh(1, 3, 1);
 	show_image(swirl, 14, 10);
 	show_image(drill, 16, 15);
 	wait_asserted(CTRL_RIGHT);
-	swoosh(4, 3, -1);
+	swoosh(4, 2, -1);
     }
 }
 
