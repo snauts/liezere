@@ -800,7 +800,7 @@ static byte wait_pull(byte button, byte fast) {
 	return true;
     }
     if (ticks >= PULL_SLOW) {
-	moment_of_truth(1, 52, "P`ar`ak l`eni vilki, nor`av`as maita!");
+	moment_of_truth(1, 40, "P`ar`ak l`eni vilki, nokabin`aj`as maita!");
 	return true;
     }
     return false;
