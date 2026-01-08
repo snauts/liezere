@@ -772,6 +772,21 @@ static byte wait_pull(byte button, byte fast) {
     return false;
 }
 
+static byte report_fish(word distance) {
+    if (distance < 4) {
+	moment_of_truth(4, 92, "N`ikul`igs ^k`isis!");
+	return true;
+    }
+    else if (distance < 1000) {
+	moment_of_truth(3, 92, "Parasts asaris!");
+	return false;
+    }
+    else {
+	moment_of_truth(2, 92, "N`ikul`igs ^k`isis!");
+	return false;
+    }
+}
+
 static byte pull_fish(void) {
     clear_screen();
     show_forest();
@@ -787,8 +802,7 @@ static byte pull_fish(void) {
 	    return false;
 	}
     }
-    moment_of_truth(2, 92, "N`ikul`igs ^k`isis!");
-    return false;
+    return report_fish(distance());
 }
 
 static byte ice_fish(void) {
