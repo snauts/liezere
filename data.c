@@ -91,14 +91,14 @@ const Text tutorial[] = {
     { .x = 46, .y = 132, .str = "Velkot p`ar`ak `atri p`artr`uks aukla" },
     { .x = 46, .y = 144, .str = "Velkot p`ar`ak l`eni zivs aizies" },
     { .x = 32, .y = 172, .str = "Jo liek`aka zivs, jo tuv`ak t`a makanam" },
-    { .str = NULL },
+    TEXT_SENTINEL,
 };
 
 const Text choices[] = {
     { .x = 88, .y = 96,  .str = "1 - Klaviat`ura" },
     { .x = 88, .y = 112, .str = "2 - D~zoistiks" },
     { .x = 88, .y = 128, .str = "3 - Pam`ac`iba" },
-    { .str = NULL },
+    TEXT_SENTINEL,
 };
 
 const byte* const fishes[] = {
@@ -112,4 +112,29 @@ const char* const reports[] = {
     " 70g - tas jau asar`itis.",
     "100g - asaris k`a asaris.",
     "Jopcik, vot tas ir makans!",
+};
+
+static const Frame day1_frame[] = {
+    { .img = panel_1a, .x = 0,  .y = 0  },
+    { .img = panel_1b, .x = 22, .y = 8  },
+    { .img = panel_1c, .x = 8,  .y = 16 },
+};
+
+static const Text day1_text[] = {
+    { .x = 64,  .y = 22,  .str = "Klau, d~zeki, negribat br`ivlaik`a" },
+    { .x = 64,  .y = 34,  .str = "atbraukt pie manis uz laukiem?" },
+    TEXT_SENTINEL,
+
+    { .x = 8,   .y = 90,  .str = "S`uds jaut`ajums, bet kur tas ir?" },
+    TEXT_SENTINEL,
+
+    { .x = 128, .y = 154, .str = "LIEZ`ER`E!" },
+    TEXT_SENTINEL,
+
+    { .x = 96,  .y = 64,  .str = "Pirm`a diena" },
+    TEXT_SENTINEL,
+};
+
+const Panel panels[] = {
+    { .frame = day1_frame, .text = day1_text },
 };

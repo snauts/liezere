@@ -35,9 +35,6 @@ pcx:
 	@./pcx-dump -i aukla2.pcx	>> image.h
 	@./pcx-dump -i loms.pcx		>> image.h
 	@./pcx-dump -i symbols.pcx	>> image.h
-	@./pcx-dump -i panel_1a.pcx	>> image.h
-	@./pcx-dump -i panel_1b.pcx	>> image.h
-	@./pcx-dump -i panel_1c.pcx	>> image.h
 
 	@./pcx-dump -i niedres.pcx	 > data.h
 	@./pcx-dump -i puduris1.pcx	>> data.h
@@ -51,6 +48,9 @@ pcx:
 	@./pcx-dump -i asaris.pcx	>> data.h
 	@./pcx-dump -i makans.pcx	>> data.h
 	@./pcx-dump -i mormene.pcx	>> data.h
+	@./pcx-dump -i panel_1a.pcx	>> data.h
+	@./pcx-dump -i panel_1b.pcx	>> data.h
+	@./pcx-dump -i panel_1c.pcx	>> data.h
 
 zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7800 prg

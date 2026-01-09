@@ -27,6 +27,7 @@ extern const Frame horizonts[];
 extern const Frame apkaime[];
 extern const Text tutorial[];
 extern const Text choices[];
+extern const Panel panels[];
 
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
@@ -412,8 +413,9 @@ static void show_text(const Text *text) {
     put_str(text->str, text->x, text->y);
 }
 
-static void show_text_series(const Text *text) {
+static const Text *show_text_series(const Text *text) {
     while (text->str) { show_text(text++); }
+    return text + 1;
 }
 
 #define PIXEL(x, y) BYTE(map_y[y] + (x >> 3))
@@ -964,21 +966,6 @@ static void wait_and_update_seed(void) {
     seed = (seed << 5) | (some & 0x1f);
 }
 
-static void day1(void) {
-    show_image(panel_1a, 0, 0);
-    put_str("Klau, d~zeki, negribat br`ivlaik`a", 64, 22);
-    put_str("atbraukt pie manis uz laukiem?", 64, 34);
-    wait_and_update_seed();
-
-    show_image(panel_1b, 22, 8);
-    put_str("S`uds jaut`ajums, bet kur tas ir?", 8, 90);
-    wait_and_update_seed();
-
-    show_image(panel_1c, 8, 16);
-    put_str("LIEZ`ER`E!", 128, 154);
-    wait_and_update_seed();
-}
-
 static void wall_of_text(const Text *text) {
     clear_screen();
     show_text_series(text);
@@ -986,25 +973,32 @@ static void wall_of_text(const Text *text) {
     wait_space();
 }
 
+static void draw_panel(Panel *panel) {
+    const Text *text = panel->text;
+    for (byte i = 0; i < 3; i++) {
+	text = show_text_series(text);
+	show_frame(panel->frame + i);
+	wait_and_update_seed();
+    }
+
+    if (text->str) wall_of_text(text);
+}
+
 static void game_fail(void) {
     put_str("Izg`a~san`as!", 96, 64);
-    wait_and_update_seed();
+    wait_space();
 }
 
 static void game_done(void) {
     put_str("Uzvara!", 96, 64);
-    wait_and_update_seed();
+    wait_space();
 }
 
-static void show_panel(byte num) {
+static void current_panel(void) {
     seed = 1;
     clear_screen();
     reset_attributes(5);
-    typedef void (*Function)(void);
-    static const Function const table[] = {
-	&game_fail, &day1, &day1, &day1, &game_done,
-    };
-    table[num]();
+    draw_panel(panels + day - 1);
 }
 
 static void show_tutorial(void) {
@@ -1023,15 +1017,15 @@ static void show_title(void) {
 static void game_loop(void) {
     init_variables();
     while (day <= 3) {
-	show_panel(day);
+	current_panel();
 	reset_cursor();
 	if (!fishing()) {
-	    day = 0;
-	    break;
+	    game_fail();
+	    return;
 	}
 	day++;
     }
-    show_panel(day);
+    game_done();
 }
 
 void reset(void) {

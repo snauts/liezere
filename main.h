@@ -18,6 +18,8 @@ typedef unsigned short word;
 #define COLOUR(x)	PTR(0x5800 + (x))
 #define STAGING_AREA	PTR(0x5b00)
 
+#define TEXT_SENTINEL	{ .str = NULL }
+
 typedef struct {
     const byte *img;
     byte x, y;
@@ -27,6 +29,11 @@ typedef struct {
     const char *str;
     byte x, y;
 } Text;
+
+typedef struct {
+    Frame *frame;
+    Text *text;
+} Panel;
 
 enum {
     FISH_SNAP = 0,
