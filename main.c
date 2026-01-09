@@ -380,11 +380,12 @@ static byte wait_123(void) {
     return last_input;
 }
 
+static void show_frame(const Frame *frame) {
+    show_image(frame->img, frame->x, frame->y);
+}
+
 static void show_series(const Frame *series) {
-    while (series->img) {
-	show_image(series->img, series->x, series->y);
-	series++;
-    }
+    while (series->img) { show_frame(series++); }
 }
 
 static void show_text(const Text *text) {
