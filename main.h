@@ -27,3 +27,12 @@ typedef struct {
     const char *str;
     byte x, y;
 } Text;
+
+enum {
+    FISH_SNAP = 0,
+    FISH_ESCAPE,
+    FISH_RUFFE,
+    FISH_PERCH,
+    FISH_ASARIS,
+    FISH_MAKANS,
+};

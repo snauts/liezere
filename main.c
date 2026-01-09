@@ -464,6 +464,10 @@ static byte wait_asserted(byte ctrl) {
     return ticks;
 }
 
+static byte wait_space(void) {
+    return wait_asserted(CTRL_FIRE);
+}
+
 static const int8 cursor[] = {
     0,  1,  0, -1,
     1, -1, -1,  1,
@@ -863,7 +867,7 @@ static void moment_of_weight(byte fish, int8 weight) {
     show_image(loms, 15, 11);
     draw_fish(fish);
 
-    wait_asserted(CTRL_FIRE);
+    wait_space();
 }
 
 static void moment_of_truth(byte fish) {
@@ -874,11 +878,11 @@ static byte wait_pull(byte button, byte fast) {
     byte ticks = wait_button(button, button, PULL_SLOW);
     if (fast && ticks <= PULL_FAST) {
 	advance_time(5);
-	moment_of_truth(0);
+	moment_of_truth(FISH_SNAP);
 	return true;
     }
     if (ticks >= PULL_SLOW) {
-	moment_of_truth(1);
+	moment_of_truth(FISH_ESCAPE);
 	return true;
     }
     return false;
@@ -886,19 +890,19 @@ static byte wait_pull(byte button, byte fast) {
 
 static byte report_fish(byte distance) {
     if (distance <= 1) {
-	moment_of_truth(5);
+	moment_of_truth(FISH_MAKANS);
 	return true;
     }
     else if (distance <= 50) {
-	moment_of_weight(4, (51 - distance) << 1);
+	moment_of_weight(FISH_ASARIS, (51 - distance) << 1);
 	return false;
     }
     else if (distance <= 80) {
-	moment_of_weight(3, (150 - distance));
+	moment_of_weight(FISH_PERCH, (150 - distance));
 	return false;
     }
     else {
-	moment_of_truth(2);
+	moment_of_truth(FISH_RUFFE);
 	return false;
     }
 }
@@ -958,7 +962,7 @@ static void init_variables(void) {
 }
 
 static void wait_and_update_seed(void) {
-    byte some = wait_asserted(CTRL_FIRE);
+    byte some = wait_space();
     seed = (seed << 5) | (some & 0x1f);
 }
 
@@ -975,6 +979,13 @@ static void day1(void) {
     show_image(panel_1c, 8, 16);
     put_str("LIEZ`ER`E!", 128, 154);
     wait_and_update_seed();
+}
+
+static void wall_of_text(const Text *text) {
+    clear_screen();
+    show_text_series(text);
+    reset_attributes(5);
+    wait_space();
 }
 
 static void game_fail(void) {
@@ -999,11 +1010,8 @@ static void show_panel(byte num) {
 }
 
 static void show_tutorial(void) {
-    clear_screen();
     decompress(STAGING_AREA, IMAGE_DATA(symbols));
-    show_text_series(tutorial);
-    reset_attributes(0x45);
-    wait_asserted(CTRL_FIRE);
+    wall_of_text(tutorial);
     reset();
 }
 
