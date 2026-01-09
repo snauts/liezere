@@ -496,15 +496,13 @@ static void draw_cursor(void) {
 
 static void reset_cursor(void) {
     steps = 0;
-    fish_x = 0;
-    fish_y = 0;
     cursor_x = 8;
     cursor_y = 180;
     cursor_frame = 0;
     hole_end = hole_map;
+    hour = (day == 2) ? 11 : 9;
     cooldown = 0;
     minute = 0;
-    hour = 9;
 }
 
 static void put_digit(byte digit, byte x, byte y) {
