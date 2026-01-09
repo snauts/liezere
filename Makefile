@@ -60,7 +60,8 @@ zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7800 prg
 	@bin2tap -b liezere.bin
 
-main.o: data.h
+data.o: data.h
+main.o: image.h
 
 %.o: %.c main.h
 	@echo compile source file $<
@@ -75,4 +76,4 @@ fuse: zxs
 	@fuse --machine 128 --no-confirm-actions liezere.tap >/dev/null
 
 clean:
-	rm -f pcx-dump data.h liezere* *.asm *.lst *.sym *.o
+	rm -f pcx-dump data.h image.h liezere* *.asm *.lst *.sym *.o
