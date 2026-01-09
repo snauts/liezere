@@ -18,6 +18,7 @@ void start_up(void) __naked {
 static volatile byte vblank;
 static byte *map_y[192];
 static byte *line[96];
+static byte no_text;
 static word seed;
 
 extern const Frame horizonts[];
@@ -159,6 +160,7 @@ static void setup_system(void) {
 }
 
 static void precalculate(void) {
+    no_text = false;
     for (byte y = 0; y < 192; y++) {
 	byte f = ((y & 7) << 3) | ((y >> 3) & 7) | (y & 0xc0);
 	map_y[y] = SCREEN(f << 5);
@@ -182,7 +184,7 @@ static void clear_screen(void) {
     out_fe(0);
 }
 
-static void put_symbol(const byte *addr, byte x, byte y, byte n) {
+static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
     byte shift = x & 7;
     byte offset = x >> 3;
     for (byte i = 0; i < n; i++) {
@@ -191,6 +193,10 @@ static void put_symbol(const byte *addr, byte x, byte y, byte n) {
 	ptr[0] |= (data >> shift);
 	ptr[1] |= (data << (8 - shift));
     }
+}
+
+static void put_symbol(const byte *addr, byte x, byte y, byte n) {
+    if (!no_text) draw_symbol(addr, x, y, n);
 }
 
 static void put_char(char symbol, byte x, byte y) {
@@ -300,6 +306,17 @@ static byte put_str(const char *msg, byte x, byte y) {
 	}
     }
     return x;
+}
+
+static byte str_len(const char *msg) {
+    no_text = true;
+    byte len = put_str(msg, 0, 0);
+    no_text = false;
+    return len;
+}
+
+static byte center(const char *msg) {
+    return 128 - (str_len(msg) >> 1);
 }
 
 static void *decompress(byte *dst, const byte *src) {
@@ -825,8 +842,8 @@ static void draw_fish(byte fish) {
     if (fish > 0) show_image(table[fish], 18, 12);
 }
 
-static void moment_of_truth(byte fish, byte x, const char *str) {
-    put_str(str, x, 64);
+static void moment_of_truth(byte fish, const char *str) {
+    put_str(str, center(str), 64);
     memset(COLOUR(0x100), 5, 0x20);
     show_image(velk1, 13, 11);
     show_image(aukla2, 15, 14);
@@ -840,11 +857,11 @@ static byte wait_pull(byte button, byte fast) {
     byte ticks = wait_button(button, button, PULL_SLOW);
     if (fast && ticks <= PULL_FAST) {
 	advance_time(3);
-	moment_of_truth(0, 48, "P`ar`ak stauji vilki, p`arr`avi auklu!");
+	moment_of_truth(0, "P`ar`ak stauji vilki, p`arr`avi auklu!");
 	return true;
     }
     if (ticks >= PULL_SLOW) {
-	moment_of_truth(1, 40, "P`ar`ak l`eni vilki, nokabin`aj`as maita!");
+	moment_of_truth(1, "P`ar`ak l`eni vilki, nokabin`aj`as maita!");
 	return true;
     }
     return false;
@@ -862,23 +879,23 @@ void update_num(char *str, byte num) {
 
 static byte report_fish(byte distance) {
     if (distance <= 1) {
-	moment_of_truth(5, 64, "Jopcik, vot tas ir makans!");
+	moment_of_truth(5, "Jopcik, vot tas ir makans!");
 	return true;
     }
     else if (distance <= 40) {
 	const char *str = "Asaris k`a asaris. ( 100g )";
 	update_num((void *) (str + 22), 40 - distance);
-	moment_of_truth(4, 64, str);
+	moment_of_truth(4, str);
 	return false;
     }
     else if (distance <= 80) {
 	const char *str = "Tas jau asar`itis. ( 60g )";
 	update_num((void *) (str + 21), 140 - distance);
-	moment_of_truth(3, 64, str);
+	moment_of_truth(3, str);
 	return false;
     }
     else {
-	moment_of_truth(2, 92, "N`ikul`igs ^k`isis.");
+	moment_of_truth(2, "N`ikul`igs ^k`isis.");
 	return false;
     }
 }
