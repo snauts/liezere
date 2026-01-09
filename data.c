@@ -148,7 +148,8 @@ static const Text day1_text[] = {
     { .x = 96,  .y = 154, .str = "Tas ir Liez`er`e!" },
     TEXT_SENTINEL,
 
-    { .x = 96,  .y = 64,  .str = "Pirm`a diena" },
+    { .x = 255, .y = 64,  .str = "- Pirm`a diena -" },
+    { .x = 255, .y = 116, .str = "Nu tik nu ^kersies, nu tik nu b`us!" },
     TEXT_SENTINEL,
 };
 

@@ -410,7 +410,8 @@ static void show_series(const Frame *series) {
 }
 
 static void show_text(const Text *text) {
-    put_str(text->str, text->x, text->y);
+    byte x = text->x < 255 ? text->x : center(text->str);
+    put_str(text->str, x, text->y);
 }
 
 static const Text *show_text_series(const Text *text) {
