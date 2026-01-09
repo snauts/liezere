@@ -985,7 +985,7 @@ static void draw_panel(Panel *panel) {
 }
 
 static void game_done(void) {
-    put_str("Uzvara!", 96, 64);
+    show_image(beigas, 0, 0);
     wait_space();
 }
 

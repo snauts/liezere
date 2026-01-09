@@ -22,6 +22,7 @@ pcx:
 	@gcc pcx-dump.c lz.c -Wall -o pcx-dump
 	@./pcx-dump -i title.pcx	 > image.h
 	@./pcx-dump -i ezers.pcx	>> image.h
+	@./pcx-dump -i beigas.pcx	>> image.h
 	@./pcx-dump -i hole.pcx		>> image.h
 	@./pcx-dump -i copene1.pcx	>> image.h
 	@./pcx-dump -i copene2.pcx	>> image.h
