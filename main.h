@@ -22,3 +22,8 @@ typedef struct {
     const byte *img;
     byte x, y;
 } Frame;
+
+typedef struct {
+    const char *str;
+    byte x, y;
+} Text;

@@ -85,3 +85,19 @@ const Frame horizonts[] = {
     { .img = krasts, .x = 28, .y = 13 },
     { .img = NULL },
 };
+
+const Text tutorial[] = {
+    { .x = 32, .y = 8,   .str = "Lai saglab`atu motiv`aciju iet cop`et," },
+    { .x = 32, .y = 20,  .str = "katru dienu j`ano^ker lielais makans." },
+    { .x = 32, .y = 48,  .str = "1. Valk`aties pa ezeru Q&0 A&1 O&2 P&3" },
+    { .x = 32, .y = 60,  .str = "2. Izv`el`eties copes vietu SPACE" },
+    { .x = 32, .y = 72,  .str = "3. Izurbt caurumu led`u O&2 P&3" },
+    { .x = 32, .y = 84,  .str = "4. ^Gorg`at mormeni var ar SPACE" },
+    { .x = 46, .y = 96,  .str = "Zivis ne^kersies, ja l`eni ~gorg`as" },
+    { .x = 32, .y = 108, .str = "5. Lai piecirstu zivi j`aspie~z Q&0" },
+    { .x = 32, .y = 120, .str = "6. Izvilkt zivi var spie~zot O&2 P&3" },
+    { .x = 46, .y = 132, .str = "Velkot p`ar`ak `atri p`artr`uks aukla" },
+    { .x = 46, .y = 144, .str = "Velkot p`ar`ak l`eni zivs aizies" },
+    { .x = 32, .y = 172, .str = "Jo liek`aka zivs, jo tuv`ak t`a makanam" },
+    { .str = NULL },
+};

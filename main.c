@@ -22,6 +22,7 @@ static word seed;
 
 extern const Frame horizonts[];
 extern const Frame apkaime[];
+extern const Text tutorial[];
 
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
@@ -383,6 +384,14 @@ static void show_series(const Frame *series) {
 	show_image(series->img, series->x, series->y);
 	series++;
     }
+}
+
+static void show_text(const Text *text) {
+    put_str(text->str, text->x, text->y);
+}
+
+static void show_text_series(const Text *text) {
+    while (text->str) { show_text(text++); }
 }
 
 #define PIXEL(x, y) BYTE(map_y[y] + (x >> 3))
@@ -968,20 +977,9 @@ static void show_panel(byte num) {
 
 static void show_tutorial(void) {
     clear_screen();
-    reset_attributes(5);
     decompress(STAGING_AREA, IMAGE_DATA(symbols));
-    put_str("Lai saglab`atu motiv`aciju iet cop`et,", 32, 8);
-    put_str("katru dienu j`ano^ker lielais makans.", 32, 20);
-    put_str("1. Valk`aties pa ezeru Q&0 A&1 O&2 P&3", 32, 48);
-    put_str("2. Izv`el`eties copes vietu SPACE", 32, 60);
-    put_str("3. Izurbt caurumu led`u O&2 P&3", 32, 72);
-    put_str("4. ^Gorg`at mormeni var ar SPACE", 32, 84);
-    put_str("Zivis ne^kersies, ja l`eni ~gorg`as", 46, 96);
-    put_str("5. Lai piecirstu zivi j`aspie~z Q&0", 32, 108);
-    put_str("6. Izvilkt zivi var spie~zot O&2 P&3", 32, 120);
-    put_str("Velkot p`ar`ak `atri p`artr`uks aukla", 46, 132);
-    put_str("Velkot p`ar`ak l`eni zivs aizies", 46, 144);
-    put_str("Jo liek`aka zivs, jo tuv`ak t`a makanam", 32, 172);
+    show_text_series(tutorial);
+    reset_attributes(0x45);
     wait_asserted(CTRL_FIRE);
     reset();
 }
