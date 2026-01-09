@@ -984,21 +984,21 @@ static void draw_panel(Panel *panel) {
     if (text->str) wall_of_text(text);
 }
 
-static void game_fail(void) {
-    put_str("Izg`a~san`as!", 96, 64);
-    wait_space();
-}
-
 static void game_done(void) {
     put_str("Uzvara!", 96, 64);
     wait_space();
 }
 
-static void current_panel(void) {
+static void current_panel(byte num) {
     seed = 1;
     clear_screen();
     reset_attributes(5);
-    draw_panel(panels + day - 1);
+    draw_panel(panels + num);
+}
+
+static void game_fail(void) {
+    current_panel(0);
+    reset();
 }
 
 static void show_tutorial(void) {
@@ -1017,11 +1017,10 @@ static void show_title(void) {
 static void game_loop(void) {
     init_variables();
     while (day <= 3) {
-	current_panel();
+	current_panel(day);
 	reset_cursor();
 	if (!fishing()) {
 	    game_fail();
-	    return;
 	}
 	day++;
     }

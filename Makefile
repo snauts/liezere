@@ -48,6 +48,9 @@ pcx:
 	@./pcx-dump -i asaris.pcx	>> data.h
 	@./pcx-dump -i makans.pcx	>> data.h
 	@./pcx-dump -i mormene.pcx	>> data.h
+	@./pcx-dump -i panel_0a.pcx	>> data.h
+	@./pcx-dump -i panel_0b.pcx	>> data.h
+	@./pcx-dump -i panel_0c.pcx	>> data.h
 	@./pcx-dump -i panel_1a.pcx	>> data.h
 	@./pcx-dump -i panel_1b.pcx	>> data.h
 	@./pcx-dump -i panel_1c.pcx	>> data.h

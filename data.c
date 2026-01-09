@@ -114,6 +114,12 @@ const char* const reports[] = {
     "Jopcik, vot tas ir makans!",
 };
 
+static const Frame day0_frame[] = {
+    { .img = panel_0a, .x = 0,  .y = 0  },
+    { .img = panel_0b, .x = 22, .y = 8  },
+    { .img = panel_0c, .x = 0,  .y = 16 },
+};
+
 static const Text day0_text[] = {
     { .x = 64,  .y = 26,  .str = "K`ads prieks sald`et nagus?" },
     TEXT_SENTINEL,
@@ -147,5 +153,6 @@ static const Text day1_text[] = {
 };
 
 const Panel panels[] = {
+    { .frame = day0_frame, .text = day0_text },
     { .frame = day1_frame, .text = day1_text },
 };
