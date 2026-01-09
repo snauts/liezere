@@ -4,6 +4,7 @@
 #define MOVE_COOLDOWN	5
 #define JERK_INTERVAL	10
 #define BITE_INTERVAL	25
+#define BITE_DELAY	15
 #define PULL_FAST	20
 #define PULL_SLOW	60
 #define WALK_TIME	3
@@ -762,7 +763,7 @@ static byte wait_button(byte button, byte state, byte cutoff) {
 static byte jerk_amount;
 
 static void reset_jerk(void) {
-    jerk_amount = 15 + (random() & 0xf);
+    jerk_amount = BITE_DELAY + (random() & 0xf);
 }
 
 static void clear_tip(void) {
