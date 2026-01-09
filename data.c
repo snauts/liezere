@@ -108,3 +108,12 @@ const Text choices[] = {
     { .x = 88, .y = 128, .str = "3 - Pam`ac`iba" },
     { .str = NULL },
 };
+
+const char* const reports[] = {
+    "P`ar`ak stauji vilki, p`arr`avi auklu!",
+    "P`ar`ak l`eni vilki, nokabin`aj`as maita!",
+    "N`ikul`igs ^k`isis.",
+    " 70g - tas jau asar`itis.",
+    "100g - asaris k`a asaris.",
+    "Jopcik, vot tas ir makans!",
+};

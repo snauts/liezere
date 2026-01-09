@@ -21,6 +21,7 @@ static byte *line[96];
 static byte no_text;
 static word seed;
 
+extern const char* const reports[];
 extern const Frame horizonts[];
 extern const Frame apkaime[];
 extern const Text tutorial[];
@@ -842,7 +843,21 @@ static void draw_fish(byte fish) {
     if (fish > 0) show_image(table[fish], 18, 12);
 }
 
-static void moment_of_truth(byte fish, const char *str) {
+static void update_num(char *str, byte num) {
+    byte dec = 0;
+    while (num >= 10) {
+	num -= 10;
+	dec++;
+    }
+    str[1] = '0' + dec;
+    str[2] = '0' + num;
+}
+
+static void moment_of_weight(byte fish, int8 weight) {
+    const char *str = reports[fish];
+
+    if (weight >= 0) update_num((void *) str, weight);
+
     put_str(str, center(str), 64);
     memset(COLOUR(0x100), 5, 0x20);
     show_image(velk1, 13, 11);
@@ -853,50 +868,39 @@ static void moment_of_truth(byte fish, const char *str) {
     wait_asserted(CTRL_FIRE);
 }
 
+static void moment_of_truth(byte fish) {
+    moment_of_weight(fish, -1);
+}
+
 static byte wait_pull(byte button, byte fast) {
     byte ticks = wait_button(button, button, PULL_SLOW);
     if (fast && ticks <= PULL_FAST) {
-	advance_time(3);
-	moment_of_truth(0, "P`ar`ak stauji vilki, p`arr`avi auklu!");
+	advance_time(5);
+	moment_of_truth(0);
 	return true;
     }
     if (ticks >= PULL_SLOW) {
-	moment_of_truth(1, "P`ar`ak l`eni vilki, nokabin`aj`as maita!");
+	moment_of_truth(1);
 	return true;
     }
     return false;
 }
 
-void update_num(char *str, byte num) {
-    byte dec = 0;
-    while (num >= 10) {
-	num -= 10;
-	dec++;
-    }
-    str[0] = '0' + dec;
-    str[1] = '0' + num;
-}
-
-static void moment_of_weight(byte fish, byte weight, const char *str) {
-    update_num((void *) str + 1, weight);
-    moment_of_truth(fish, str);
-}
-
 static byte report_fish(byte distance) {
     if (distance <= 1) {
-	moment_of_truth(5, "Jopcik, vot tas ir makans!");
+	moment_of_truth(5);
 	return true;
     }
     else if (distance <= 50) {
-	moment_of_weight(4, (51 - distance) << 1, "100g - asaris k`a asaris.");
+	moment_of_weight(4, (51 - distance) << 1);
 	return false;
     }
     else if (distance <= 80) {
-	moment_of_weight(3, (150 - distance), " 70g - tas jau asar`itis.");
+	moment_of_weight(3, (150 - distance));
 	return false;
     }
     else {
-	moment_of_truth(2, "N`ikul`igs ^k`isis.");
+	moment_of_truth(2);
 	return false;
     }
 }
