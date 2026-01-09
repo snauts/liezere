@@ -877,21 +877,22 @@ void update_num(char *str, byte num) {
     str[1] = '0' + num;
 }
 
+static void moment_of_weight(byte fish, byte weight, const char *str) {
+    update_num((void *) str + 1, weight);
+    moment_of_truth(fish, str);
+}
+
 static byte report_fish(byte distance) {
     if (distance <= 1) {
 	moment_of_truth(5, "Jopcik, vot tas ir makans!");
 	return true;
     }
-    else if (distance <= 40) {
-	const char *str = "Asaris k`a asaris. ( 100g )";
-	update_num((void *) (str + 22), 40 - distance);
-	moment_of_truth(4, str);
+    else if (distance <= 50) {
+	moment_of_weight(4, (51 - distance) << 1, "100g - asaris k`a asaris.");
 	return false;
     }
     else if (distance <= 80) {
-	const char *str = "Tas jau asar`itis. ( 60g )";
-	update_num((void *) (str + 21), 140 - distance);
-	moment_of_truth(3, str);
+	moment_of_weight(3, (150 - distance), " 70g - tas jau asar`itis.");
 	return false;
     }
     else {
