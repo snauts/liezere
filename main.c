@@ -508,7 +508,7 @@ static void reset_cursor(void) {
     cursor_y = 180;
     cursor_frame = 0;
     hole_end = hole_map;
-    hour = (day == 2) ? 11 : 9;
+    hour = (day == 2) ? 0x11 : 0x09;
     cooldown = 0;
     minute = 0;
 }
