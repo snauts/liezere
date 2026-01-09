@@ -1,5 +1,5 @@
 #include "main.h"
-#include "data.h"
+#include "image.h"
 
 #define MOVE_COOLDOWN	5
 #define JERK_INTERVAL	10
@@ -22,6 +22,7 @@ static byte no_text;
 static word seed;
 
 extern const char* const reports[];
+extern const byte* const fishes[];
 extern const Frame horizonts[];
 extern const Frame apkaime[];
 extern const Text tutorial[];
@@ -839,10 +840,7 @@ static byte jerk_fish(void) {
 }
 
 static void draw_fish(byte fish) {
-    static const byte * const table[] = {
-	NULL, mormene, ruffe, perch, asaris, makans
-    };
-    if (fish > 0) show_image(table[fish], 18, 12);
+    if (fish > 0) show_image(fishes[fish], 18, 12);
 }
 
 static void update_num(char *str, byte num) {

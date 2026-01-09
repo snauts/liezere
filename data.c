@@ -1,8 +1,5 @@
 #include "main.h"
-
-extern const byte puduris1[];
-extern const byte puduris2[];
-extern const byte niedres[];
+#include "data.h"
 
 const Frame apkaime[] = {
     { .img = puduris1, .x = 2,  .y = 14 },
@@ -34,11 +31,6 @@ const Frame apkaime[] = {
     { .img = niedres,  .x = 30, .y = 21 },
     { .img = NULL },
 };
-
-extern const byte egle1[];
-extern const byte egle2[];
-extern const byte egle3[];
-extern const byte krasts[];
 
 const Frame horizonts[] = {
     { .img = egle2,  .x = 0,  .y = 2  },
@@ -107,6 +99,10 @@ const Text choices[] = {
     { .x = 88, .y = 112, .str = "2 - D~zoistiks" },
     { .x = 88, .y = 128, .str = "3 - Pam`ac`iba" },
     { .str = NULL },
+};
+
+const byte* const fishes[] = {
+    NULL, mormene, ruffe, perch, asaris, makans
 };
 
 const char* const reports[] = {

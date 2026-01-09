@@ -20,36 +20,37 @@ msg:
 
 pcx:
 	@gcc pcx-dump.c lz.c -Wall -o pcx-dump
-	@./pcx-dump -i title.pcx > data.h
-	@./pcx-dump -i ezers.pcx >> data.h
-	@./pcx-dump -i puduris1.pcx >> data.h
-	@./pcx-dump -i puduris2.pcx >> data.h
-	@./pcx-dump -i niedres.pcx >> data.h
-	@./pcx-dump -i krasts.pcx >> data.h
-	@./pcx-dump -i egle1.pcx >> data.h
-	@./pcx-dump -i egle2.pcx >> data.h
-	@./pcx-dump -i egle3.pcx >> data.h
-	@./pcx-dump -i urbis.pcx >> data.h
-	@./pcx-dump -i swirl.pcx >> data.h
-	@./pcx-dump -i drill.pcx >> data.h
-	@./pcx-dump -i hole.pcx >> data.h
-	@./pcx-dump -i copene1.pcx >> data.h
-	@./pcx-dump -i copene2.pcx >> data.h
-	@./pcx-dump -i copene3.pcx >> data.h
-	@./pcx-dump -i velk1.pcx >> data.h
-	@./pcx-dump -i velk2.pcx >> data.h
-	@./pcx-dump -i aukla1.pcx >> data.h
-	@./pcx-dump -i aukla2.pcx >> data.h
-	@./pcx-dump -i loms.pcx >> data.h
-	@./pcx-dump -i ruffe.pcx >> data.h
-	@./pcx-dump -i perch.pcx >> data.h
-	@./pcx-dump -i asaris.pcx >> data.h
-	@./pcx-dump -i makans.pcx >> data.h
-	@./pcx-dump -i mormene.pcx >> data.h
-	@./pcx-dump -i symbols.pcx >> data.h
-	@./pcx-dump -i panel_1a.pcx >> data.h
-	@./pcx-dump -i panel_1b.pcx >> data.h
-	@./pcx-dump -i panel_1c.pcx >> data.h
+	@./pcx-dump -i title.pcx	 > image.h
+	@./pcx-dump -i ezers.pcx	>> image.h
+	@./pcx-dump -i hole.pcx		>> image.h
+	@./pcx-dump -i copene1.pcx	>> image.h
+	@./pcx-dump -i copene2.pcx	>> image.h
+	@./pcx-dump -i copene3.pcx	>> image.h
+	@./pcx-dump -i urbis.pcx	>> image.h
+	@./pcx-dump -i swirl.pcx	>> image.h
+	@./pcx-dump -i drill.pcx	>> image.h
+	@./pcx-dump -i velk1.pcx	>> image.h
+	@./pcx-dump -i velk2.pcx	>> image.h
+	@./pcx-dump -i aukla1.pcx	>> image.h
+	@./pcx-dump -i aukla2.pcx	>> image.h
+	@./pcx-dump -i loms.pcx		>> image.h
+	@./pcx-dump -i symbols.pcx	>> image.h
+	@./pcx-dump -i panel_1a.pcx	>> image.h
+	@./pcx-dump -i panel_1b.pcx	>> image.h
+	@./pcx-dump -i panel_1c.pcx	>> image.h
+
+	@./pcx-dump -i niedres.pcx	 > data.h
+	@./pcx-dump -i puduris1.pcx	>> data.h
+	@./pcx-dump -i puduris2.pcx	>> data.h
+	@./pcx-dump -i krasts.pcx	>> data.h
+	@./pcx-dump -i egle1.pcx	>> data.h
+	@./pcx-dump -i egle2.pcx	>> data.h
+	@./pcx-dump -i egle3.pcx	>> data.h
+	@./pcx-dump -i ruffe.pcx	>> data.h
+	@./pcx-dump -i perch.pcx	>> data.h
+	@./pcx-dump -i asaris.pcx	>> data.h
+	@./pcx-dump -i makans.pcx	>> data.h
+	@./pcx-dump -i mormene.pcx	>> data.h
 
 zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7800 prg
