@@ -66,10 +66,6 @@ static void wait_vblank(void) {
     while (!vblank) { }
 }
 
-static void delay(byte ticks) {
-    while (ticks-- > 0) { wait_vblank(); }
-}
-
 static byte in_key(byte a) {
     __asm__("in a, (#0xfe)");
     return a;
@@ -82,14 +78,6 @@ static byte in_joy(byte a) {
 
 static void out_fe(byte data) {
     __asm__("out (#0xfe), a"); data;
-}
-
-void __sdcc_call_iy(void) __naked {
-    __asm__("jp (iy)");
-}
-
-void __sdcc_call_hl(void) __naked {
-    __asm__("jp (hl)");
 }
 
 static byte inc10(byte a) __naked {
@@ -170,21 +158,14 @@ static void precalculate(void) {
     }
 }
 
-static void clear_block(byte y, byte h) {
-    byte **row = map_y + y;
-    for (byte i = 0; i < h; i++) {
-	memset(*row++, 0, 32);
-    }
-}
-
 static void reset_attributes(byte color) {
     memset(COLOUR(0), color, 0x300);
 }
 
 static void clear_screen(void) {
-    reset_attributes(0);
-    clear_block(0, 192);
     out_fe(0);
+    reset_attributes(0);
+    memset(SCREEN(0), 0, 0x1800);
 }
 
 static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
@@ -377,7 +358,7 @@ static byte read_123(void) {
     return ~in_key(0xf7) & 7;
 }
 
-static void animate_line(void) {
+static void animate_title_line(void) {
     for (byte y = 0; y < 34; y++) {
 	byte *ptr = map_y[y] + 22;
 	*ptr ^= 0x10;
@@ -393,7 +374,7 @@ static byte wait_123(void) {
 	    ticks++;
 	}
 	if (ticks == 5) {
-	    animate_line();
+	    animate_title_line();
 	    ticks = 0;
 	}
     }
@@ -856,6 +837,13 @@ static void update_num(char *str, byte num) {
     str[2] = '0' + num;
 }
 
+static const Frame raise[] = {
+    { .img = velk1,  .x = 13, .y = 11 },
+    { .img = aukla2, .x = 15, .y = 14 },
+    { .img = loms,   .x = 15, .y = 11 },
+    { .img = NULL },
+};
+
 static void moment_of_weight(byte fish, int8 weight) {
     const char *str = reports[fish];
 
@@ -863,9 +851,7 @@ static void moment_of_weight(byte fish, int8 weight) {
 
     put_str(str, center(str), 64);
     memset(COLOUR(0x100), 5, 0x20);
-    show_image(velk1, 13, 11);
-    show_image(aukla2, 15, 14);
-    show_image(loms, 15, 11);
+    show_series(raise);
     draw_fish(fish);
 
     wait_space();
@@ -913,7 +899,7 @@ static byte pull_fish(void) {
     show_forest();
     for (byte i = 0; i < 5; i++) {
 	advance_time(1);
-	show_image(velk1, 13, 11);
+	show_frame(raise);
 	if (wait_pull(CTRL_LEFT, i)) {
 	    return false;
 	}
@@ -928,8 +914,8 @@ static byte pull_fish(void) {
 
 static byte ice_fish(void) {
     clear_screen();
+    reset_attributes(0x7d);
     memset(COLOUR(0x00), 0x78, 0x20);
-    memset(COLOUR(0x20), 0x7d, 0x2e0);
     decompress(COPENE1, IMAGE_DATA(copene1));
     decompress(COPENE2, IMAGE_DATA(copene2));
     show_image(copene1, 16, 0);
@@ -1034,7 +1020,6 @@ void reset(void) {
     precalculate();
     clear_screen();
     show_title();
-    clear_screen();
     game_loop();
     reset();
 }
