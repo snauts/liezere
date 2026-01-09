@@ -275,7 +275,7 @@ static byte special_symbol(char c, byte x, byte y) {
     return 8;
 }
 
-static void put_str(const char *msg, byte x, byte y) {
+static byte put_str(const char *msg, byte x, byte y) {
     while (*msg != 0) {
 	char symbol = *(msg++);
 	if (symbol == ' ') {
@@ -299,6 +299,7 @@ static void put_str(const char *msg, byte x, byte y) {
 	    x += trailing(symbol);
 	}
     }
+    return x;
 }
 
 static void *decompress(byte *dst, const byte *src) {
@@ -994,6 +995,7 @@ static void show_title(void) {
 }
 
 static void game_loop(void) {
+    init_variables();
     while (day <= 3) {
 	show_panel(day);
 	reset_cursor();
@@ -1013,7 +1015,6 @@ void reset(void) {
     clear_screen();
     show_title();
     clear_screen();
-    init_variables();
     game_loop();
     reset();
 }
