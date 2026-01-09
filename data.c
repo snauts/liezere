@@ -114,6 +114,17 @@ const char* const reports[] = {
     "Jopcik, vot tas ir makans!",
 };
 
+static const Text day0_text[] = {
+    { .x = 64,  .y = 26,  .str = "K`ads prieks sald`et nagus?" },
+    TEXT_SENTINEL,
+
+    { .x = 8,   .y = 90,  .str = "Ja br`ivlaiku var pavad`it," },
+    TEXT_SENTINEL,
+
+    { .x = 64,  .y = 154, .str = "darot pat`ikam`akas lietas." },
+    TEXT_SENTINEL,
+};
+
 static const Frame day1_frame[] = {
     { .img = panel_1a, .x = 0,  .y = 0  },
     { .img = panel_1b, .x = 22, .y = 8  },
