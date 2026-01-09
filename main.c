@@ -23,6 +23,7 @@ static word seed;
 extern const Frame horizonts[];
 extern const Frame apkaime[];
 extern const Text tutorial[];
+extern const Text choices[];
 
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
@@ -986,9 +987,7 @@ static void show_tutorial(void) {
 
 static void show_title(void) {
     show_image(title, 0, 0);
-    put_str("1 - Klaviat`ura", 88, 96);
-    put_str("2 - D~zoistiks", 88, 112);
-    put_str("3 - Pam`ac`iba", 88, 128);
+    show_text_series(choices);
     memset(COLOUR(0x140), 0x47, 0x100);
     if (wait_123() & 4) show_tutorial();
 }

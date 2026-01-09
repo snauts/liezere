@@ -101,3 +101,10 @@ const Text tutorial[] = {
     { .x = 32, .y = 172, .str = "Jo liek`aka zivs, jo tuv`ak t`a makanam" },
     { .str = NULL },
 };
+
+const Text choices[] = {
+    { .x = 88, .y = 96,  .str = "1 - Klaviat`ura" },
+    { .x = 88, .y = 112, .str = "2 - D~zoistiks" },
+    { .x = 88, .y = 128, .str = "3 - Pam`ac`iba" },
+    { .str = NULL },
+};
