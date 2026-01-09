@@ -117,7 +117,7 @@ const char* const reports[] = {
 static const Frame day1_frame[] = {
     { .img = panel_1a, .x = 0,  .y = 0  },
     { .img = panel_1b, .x = 22, .y = 8  },
-    { .img = panel_1c, .x = 8,  .y = 16 },
+    { .img = panel_1c, .x = 4,  .y = 16 },
 };
 
 static const Text day1_text[] = {
@@ -128,7 +128,7 @@ static const Text day1_text[] = {
     { .x = 8,   .y = 90,  .str = "S`uds jaut`ajums, bet kur tas ir?" },
     TEXT_SENTINEL,
 
-    { .x = 128, .y = 154, .str = "LIEZ`ER`E!" },
+    { .x = 96,  .y = 154, .str = "Tas ir Liez`er`e!" },
     TEXT_SENTINEL,
 
     { .x = 96,  .y = 64,  .str = "Pirm`a diena" },
