@@ -941,7 +941,7 @@ static void day1(void) {
     wait_and_update_seed();
 
     show_image(panel_1c, 8, 16);
-    put_str("LIEZER`E!", 128, 154);
+    put_str("LIEZ`ER`E!", 128, 154);
     wait_and_update_seed();
 }
 
