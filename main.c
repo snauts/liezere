@@ -7,7 +7,7 @@
 #define BITE_DELAY	15
 #define PULL_FAST	20
 #define PULL_SLOW	60
-#define WALK_TIME	3
+#define WALK_TIME	5
 #define JERK_TIME	5
 
 void reset(void);
