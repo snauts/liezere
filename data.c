@@ -205,4 +205,4 @@ const Panel panels[] = {
     { .frame = day3_frame, .text = day3_text },
 };
 
-const Text the_end = { .x = 1, .y = 184, .str = "BEIGAS" };
+const Text the_end = { .x = 16, .y = 35, .str = "BEIGAS" };

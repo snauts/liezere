@@ -179,8 +179,8 @@ static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
     for (byte i = 0; i < n; i++) {
 	byte data = *addr++;
 	byte *ptr = map_y[y + i] + offset;
-	ptr[0] ^= (data >> shift);
-	ptr[1] ^= (data << (8 - shift));
+	ptr[0] |= (data >> shift);
+	ptr[1] |= (data << (8 - shift));
     }
 }
 
