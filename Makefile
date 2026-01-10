@@ -58,6 +58,9 @@ pcx:
 	@./pcx-dump -i panel_2a.pcx	>> data.h
 	@./pcx-dump -i panel_2b.pcx	>> data.h
 	@./pcx-dump -i panel_2c.pcx	>> data.h
+	@./pcx-dump -i panel_3a.pcx	>> data.h
+	@./pcx-dump -i panel_3b.pcx	>> data.h
+	@./pcx-dump -i panel_3c.pcx	>> data.h
 
 zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7800 prg

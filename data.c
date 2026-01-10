@@ -176,8 +176,31 @@ static const Text day2_text[] = {
     TEXT_SENTINEL,
 };
 
+static const Frame day3_frame[] = {
+    { .img = panel_3a, .x = 0,  .y = 0  },
+    { .img = panel_3b, .x = 22, .y = 7  },
+    { .img = panel_3c, .x = 0,  .y = 16 },
+};
+
+static const Text day3_text[] = {
+    { .x = 72,   .y = 26,  .str = "T`adu lomu b`utu gr`eks laist zudum`a." },
+    TEXT_SENTINEL,
+
+    { .x = 24,   .y = 90,  .str = "Liel`as zivis j`a`ed pa~siem," },
+    TEXT_SENTINEL,
+
+    { .x = 64,  .y = 154, .str = "bet maz`as j`aatdod ka^kiem." },
+    TEXT_SENTINEL,
+
+    { .x = 255, .y = 64,  .str = "- Tre~s`a diena -" },
+    { .x = 255, .y = 116, .str = "Apet`ite rodas `edot." },
+    { .x = 255, .y = 128, .str = "~Sodien j`ano^ker divi makani." },
+    TEXT_SENTINEL,
+};
+
 const Panel panels[] = {
     { .frame = day0_frame, .text = day0_text },
     { .frame = day1_frame, .text = day1_text },
     { .frame = day2_frame, .text = day2_text },
+    { .frame = day3_frame, .text = day3_text },
 };
