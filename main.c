@@ -543,12 +543,13 @@ static byte visited(byte x, byte y) {
     return false;
 }
 
-static void set_cursor(byte x, byte y) {
+static void set_cursor(byte x, byte y, byte moves) {
     draw_cursor();
     if (good_spot(x, y) || visited(x, y)) {
-	if (++steps == WALK_TIME) {
+	steps += moves;
+	if (steps >= WALK_TIME) {
+	    steps -= WALK_TIME;
 	    advance_time(1);
-	    steps = 0;
 	}
 	cursor_x = x;
 	cursor_y = y;
@@ -618,28 +619,33 @@ static byte total_distance(void) {
 
 static void move_cursor(void) {
     byte button = read_input();
+    byte moves = 0;
     byte x = cursor_x;
     byte y = cursor_y;
 
     if (button & CTRL_UP) {
+	moves++;
 	y--;
     }
-    else if (button & CTRL_DOWN) {
+    if (button & CTRL_DOWN) {
+	moves++;
 	y++;
     }
-    else if (button & CTRL_LEFT) {
+    if (button & CTRL_LEFT) {
+	moves++;
 	x--;
     }
-    else if (button & CTRL_RIGHT) {
+    if (button & CTRL_RIGHT) {
+	moves++;
 	x++;
     }
-    else {
+    if (moves == 0) {
 	cooldown = 0;
 	return;
     }
 
     if (cooldown == 0 || cooldown > MOVE_COOLDOWN) {
-	set_cursor(x, y);
+	set_cursor(x, y, moves);
     }
     if (cooldown <= MOVE_COOLDOWN) {
 	cooldown++;
