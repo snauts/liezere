@@ -129,6 +129,7 @@ static const Text day0_text[] = {
 
     { .x = 64,  .y = 154, .str = "darot pat`ikam`akas lietas." },
     TEXT_SENTINEL,
+    TEXT_SENTINEL,
 };
 
 static const Frame day1_frame[] = {
