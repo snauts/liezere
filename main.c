@@ -461,8 +461,9 @@ static const int8 cursor[] = {
     1,  1, -1, -1,
 };
 
-static byte fish_x;
-static byte fish_y;
+static byte fish_x[2];
+static byte fish_y[2];
+static byte count;
 
 static byte cursor_x;
 static byte cursor_y;
@@ -490,6 +491,7 @@ static void reset_cursor(void) {
     cursor_y = 180;
     cursor_frame = 0;
     hole_end = hole_map;
+    count = (day == 3) ? 2 : 1;
     hour = (day == 2) ? 0x11 : 0x09;
     cooldown = 0;
     minute = 0;
@@ -581,12 +583,39 @@ static byte sqrt(word value) {
     return bisect(value, 0, 255) - 1;
 }
 
-static byte distance(void) {
-    word a = square(difference(fish_x, cursor_x));
-    word b = square(difference(fish_y, cursor_y));
+static byte distance(byte i) {
+    word a = square(difference(fish_x[i], cursor_x));
+    word b = square(difference(fish_y[i], cursor_y));
     word c = a + b;
 
     return (c >= a && c >= b) ? sqrt(c) : 255;
+}
+
+static byte is_goal(byte distance) {
+    return distance <= 1;
+}
+
+static void remove_fish(byte place) {
+    for (byte i = place + 1; i < count; i++) {
+	fish_x[i - 1] = fish_x[i];
+	fish_y[i - 1] = fish_y[i];
+    }
+    count--;
+}
+
+static byte total_distance(void) {
+    byte min = 255;
+    for (byte i = 0; i < count; i++) {
+	byte len = distance(i);
+	if (is_goal(len)) {
+	    remove_fish(i);
+	    return len;
+	}
+	else if (len < min) {
+	    min = len;
+	}
+    }
+    return min;
 }
 
 static void move_cursor(void) {
@@ -683,17 +712,23 @@ static void draw_holes(void) {
     }
 }
 
-static byte valid_fish(void) {
-    return good_spot(fish_x, fish_y);
+static byte valid_fish(byte i) {
+    return good_spot(fish_x[i], fish_y[i]);
+}
+
+static void generate_fish(byte i) {
+    do {
+	word r = random();
+	fish_x[i] = r & 0xff;
+	fish_y[i] = r >> 8;
+    } while (!valid_fish(i));
 }
 
 static void put_fish(void) {
     if (hole_end == hole_map) {
-	do {
-	    word r = random();
-	    fish_x = r & 0xff;
-	    fish_y = r >> 8;
-	} while (!valid_fish());
+	for (byte i = 0; i < count; i++) {
+	    generate_fish(i);
+	}
     }
 }
 
@@ -877,9 +912,9 @@ static byte wait_pull(byte button, byte fast) {
 }
 
 static byte report_fish(byte distance) {
-    if (distance <= 1) {
+    if (is_goal(distance)) {
 	moment_of_truth(FISH_MAKANS);
-	return true;
+	return count == 0;
     }
     else if (distance <= 50) {
 	moment_of_weight(FISH_ASARIS, (51 - distance) << 1);
@@ -910,7 +945,7 @@ static byte pull_fish(void) {
 	    return false;
 	}
     }
-    return report_fish(distance());
+    return report_fish(total_distance());
 }
 
 static byte ice_fish(void) {
