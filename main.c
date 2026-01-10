@@ -31,6 +31,7 @@ extern const Frame horizonts[];
 extern const Frame apkaime[];
 extern const Text tutorial[];
 extern const Text choices[];
+extern const Text the_end;
 extern const Panel panels[];
 
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
@@ -178,8 +179,8 @@ static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
     for (byte i = 0; i < n; i++) {
 	byte data = *addr++;
 	byte *ptr = map_y[y + i] + offset;
-	ptr[0] |= (data >> shift);
-	ptr[1] |= (data << (8 - shift));
+	ptr[0] ^= (data >> shift);
+	ptr[1] ^= (data << (8 - shift));
     }
 }
 
@@ -1007,6 +1008,7 @@ static void draw_panel(Panel *panel) {
 
 static void game_done(void) {
     show_image(beigas, 0, 0);
+    show_text(&the_end);
     wait_space();
 }
 
