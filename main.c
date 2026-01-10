@@ -591,10 +591,6 @@ static byte distance(byte i) {
     return (c >= a && c >= b) ? sqrt(c) : 255;
 }
 
-static byte is_goal(byte distance) {
-    return distance <= 1;
-}
-
 static void remove_fish(byte place) {
     for (byte i = place + 1; i < count; i++) {
 	fish_x[i - 1] = fish_x[i];
@@ -603,19 +599,17 @@ static void remove_fish(byte place) {
     count--;
 }
 
+static byte closest;
 static byte total_distance(void) {
-    byte min = 255;
+    byte minimum = 255;
     for (byte i = 0; i < count; i++) {
-	byte len = distance(i);
-	if (is_goal(len)) {
-	    remove_fish(i);
-	    return len;
-	}
-	else if (len < min) {
-	    min = len;
+	byte length = distance(i);
+	if (length < minimum) {
+	    minimum = length;
+	    closest = i;
 	}
     }
-    return min;
+    return minimum;
 }
 
 static void move_cursor(void) {
@@ -912,8 +906,9 @@ static byte wait_pull(byte button, byte fast) {
 }
 
 static byte report_fish(byte distance) {
-    if (is_goal(distance)) {
+    if (distance <= 1) {
 	moment_of_truth(FISH_MAKANS);
+	remove_fish(closest);
 	return count == 0;
     }
     else if (distance <= 50) {
