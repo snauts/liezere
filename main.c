@@ -884,7 +884,7 @@ static void moment_of_weight(byte fish, int8 weight) {
     if (weight >= 0) update_num((void *) str, weight);
 
     put_str(str, center(str), 64);
-    memset(COLOUR(0x100), 5, 0x20);
+    memset(COLOUR(0xe0), 5, 0x60);
     show_series(raise);
     draw_fish(fish);
 
