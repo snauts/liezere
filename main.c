@@ -5,6 +5,9 @@
 #define JERK_INTERVAL	10
 #define BITE_INTERVAL	25
 #define BITE_DELAY	15
+#define SNAP_PENALTY	5
+#define DRILL_MOVES	5
+#define PULL_MOVES	5
 #define PULL_FAST	20
 #define PULL_SLOW	60
 #define WALK_TIME	5
@@ -676,7 +679,7 @@ static void show_forest(void) {
 }
 
 static void animate_drill(void) {
-    for (byte i = 0; i < 5; i++) {
+    for (byte i = 0; i < DRILL_MOVES; i++) {
 	advance_time(1);
 	show_image(urbis, 14, 8);
 	wait_asserted(CTRL_LEFT);
@@ -894,7 +897,7 @@ static void moment_of_truth(byte fish) {
 static byte wait_pull(byte button, byte fast) {
     byte ticks = wait_button(button, button, PULL_SLOW);
     if (fast && ticks <= PULL_FAST) {
-	advance_time(5);
+	advance_time(SNAP_PENALTY);
 	moment_of_truth(FISH_SNAP);
 	return true;
     }
@@ -928,7 +931,7 @@ static byte report_fish(byte distance) {
 static byte pull_fish(void) {
     clear_screen();
     show_forest();
-    for (byte i = 0; i < 5; i++) {
+    for (byte i = 0; i < PULL_MOVES; i++) {
 	advance_time(1);
 	show_frame(raise);
 	if (wait_pull(CTRL_LEFT, i)) {
