@@ -154,7 +154,30 @@ static const Text day1_text[] = {
     TEXT_SENTINEL,
 };
 
+static const Frame day2_frame[] = {
+    { .img = panel_2a, .x = 0,  .y = 0  },
+    { .img = panel_2b, .x = 22, .y = 6  },
+    { .img = panel_2c, .x = 1,  .y = 16 },
+};
+
+static const Text day2_text[] = {
+    { .x = 72,  .y = 26,  .str = "Zini, kas ir j`adara, kad izcelies?" },
+    TEXT_SENTINEL,
+
+    { .x = 16,   .y = 90,  .str = "Pareizi, tev ir j`auzst`ajas." },
+    TEXT_SENTINEL,
+
+    { .x = 88,  .y = 154, .str = "L`idz neklausa vairs k`ajas." },
+    TEXT_SENTINEL,
+
+    { .x = 255, .y = 64,  .str = "- Otr`a diena -" },
+    { .x = 255, .y = 116, .str = "Neizprotamu apst`ak^lu d`e^l "
+				 "d~zeki aizgul`ejas." },
+    TEXT_SENTINEL,
+};
+
 const Panel panels[] = {
     { .frame = day0_frame, .text = day0_text },
     { .frame = day1_frame, .text = day1_text },
+    { .frame = day2_frame, .text = day2_text },
 };
