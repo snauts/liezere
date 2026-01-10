@@ -134,7 +134,7 @@ static const Text day0_text[] = {
 
 static const Frame day1_frame[] = {
     { .img = panel_1a, .x = 0,  .y = 0  },
-    { .img = panel_1b, .x = 20, .y = 8  },
+    { .img = panel_1b, .x = 22, .y = 8  },
     { .img = panel_1c, .x = 4,  .y = 16 },
 };
 
