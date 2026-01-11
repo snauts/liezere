@@ -786,11 +786,25 @@ static void fishing_line(void) {
     }
 }
 
+static void noop(byte cycles) {
+    for (byte i = 0; i < cycles; i++) { }
+}
+
+static void eye_cue_for_pull(void) {
+    set_pixel(126, 98);
+    set_pixel(129, 98);
+    set_pixel(126, 97);
+    set_pixel(129, 97);
+}
+
 static byte wait_button(byte button, byte state, byte cutoff) {
     byte ticks = 0;
     while ((read_input() & button) != state) {
 	if (vblank && ticks < 255) {
 	    vblank = 0;
+	    if (cutoff && ticks == PULL_FAST) {
+		eye_cue_for_pull();
+	    }
 	    if (++ticks == cutoff) {
 		return cutoff;
 	    }
