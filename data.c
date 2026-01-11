@@ -90,7 +90,7 @@ const Text tutorial[] = {
     { .x = 32, .y = 120, .str = "6. Izvilkt zivi var spie~zot O&2 P&3" },
     { .x = 46, .y = 132, .str = "Velkot p`ar`ak `atri p`artr`uks aukla" },
     { .x = 46, .y = 144, .str = "Velkot p`ar`ak l`eni zivs aizies" },
-    { .x = 32, .y = 172, .str = "Jo liek`aka zivs, jo tuv`ak t`a makanam" },
+    { .x = 32, .y = 172, .str = "Jo liel`aka zivs, jo tuv`ak t`a makanam" },
     TEXT_SENTINEL,
 };
 
