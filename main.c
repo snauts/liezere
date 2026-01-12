@@ -735,7 +735,7 @@ static void animate_drill(void) {
 static void add_hole(void) {
     hole_now = hole_end;
     hole_now->x = cursor_x;
-    hole_now->y = cursor_x;
+    hole_now->y = cursor_y;
     hole_now->weight = 0;
     hole_end++;
 }
