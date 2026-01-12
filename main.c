@@ -690,10 +690,17 @@ static void walk_lake(void) {
     draw_cursor();
 }
 
+static void invert_snow(void) {
+    for (byte y = 112; y < 192; y++) {
+	memset(map_y[y], 0xff, 0x20);
+    }
+}
+
 static void show_forest(void) {
     clear_screen();
+    invert_snow();
     memset(COLOUR(0), 0x28, 0x80);
-    memset(COLOUR(0x1c0), 0x78, 0x140);
+    memset(COLOUR(0x1c0), 0x47, 0x140);
     show_series(horizonts);
 }
 
