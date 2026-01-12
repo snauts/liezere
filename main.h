@@ -3,6 +3,9 @@ typedef signed short int16;
 typedef unsigned char byte;
 typedef unsigned short word;
 
+#define AY
+#define ZXS
+
 #define false		0
 #define true		1
 
@@ -19,6 +22,10 @@ typedef unsigned short word;
 #define STAGING_AREA	PTR(0x5b00)
 
 #define TEXT_SENTINEL	{ .str = NULL }
+
+void memset(byte *ptr, byte data, word len);
+void select_music(void *ptr);
+void stop_music(void);
 
 typedef struct {
     const byte *img;
