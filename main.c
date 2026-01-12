@@ -1102,6 +1102,7 @@ static void game_loop(void) {
 
 void reset(void) {
     SETUP_STACK();
+    stop_music();
     setup_system();
     precalculate();
     clear_screen();
