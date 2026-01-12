@@ -732,7 +732,7 @@ static void animate_drill(void) {
 static void add_hole(void) {
     hole_now = hole_end;
     hole_now->pos = pos;
-    hole_now->weight = 0;
+    hole_now->distance = 0;
     hole_end++;
 }
 
@@ -938,9 +938,8 @@ static const Frame raise[] = {
 
 static void moment_of_weight(byte fish, byte weight) {
     const char *str = reports[fish];
-    hole_now->weight = weight;
 
-    if (weight >= 70) {
+    if (weight > 0) {
 	to_decimal((void *) str, weight);
     }
 
@@ -975,6 +974,8 @@ static byte get_weight(byte distance) {
 }
 
 static byte report_fish(byte distance) {
+    hole_now->distance = distance;
+
     if (distance <= 1) {
 	moment_of_truth(FISH_MAKANS);
 	remove_fish(closest);
@@ -997,11 +998,11 @@ static byte report_fish(byte distance) {
 	return false;
     }
     else if (distance < 150) {
-	moment_of_weight(FISH_RUFFE, 2);
+	moment_of_truth(FISH_RUFFE);
 	return false;
     }
     else {
-	moment_of_weight(FISH_WEEDS, 1);
+	moment_of_truth(FISH_WEEDS);
 	return false;
     }
 }
