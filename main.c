@@ -508,8 +508,9 @@ static byte cursor_y;
 static byte cursor_frame;
 
 static byte steps;
-static byte *hole_end;
-static byte hole_map[192];
+static Hole *hole_now;
+static Hole *hole_end;
+static Hole hole_map[64];
 
 static byte cooldown;
 static byte minute;
@@ -565,13 +566,12 @@ static void advance_time(byte amount) {
 }
 
 static byte visited(byte x, byte y) {
-    byte *ptr = hole_map;
-    while (ptr < hole_end) {
-	byte hole_x = *(ptr++);
-	byte hole_y = *(ptr++);
-	if (x == hole_x && y == hole_y) {
+    hole_now = hole_map;
+    while (hole_now < hole_end) {
+	if (x == hole_now->x && y == hole_now->y) {
 	    return true;
 	}
+	hole_now++;
     }
     return false;
 }
@@ -732,21 +732,27 @@ static void animate_drill(void) {
     }
 }
 
+static void add_hole(void) {
+    hole_now = hole_end;
+    hole_now->x = cursor_x;
+    hole_now->y = cursor_x;
+    hole_now->weight = 0;
+    hole_end++;
+}
+
 static void drill_hole(void) {
     if (!visited(cursor_x, cursor_y) && not_late()) {
-	*(hole_end++) = cursor_x;
-	*(hole_end++) = cursor_y;
+	add_hole();
 	show_forest();
 	animate_drill();
     }
 }
 
 static void draw_holes(void) {
-    byte *ptr = hole_map;
+    Hole *ptr = hole_map;
     while (ptr < hole_end) {
-	byte x = *(ptr++);
-	byte y = *(ptr++);
-	set_pixel(x, y);
+	set_pixel(ptr->x, ptr->y);
+	ptr++;
     }
 }
 

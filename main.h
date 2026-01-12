@@ -42,6 +42,11 @@ typedef struct {
     Text *text;
 } Panel;
 
+typedef struct {
+    byte x, y;
+    byte weight;
+} Hole;
+
 enum {
     FISH_SNAP = 0,
     FISH_ESCAPE,
