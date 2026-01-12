@@ -959,18 +959,30 @@ static byte wait_pull(byte button, byte fast) {
     return false;
 }
 
+static byte get_weight(byte distance) {
+    return (51 - distance) << 1;
+}
+
 static byte report_fish(byte distance) {
     if (distance <= 1) {
 	moment_of_truth(FISH_MAKANS);
 	remove_fish(closest);
 	return count == 0;
     }
-    else if (distance <= 50) {
-	moment_of_weight(FISH_ASARIS, (51 - distance) << 1);
+    else if (distance <= 11) {
+	moment_of_weight(FISH_LARGE, get_weight(distance));
+	return false;
+    }
+    else if (distance <= 31) {
+	moment_of_weight(FISH_DECENT, get_weight(distance));
+	return false;
+    }
+    else if (distance <= 51) {
+	moment_of_weight(FISH_ASARIS, get_weight(distance));
 	return false;
     }
     else if (distance <= 80) {
-	moment_of_weight(FISH_PERCH, (150 - distance));
+	moment_of_weight(FISH_PERCH, 150 - distance);
 	return false;
     }
     else {

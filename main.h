@@ -48,5 +48,7 @@ enum {
     FISH_RUFFE,
     FISH_PERCH,
     FISH_ASARIS,
+    FISH_DECENT,
+    FISH_LARGE,
     FISH_MAKANS,
 };
