@@ -222,7 +222,7 @@ static unsigned char *add_header(unsigned char *buf) {
     unsigned char *img = malloc(total_size() + HEADER_SIZE);
     memcpy(img + HEADER_SIZE, buf, total_size());
     img[0] = header.w / 8;
-    img[1] = header.h / 8;
+    img[1] = header.h;
     free(buf);
     return img;
 }

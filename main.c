@@ -331,7 +331,7 @@ static void *decompress(byte *dst, const byte *src) {
 
 static void draw_image(byte *ptr, byte x, byte y) {
     byte w = *(ptr++);
-    byte h = *(ptr++) << 3;
+    byte h = *(ptr++);
 
     y = y << 3;
 
