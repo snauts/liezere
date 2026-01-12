@@ -985,8 +985,12 @@ static byte report_fish(byte distance) {
 	moment_of_weight(FISH_PERCH, 150 - distance);
 	return false;
     }
-    else {
+    else if (distance <= 150) {
 	moment_of_truth(FISH_RUFFE);
+	return false;
+    }
+    else {
+	moment_of_truth(FISH_WEEDS);
 	return false;
     }
 }

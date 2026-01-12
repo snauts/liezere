@@ -44,6 +44,7 @@ pcx:
 	@./pcx-dump -i egle1.pcx	>> data.h
 	@./pcx-dump -i egle2.pcx	>> data.h
 	@./pcx-dump -i egle3.pcx	>> data.h
+	@./pcx-dump -i weeds.pcx	>> data.h
 	@./pcx-dump -i ruffe.pcx	>> data.h
 	@./pcx-dump -i perch.pcx	>> data.h
 	@./pcx-dump -i asaris.pcx	>> data.h

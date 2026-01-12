@@ -45,6 +45,7 @@ typedef struct {
 enum {
     FISH_SNAP = 0,
     FISH_ESCAPE,
+    FISH_WEEDS,
     FISH_RUFFE,
     FISH_PERCH,
     FISH_ASARIS,

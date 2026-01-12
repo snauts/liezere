@@ -103,7 +103,7 @@ static const Frame day3_frame[] = {
 };
 
 const byte* const fishes[] = {
-    NULL, mormene, ruffe, perch, asaris, asaris, asaris, makans
+    NULL, mormene, weeds, ruffe, perch, asaris, asaris, asaris, makans
 };
 
 const Text tutorial[] = {
@@ -132,6 +132,7 @@ const Text choices[] = {
 const char* const reports[] = {
     "P`ar`ak stauji vilki, p`arr`avi auklu!",
     "P`ar`ak l`eni vilki, nokabin`aj`as maita!",
+    "Zivis ~seit nav ne tuvu.",
     "N`ikul`igs ^k`isis.",
     " 70g - tas jau asar`itis.",
     "100g - asaris k`a asaris.",
