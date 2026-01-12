@@ -501,9 +501,7 @@ static const int8 cursor[] = {
 static Pos fish[2];
 static byte count;
 
-static byte cursor_x;
-static byte cursor_y;
-
+static Pos pos;
 static byte cursor_frame;
 
 static byte steps;
@@ -518,14 +516,14 @@ static byte day;
 
 static void draw_cursor(void) {
     const int8 *dir = cursor + (cursor_frame & 0xf);
-    set_pixel(cursor_x + dir[0], cursor_y + dir[1]);
-    set_pixel(cursor_x + dir[2], cursor_y + dir[3]);
+    set_pixel(pos.x + dir[0], pos.y + dir[1]);
+    set_pixel(pos.x + dir[2], pos.y + dir[3]);
 }
 
 static void reset_cursor(void) {
     steps = 0;
-    cursor_x = 8;
-    cursor_y = 180;
+    pos.x = 8;
+    pos.y = 180;
     cursor_frame = 0;
     hole_end = hole_map;
     count = (day == 3) ? 2 : 1;
@@ -583,8 +581,8 @@ static void set_cursor(byte x, byte y, byte moves) {
 	    steps -= WALK_TIME;
 	    advance_time(1);
 	}
-	cursor_x = x;
-	cursor_y = y;
+	pos.x = x;
+	pos.y = y;
     }
     draw_cursor();
 }
@@ -621,8 +619,8 @@ static byte sqrt(word value) {
 }
 
 static byte distance(byte i) {
-    word a = square(difference(fish[i].x, cursor_x));
-    word b = square(difference(fish[i].y, cursor_y));
+    word a = square(difference(fish[i].x, pos.x));
+    word b = square(difference(fish[i].y, pos.y));
     word c = a + b;
 
     return (c >= a && c >= b) ? sqrt(c) : 255;
@@ -651,8 +649,8 @@ static byte total_distance(void) {
 static void move_cursor(void) {
     byte button = read_input();
     byte moves = 0;
-    byte x = cursor_x;
-    byte y = cursor_y;
+    byte x = pos.x;
+    byte y = pos.y;
 
     if (button & CTRL_UP) {
 	moves++;
@@ -732,14 +730,14 @@ static void animate_drill(void) {
 
 static void add_hole(void) {
     hole_now = hole_end;
-    hole_now->x = cursor_x;
-    hole_now->y = cursor_y;
+    hole_now->x = pos.x;
+    hole_now->y = pos.y;
     hole_now->weight = 0;
     hole_end++;
 }
 
 static void drill_hole(void) {
-    if (!visited(cursor_x, cursor_y) && not_late()) {
+    if (!visited(pos.x, pos.y) && not_late()) {
 	add_hole();
 	show_forest();
 	animate_drill();
