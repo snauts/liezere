@@ -118,15 +118,10 @@ static unsigned char *read_pcx(const char *file) {
     return pixels;
 }
 
-static void image_dimensions(void) {
-    printf(" 0x%02x, 0x%02x,\n", header.w / 8, header.h / 8);
-}
-
 static void compress_and_save(const char *name, void *buf, int length) {
     unsigned char dst[estimate(length)];
     int size = compress(dst, buf, length);
     printf("const byte %s[] = {\n", name);
-    if (option == 'i') image_dimensions();
     dump_buffer(dst, size, 1);
     printf("};\n");
 }
@@ -222,9 +217,19 @@ static void *convert_bitmap(unsigned char *buf) {
     return buf;
 }
 
+const int HEADER_SIZE = 2;
+static unsigned char *add_header(unsigned char *buf) {
+    unsigned char *img = malloc(total_size() + HEADER_SIZE);
+    memcpy(img + HEADER_SIZE, buf, total_size());
+    img[0] = header.w / 8;
+    img[1] = header.h / 8;
+    free(buf);
+    return img;
+}
+
 static void save_image(const char *name) {
-    unsigned char *buf = convert_bitmap(read_pcx(name));
-    save_array(name, buf, total_size());
+    unsigned char *buf = add_header(convert_bitmap(read_pcx(name)));
+    save_array(name, buf, total_size() + HEADER_SIZE);
     free(buf);
 }
 

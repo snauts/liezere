@@ -266,7 +266,7 @@ static void put_tick(char c, byte x, byte y) {
 }
 
 static byte special_symbol(char c, byte x, byte y) {
-    put_symbol(STAGING_AREA + ((c - '0') << 3), x, y, 8);
+    put_symbol(IMAGE_DATA(STAGING_AREA) + ((c - '0') << 3), x, y, 8);
     return 8;
 }
 
@@ -327,12 +327,9 @@ static void *decompress(byte *dst, const byte *src) {
     return dst;
 }
 
-static void show_image(const byte *src, byte x, byte y) {
-    byte *ptr = STAGING_AREA;
-    decompress(ptr, IMAGE_DATA(src));
-
-    byte w = src[0];
-    byte h = src[1] << 3;
+static void draw_image(byte *ptr, byte x, byte y) {
+    byte w = *(ptr++);
+    byte h = *(ptr++) << 3;
 
     y = y << 3;
 
@@ -348,6 +345,12 @@ static void show_image(const byte *src, byte x, byte y) {
 	dst += 0x20;
 	ptr += w;
     }
+}
+
+static void show_image(const byte *src, byte x, byte y) {
+    byte *ptr = STAGING_AREA;
+    decompress(ptr, src);
+    draw_image(ptr, x, y);
 }
 
 static byte use_joy;
@@ -749,11 +752,7 @@ static void show_lake(void) {
 #define COPENE2 (STAGING_AREA + 0x200)
 
 static void draw_tip(byte *ptr) {
-    for (byte i = 0; i < 16; i++) {
-	byte *dst = map_y[i] + 16;
-	memcpy(dst, ptr, 3);
-	ptr += 3;
-    }
+    draw_image(ptr, 16, 0);
 }
 
 static void starting_line(void) {
@@ -971,8 +970,8 @@ static byte ice_fish(void) {
     clear_screen();
     reset_attributes(0x7d);
     memset(COLOUR(0x00), 0x78, 0x20);
-    decompress(COPENE1, IMAGE_DATA(copene1));
-    decompress(COPENE2, IMAGE_DATA(copene2));
+    decompress(COPENE1, copene1);
+    decompress(COPENE2, copene2);
     show_image(copene1, 16, 0);
     show_image(hole, 12, 19);
     starting_line();
@@ -1045,7 +1044,7 @@ static void game_fail(void) {
 }
 
 static void show_tutorial(void) {
-    decompress(STAGING_AREA, IMAGE_DATA(symbols));
+    decompress(STAGING_AREA, symbols);
     wall_of_text(tutorial);
     reset();
 }
