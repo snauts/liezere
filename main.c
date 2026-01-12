@@ -751,22 +751,18 @@ static void draw_holes(void) {
     }
 }
 
-static byte valid_fish(byte i) {
-    return good_spot(fish[i].x, fish[i].y);
-}
-
-static void generate_fish(byte i) {
+static void generate_fish(Pos *f) {
     do {
 	word r = random();
-	fish[i].x = r & 0xff;
-	fish[i].y = r >> 8;
-    } while (!valid_fish(i));
+	f->x = r & 0xff;
+	f->y = r >> 8;
+    } while (!good_spot(f->x, f->y));
 }
 
 static void put_fish(void) {
     if (hole_end == hole_map) {
 	for (byte i = 0; i < count; i++) {
-	    generate_fish(i);
+	    generate_fish(fish + i);
 	}
     }
 }
