@@ -2,7 +2,7 @@
 #include "image.h"
 
 #define MOVE_COOLDOWN	5
-#define JERK_INTERVAL	10
+#define JERK_INTERVAL	15
 #define BITE_INTERVAL	25
 #define BITE_DELAY	15
 #define SNAP_PENALTY	5
