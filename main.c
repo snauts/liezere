@@ -732,6 +732,7 @@ static void animate_drill(void) {
 static void add_hole(void) {
     hole_now = hole_end;
     hole_now->pos = pos;
+    hole_now->weight = 0;
     hole_now->distance = 0;
     hole_end++;
 }
@@ -941,6 +942,7 @@ static void moment_of_weight(byte fish, byte weight) {
 
     if (weight > 0) {
 	to_decimal((void *) str, weight);
+	hole_now->weight = weight;
     }
 
     put_str(str, center(str), 64);
