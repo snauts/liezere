@@ -1097,10 +1097,10 @@ static void report_number(char *buf, word amount) {
 }
 
 static void report_weight(char *buf, word amount) {
-    byte end = to_decimal(buf, amount, 1000) - 2;
-    buf[end++] = 'k';
-    buf[end++] = 'g';
-    buf[end] = 0;
+    buf += to_decimal(buf, amount, 1000) - 2;
+    *(buf++) = 'k';
+    *(buf++) = 'g';
+    *buf = 0;
 }
 
 static void report_amount(byte i, byte y) {
