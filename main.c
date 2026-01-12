@@ -751,7 +751,7 @@ static void draw_holes(void) {
 }
 
 static byte valid_fish(byte i) {
-    return good_spot(fish[i].x, fish[i].x);
+    return good_spot(fish[i].x, fish[i].y);
 }
 
 static void generate_fish(byte i) {
