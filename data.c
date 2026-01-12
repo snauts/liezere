@@ -134,7 +134,7 @@ const char* const reports[] = {
     "P`ar`ak l`eni vilki, nokabin`aj`as maita!",
     "Zaceps, zivis ~seit nav ne tuvu.",
     "N`ikul`igs ^k`isis.",
-    " 70g - tas jau asar`itis.",
+    "70g - tas jau asar`itis.",
     "100g - asaris k`a asaris.",
     "100g - piekl`aj`igs asaris.",
     "100g - krup^naks, makanam j`abut tuvu.",

@@ -917,14 +917,23 @@ static void draw_fish(byte fish) {
     if (fish > 0) show_image(fishes[fish], 18, 12);
 }
 
-static void update_num(char *str, byte num) {
-    byte dec = 0;
-    while (num >= 10) {
-	num -= 10;
-	dec++;
+static byte to_decimal(char *str, word num) {
+    byte index = 0;
+    static const word pow[] = {
+	10000, 1000, 100, 10, 1
+    };
+    for (byte i = 0; i < SIZE(pow); i++) {
+	byte count = 0;
+	word x = pow[i];
+	while (num >= x) {
+	    num -= x;
+	    count++;
+	}
+	if (count > 0 || index > 0 || x == 1) {
+	    str[index++] = '0' + count;
+	}
     }
-    str[1] = '0' + dec;
-    str[2] = '0' + num;
+    return index;
 }
 
 static const Frame raise[] = {
@@ -934,10 +943,10 @@ static const Frame raise[] = {
     { .img = NULL },
 };
 
-static void moment_of_weight(byte fish, int8 weight) {
+static void moment_of_weight(byte fish, byte weight) {
     const char *str = reports[fish];
 
-    if (weight >= 0) update_num((void *) str, weight);
+    if (weight > 0) to_decimal((void *) str, weight);
 
     put_str(str, center(str), 64);
     memset(COLOUR(0xe0), 5, 0x60);
@@ -948,7 +957,7 @@ static void moment_of_weight(byte fish, int8 weight) {
 }
 
 static void moment_of_truth(byte fish) {
-    moment_of_weight(fish, -1);
+    moment_of_weight(fish, 0);
 }
 
 static byte wait_pull(byte button, byte fast) {
@@ -966,7 +975,7 @@ static byte wait_pull(byte button, byte fast) {
 }
 
 static byte get_weight(byte distance) {
-    return (51 - distance) << 1;
+    return 100 + ((51 - distance) << 1);
 }
 
 static byte report_fish(byte distance) {
@@ -991,7 +1000,7 @@ static byte report_fish(byte distance) {
 	moment_of_weight(FISH_PERCH, 150 - distance);
 	return false;
     }
-    else if (distance <= 150) {
+    else if (distance < 150) {
 	moment_of_truth(FISH_RUFFE);
 	return false;
     }
