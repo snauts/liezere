@@ -28,6 +28,10 @@ void select_music(void *ptr);
 void stop_music(void);
 
 typedef struct {
+    byte x, y;
+} Pos;
+
+typedef struct {
     const byte *img;
     byte x, y;
 } Frame;

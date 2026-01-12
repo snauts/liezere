@@ -498,8 +498,7 @@ static const int8 cursor[] = {
     1,  1, -1, -1,
 };
 
-static byte fish_x[2];
-static byte fish_y[2];
+static Pos fish[2];
 static byte count;
 
 static byte cursor_x;
@@ -622,8 +621,8 @@ static byte sqrt(word value) {
 }
 
 static byte distance(byte i) {
-    word a = square(difference(fish_x[i], cursor_x));
-    word b = square(difference(fish_y[i], cursor_y));
+    word a = square(difference(fish[i].x, cursor_x));
+    word b = square(difference(fish[i].y, cursor_y));
     word c = a + b;
 
     return (c >= a && c >= b) ? sqrt(c) : 255;
@@ -631,8 +630,7 @@ static byte distance(byte i) {
 
 static void remove_fish(byte place) {
     for (byte i = place + 1; i < count; i++) {
-	fish_x[i - 1] = fish_x[i];
-	fish_y[i - 1] = fish_y[i];
+	fish[i - 1] = fish[i];
     }
     count--;
 }
@@ -757,14 +755,14 @@ static void draw_holes(void) {
 }
 
 static byte valid_fish(byte i) {
-    return good_spot(fish_x[i], fish_y[i]);
+    return good_spot(fish[i].x, fish[i].x);
 }
 
 static void generate_fish(byte i) {
     do {
 	word r = random();
-	fish_x[i] = r & 0xff;
-	fish_y[i] = r >> 8;
+	fish[i].x = r & 0xff;
+	fish[i].y = r >> 8;
     } while (!valid_fish(i));
 }
 
