@@ -913,7 +913,7 @@ static void draw_fish(byte fish) {
     if (fish > 0) show_image(fishes[fish], 18, 12);
 }
 
-static byte to_decimal(char *str, word num) {
+static byte to_decimal(char *str, word num, word pad) {
     byte index = 0;
     static const word pow[] = {
 	10000, 1000, 100, 10, 1
@@ -925,8 +925,11 @@ static byte to_decimal(char *str, word num) {
 	    num -= x;
 	    count++;
 	}
-	if (count > 0 || index > 0 || x == 1) {
+	if (count > 0 || index > 0 || x == pad) {
 	    str[index++] = '0' + count;
+	}
+	if (pad > 1 && x == pad) {
+	    str[index++] = '.';
 	}
     }
     return index;
@@ -943,7 +946,7 @@ static void moment_of_weight(byte fish, byte weight) {
     const char *str = reports[fish];
 
     if (weight > 0) {
-	to_decimal((void *) str, weight);
+	to_decimal((void *) str, weight, 1);
 	stats[STATS_SVARS] += weight;
 	stats[STATS_ASARI]++;
     }
@@ -1089,11 +1092,27 @@ static void draw_panel(Panel *panel) {
     if (text->str) wall_of_text(text);
 }
 
-static void report_number(const char *str, word amount, byte y) {
-    char num[6];
-    put_str(str, 128 - str_len(str), y);
-    num[to_decimal(num, amount)] = 0;
-    put_str(num, 144, y);
+static void report_number(char *buf, word amount) {
+    buf[to_decimal(buf, amount, 1)] = 0;
+}
+
+static void report_weight(char *buf, word amount) {
+    byte end = to_decimal(buf, amount, 1000);
+    buf[end++] = 'k';
+    buf[end++] = 'g';
+    buf[end] = 0;
+}
+
+static void report_amount(byte i, byte y) {
+    char buf[12];
+    word amount = stats[i];
+    if (i == STATS_SVARS) {
+	report_weight(buf, amount);
+    }
+    else {
+	report_number(buf, amount);
+    }
+    put_str(buf, 144, y);
 }
 
 static void statistics(void) {
@@ -1102,8 +1121,10 @@ static void statistics(void) {
     reset_attributes(0x4);
     show_text_series(stat_title);
     for (byte i = 0; i < STATS_COUNT; i++) {
-	report_number(stat_strs[i], stats[i], y);
-	y += 16;
+	const char *str = stat_strs[i];
+	put_str(str, 128 - str_len(str), y);
+	report_amount(i, y);
+	y = y + 16;
     }
     wait_space();
 }
