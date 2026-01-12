@@ -15,7 +15,6 @@
 
 void reset(void);
 void start_up(void) __naked {
-    __asm__("di");
     __asm__("jp _reset");
 }
 
@@ -35,6 +34,7 @@ extern const Text choices[];
 extern const Text the_end;
 extern const Panel panels[];
 
+#define DISABLE_IRQ()	__asm__("di");
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
 #define IRQ_BASE	0xfe00
@@ -1123,6 +1123,7 @@ static void game_loop(void) {
 }
 
 void reset(void) {
+    DISABLE_IRQ();
     SETUP_STACK();
     stop_music();
     setup_system();
