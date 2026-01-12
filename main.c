@@ -732,15 +732,17 @@ static void animate_drill(void) {
 static void add_hole(void) {
     hole_now = hole_end;
     hole_now->pos = pos;
+    hole_now->weight = 0;
     hole_end++;
 }
 
-static void drill_hole(void) {
+static byte drill_hole(void) {
     if (!visited(pos.x, pos.y) && not_late()) {
 	add_hole();
 	show_forest();
 	animate_drill();
     }
+    return true;
 }
 
 static void draw_holes(void) {
@@ -936,8 +938,11 @@ static const Frame raise[] = {
 
 static void moment_of_weight(byte fish, byte weight) {
     const char *str = reports[fish];
+    hole_now->weight = weight;
 
-    if (weight > 0) to_decimal((void *) str, weight);
+    if (weight >= 70) {
+	to_decimal((void *) str, weight);
+    }
 
     put_str(str, center(str), 64);
     memset(COLOUR(0xe0), 5, 0x60);
@@ -992,11 +997,11 @@ static byte report_fish(byte distance) {
 	return false;
     }
     else if (distance < 150) {
-	moment_of_truth(FISH_RUFFE);
+	moment_of_weight(FISH_RUFFE, 2);
 	return false;
     }
     else {
-	moment_of_truth(FISH_WEEDS);
+	moment_of_weight(FISH_WEEDS, 1);
 	return false;
     }
 }
@@ -1041,8 +1046,7 @@ static byte fishing(void) {
     while (not_late()) {
 	show_lake();
 	walk_lake();
-	drill_hole();
-	if (catch_fish()) {
+	if (drill_hole() && catch_fish()) {
 	    return true;
 	}
     }
