@@ -20,6 +20,7 @@ void start_up(void) __naked {
 }
 
 static volatile byte vblank;
+static const byte *cached;
 static byte *map_y[192];
 static byte *line[96];
 static byte no_text;
@@ -169,6 +170,7 @@ static void reset_attributes(byte color) {
 
 static void clear_screen(void) {
     out_fe(0);
+    cached = NULL;
     reset_attributes(0);
     memset(SCREEN(0), 0, 0x1800);
 }
@@ -349,7 +351,10 @@ static void draw_image(byte *ptr, byte x, byte y) {
 
 static void show_image(const byte *src, byte x, byte y) {
     byte *ptr = STAGING_AREA;
-    decompress(ptr, src);
+    if (src != cached) {
+	decompress(ptr, src);
+	cached = src;
+    }
     draw_image(ptr, x, y);
 }
 
