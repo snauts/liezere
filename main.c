@@ -421,7 +421,7 @@ static byte wait_123(void) {
 }
 
 static void show_frame(const Frame *frame) {
-    show_image(frame->img, frame->x, frame->y);
+    show_image(frame->img, frame->pos.x, frame->pos.y);
 }
 
 static void show_series(const Frame *series) {
@@ -429,8 +429,8 @@ static void show_series(const Frame *series) {
 }
 
 static void show_text(const Text *text) {
-    byte x = text->x < 255 ? text->x : center(text->str);
-    put_str(text->str, x, text->y);
+    byte x = text->pos.x < 255 ? text->pos.x : center(text->str);
+    put_str(text->str, x, text->pos.y);
 }
 
 static const Text *show_text_series(const Text *text) {
@@ -931,9 +931,9 @@ static byte to_decimal(char *str, word num) {
 }
 
 static const Frame raise[] = {
-    { .img = velk1,  .x = 13, .y = 11 },
-    { .img = aukla2, .x = 15, .y = 14 },
-    { .img = loms,   .x = 15, .y = 11 },
+    { .img = velk1,  .pos = POS(13, 11) },
+    { .img = aukla2, .pos = POS(15, 14) },
+    { .img = loms,   .pos = POS(15, 11) },
     { .img = NULL },
 };
 

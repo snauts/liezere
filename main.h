@@ -21,6 +21,7 @@ typedef unsigned short word;
 #define COLOUR(x)	PTR(0x5800 + (x))
 #define STAGING_AREA	PTR(0x5b00)
 
+#define POS(X, Y)	{ .x = X, .y = Y }
 #define TEXT_SENTINEL	{ .str = NULL }
 
 void memset(byte *ptr, byte data, word len);
@@ -33,12 +34,12 @@ typedef struct {
 
 typedef struct {
     const byte *img;
-    byte x, y;
+    Pos pos;
 } Frame;
 
 typedef struct {
     const char *str;
-    byte x, y;
+    Pos pos;
 } Text;
 
 typedef struct {
@@ -48,6 +49,7 @@ typedef struct {
 
 typedef struct {
     Pos pos;
+    byte weight;
 } Hole;
 
 enum {
