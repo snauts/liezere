@@ -9,7 +9,7 @@
 #define DRILL_MOVES	5
 #define PULL_MOVES	5
 #define PULL_FAST	20
-#define PULL_SLOW	60
+#define PULL_SLOW	80
 #define WALK_TIME	5
 #define JERK_TIME	5
 
