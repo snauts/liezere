@@ -132,7 +132,7 @@ const Text choices[] = {
 const char* const reports[] = {
     "P`ar`ak stauji vilki, p`arr`avi auklu!",
     "P`ar`ak l`eni vilki, nokabin`aj`as maita!",
-    "Zivis ~seit nav ne tuvu.",
+    "Zaceps, zivis ~seit nav ne tuvu.",
     "N`ikul`igs ^k`isis.",
     " 70g - tas jau asar`itis.",
     "100g - asaris k`a asaris.",
