@@ -78,6 +78,34 @@ const Frame horizonts[] = {
     { .img = NULL },
 };
 
+static const Frame day0_frame[] = {
+    { .img = panel_0a, .x = 0,  .y = 0  },
+    { .img = panel_0b, .x = 22, .y = 8  },
+    { .img = panel_0c, .x = 0,  .y = 16 },
+};
+
+static const Frame day1_frame[] = {
+    { .img = panel_1a, .x = 0,  .y = 0  },
+    { .img = panel_1b, .x = 22, .y = 8  },
+    { .img = panel_1c, .x = 4,  .y = 16 },
+};
+
+static const Frame day2_frame[] = {
+    { .img = panel_2a, .x = 0,  .y = 0  },
+    { .img = panel_2b, .x = 22, .y = 6  },
+    { .img = panel_2c, .x = 1,  .y = 16 },
+};
+
+static const Frame day3_frame[] = {
+    { .img = panel_3a, .x = 0,  .y = 0  },
+    { .img = panel_3b, .x = 22, .y = 7  },
+    { .img = panel_3c, .x = 0,  .y = 16 },
+};
+
+const byte* const fishes[] = {
+    NULL, mormene, ruffe, perch, asaris, makans
+};
+
 const Text tutorial[] = {
     { .x = 32, .y = 8,   .str = "Lai saglab`atu motiv`aciju iet cop`et," },
     { .x = 32, .y = 20,  .str = "katru dienu j`ano^ker lielais makans." },
@@ -101,10 +129,6 @@ const Text choices[] = {
     TEXT_SENTINEL,
 };
 
-const byte* const fishes[] = {
-    NULL, mormene, ruffe, perch, asaris, makans
-};
-
 const char* const reports[] = {
     "P`ar`ak stauji vilki, p`arr`avi auklu!",
     "P`ar`ak l`eni vilki, nokabin`aj`as maita!",
@@ -112,12 +136,6 @@ const char* const reports[] = {
     " 70g - tas jau asar`itis.",
     "100g - asaris k`a asaris.",
     "Jopcik, vot tas ir makans!",
-};
-
-static const Frame day0_frame[] = {
-    { .img = panel_0a, .x = 0,  .y = 0  },
-    { .img = panel_0b, .x = 22, .y = 8  },
-    { .img = panel_0c, .x = 0,  .y = 16 },
 };
 
 static const Text day0_text[] = {
@@ -130,12 +148,6 @@ static const Text day0_text[] = {
     { .x = 64,  .y = 154, .str = "darot pat`ikam`akas lietas." },
     TEXT_SENTINEL,
     TEXT_SENTINEL,
-};
-
-static const Frame day1_frame[] = {
-    { .img = panel_1a, .x = 0,  .y = 0  },
-    { .img = panel_1b, .x = 22, .y = 8  },
-    { .img = panel_1c, .x = 4,  .y = 16 },
 };
 
 static const Text day1_text[] = {
@@ -154,12 +166,6 @@ static const Text day1_text[] = {
     TEXT_SENTINEL,
 };
 
-static const Frame day2_frame[] = {
-    { .img = panel_2a, .x = 0,  .y = 0  },
-    { .img = panel_2b, .x = 22, .y = 6  },
-    { .img = panel_2c, .x = 1,  .y = 16 },
-};
-
 static const Text day2_text[] = {
     { .x = 72,  .y = 26,  .str = "Zini, kas ir j`adara, kad izcelies?" },
     TEXT_SENTINEL,
@@ -174,12 +180,6 @@ static const Text day2_text[] = {
     { .x = 255, .y = 116, .str = "Neizprotamu apst`ak^lu d`e^l "
 				 "d~zeki aizgul`ejas." },
     TEXT_SENTINEL,
-};
-
-static const Frame day3_frame[] = {
-    { .img = panel_3a, .x = 0,  .y = 0  },
-    { .img = panel_3b, .x = 22, .y = 7  },
-    { .img = panel_3c, .x = 0,  .y = 16 },
 };
 
 static const Text day3_text[] = {
@@ -198,11 +198,11 @@ static const Text day3_text[] = {
     TEXT_SENTINEL,
 };
 
+const Text the_end = { .x = 16, .y = 35, .str = "BEIGAS" };
+
 const Panel panels[] = {
     { .frame = day0_frame, .text = day0_text },
     { .frame = day1_frame, .text = day1_text },
     { .frame = day2_frame, .text = day2_text },
     { .frame = day3_frame, .text = day3_text },
 };
-
-const Text the_end = { .x = 16, .y = 35, .str = "BEIGAS" };
