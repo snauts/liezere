@@ -349,13 +349,17 @@ static void draw_image(byte *ptr, byte x, byte y) {
     }
 }
 
-static void show_image(const byte *src, byte x, byte y) {
+static byte *cache_image(const byte *src) {
     byte *ptr = STAGING_AREA;
     if (src != cached) {
 	decompress(ptr, src);
 	cached = src;
     }
-    draw_image(ptr, x, y);
+    return ptr;
+}
+
+static void show_image(const byte *src, byte x, byte y) {
+    draw_image(cache_image(src), x, y);
 }
 
 static byte use_joy;
