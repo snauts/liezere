@@ -62,3 +62,11 @@ enum {
     FISH_LARGE,
     FISH_MAKANS,
 };
+
+enum {
+    STATS_MAKANI = 0,
+    STATS_ASARI,
+    STATS_RUFFES,
+    STATS_SVARS,
+    STATS_COUNT, // this shoud be last
+};

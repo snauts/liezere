@@ -25,10 +25,12 @@ static byte *line[96];
 static byte no_text;
 static word seed;
 
+extern const char* const stat_strs[];
 extern const char* const reports[];
 extern const byte* const fishes[];
 extern const Frame horizonts[];
 extern const Frame apkaime[];
+extern const Text stat_title[];
 extern const Text tutorial[];
 extern const Text choices[];
 extern const Text the_end;
@@ -515,6 +517,8 @@ static byte minute;
 static byte hour;
 static byte day;
 
+static word stats[STATS_COUNT];
+
 static void draw_cursor(void) {
     const int8 *dir = cursor + (cursor_frame & 0xf);
     set_pixel(pos.x + dir[0], pos.y + dir[1]);
@@ -940,6 +944,8 @@ static void moment_of_weight(byte fish, byte weight) {
 
     if (weight > 0) {
 	to_decimal((void *) str, weight);
+	stats[STATS_SVARS] += weight;
+	stats[STATS_ASARI]++;
     }
 
     put_str(str, center(str), 64);
@@ -976,6 +982,7 @@ static byte report_fish(byte distance) {
     if (distance <= 1) {
 	moment_of_truth(FISH_MAKANS);
 	remove_fish(closest);
+	stats[STATS_MAKANI]++;
 	return count == 0;
     }
     else if (distance <= 11) {
@@ -996,6 +1003,7 @@ static byte report_fish(byte distance) {
     }
     else if (distance < 150) {
 	moment_of_truth(FISH_RUFFE);
+	stats[STATS_RUFFES]++;
 	return false;
     }
     else {
@@ -1052,6 +1060,7 @@ static byte fishing(void) {
 }
 
 static void init_variables(void) {
+    memset(stats, 0, sizeof(stats));
     last_input = read_input();
     init_fishing_line();
     day = 1;
@@ -1080,10 +1089,30 @@ static void draw_panel(Panel *panel) {
     if (text->str) wall_of_text(text);
 }
 
+static void report_number(const char *str, word amount, byte y) {
+    char num[6];
+    put_str(str, 128 - str_len(str), y);
+    num[to_decimal(num, amount)] = 0;
+    put_str(num, 144, y);
+}
+
+static void statistics(void) {
+    byte y = 64;
+    clear_screen();
+    reset_attributes(0x4);
+    show_text_series(stat_title);
+    for (byte i = 0; i < STATS_COUNT; i++) {
+	report_number(stat_strs[i], stats[i], y);
+	y += 16;
+    }
+    wait_space();
+}
+
 static void game_done(void) {
     show_image(beigas, 0, 0);
     show_text(&the_end);
     wait_space();
+    statistics();
 }
 
 static void current_panel(byte num) {
@@ -1095,6 +1124,7 @@ static void current_panel(byte num) {
 
 static void game_fail(void) {
     current_panel(0);
+    statistics();
     reset();
 }
 
