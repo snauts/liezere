@@ -103,7 +103,7 @@ static const Frame day3_frame[] = {
 };
 
 const byte* const fishes[] = {
-    NULL, mormene, weeds, ruffe, perch, asaris, asaris, asaris, makans
+    NULL, mormene, weeds, ruffe, perch, asaris, decent, large, makans
 };
 
 const Text tutorial[] = {

@@ -48,6 +48,8 @@ pcx:
 	@./pcx-dump -i ruffe.pcx	>> data.h
 	@./pcx-dump -i perch.pcx	>> data.h
 	@./pcx-dump -i asaris.pcx	>> data.h
+	@./pcx-dump -i decent.pcx	>> data.h
+	@./pcx-dump -i large.pcx	>> data.h
 	@./pcx-dump -i makans.pcx	>> data.h
 	@./pcx-dump -i mormene.pcx	>> data.h
 	@./pcx-dump -i panel_0a.pcx	>> data.h
