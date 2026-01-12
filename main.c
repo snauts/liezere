@@ -565,7 +565,7 @@ static void advance_time(byte amount) {
 static byte visited(byte x, byte y) {
     hole_now = hole_map;
     while (hole_now < hole_end) {
-	if (x == hole_now->x && y == hole_now->y) {
+	if (x == hole_now->pos.x && y == hole_now->pos.y) {
 	    return true;
 	}
 	hole_now++;
@@ -730,9 +730,7 @@ static void animate_drill(void) {
 
 static void add_hole(void) {
     hole_now = hole_end;
-    hole_now->x = pos.x;
-    hole_now->y = pos.y;
-    hole_now->weight = 0;
+    hole_now->pos = pos;
     hole_end++;
 }
 
@@ -747,7 +745,7 @@ static void drill_hole(void) {
 static void draw_holes(void) {
     Hole *ptr = hole_map;
     while (ptr < hole_end) {
-	set_pixel(ptr->x, ptr->y);
+	set_pixel(ptr->pos.x, ptr->pos.y);
 	ptr++;
     }
 }

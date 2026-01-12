@@ -47,8 +47,7 @@ typedef struct {
 } Panel;
 
 typedef struct {
-    byte x, y;
-    byte weight;
+    Pos pos;
 } Hole;
 
 enum {
