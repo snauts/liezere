@@ -785,14 +785,36 @@ static void show_forest(void) {
     wait_vblank();
 }
 
+static const Frame sprites[] = {
+    { .img = velk1,   .pos = POS(13, 11) },
+    { .img = aukla2,  .pos = POS(15, 14) },
+    { .img = loms,    .pos = POS(15, 11) },
+    { .img = NULL },
+    { .img = velk2,   .pos = POS(14, 12) },
+    { .img = aukla1,  .pos = POS(15, 16) },
+    { .img = NULL },
+    { .img = urbis,   .pos = POS(14,  8) },
+    { .img = swirl,   .pos = POS(14, 10) },
+    { .img = drill,   .pos = POS(16, 15) },
+    { .img = NULL },
+    { .img = copene3, .pos = POS(16,  0) },
+    { .img = copene1, .pos = POS(16,  0) },
+    { .img = hole,    .pos = POS(12, 19) },
+    { .img = NULL },
+    { .img = motils,  .pos = POS( 9, 18) },
+    { .img = motils,  .pos = POS(24, 20) },
+    { .img = motils,  .pos = POS(21, 19) },
+    { .img = motils,  .pos = POS( 6, 21) },
+    { .img = NULL },
+};
+
 static void animate_drill(void) {
     for (byte i = 0; i < DRILL_MOVES; i++) {
 	advance_time(1);
-	show_image(urbis, 14, 8);
+	show_frame(sprites + 7);
 	wait_asserted(CTRL_LEFT);
 	swoosh(1, 3, 1);
-	show_image(swirl, 14, 10);
-	show_image(drill, 16, 15);
+	show_series(sprites + 8);
 	wait_asserted(CTRL_RIGHT);
 	swoosh(4, 2, -1);
     }
@@ -931,14 +953,6 @@ static void clear_tip(void) {
 }
 
 static const Frame *debris;
-static const Frame garbage[] = {
-    { .img = motils, .pos = POS( 9, 18) },
-    { .img = motils, .pos = POS(24, 20) },
-    { .img = motils, .pos = POS(21, 19) },
-    { .img = motils, .pos = POS( 6, 21) },
-    { .img = NULL },
-};
-
 static void hook_failure(void) {
     if (debris->img) {
 	show_frame(debris);
@@ -948,7 +962,7 @@ static void hook_failure(void) {
 
 static byte fish_bite(void) {
     byte ticks = BITE_INTERVAL;
-    show_image(copene3, 16, 0);
+    show_frame(sprites + 11);
     last_input = read_input();
     while (ticks > 0) {
 	if (asserted(CTRL_UP)) {
@@ -979,7 +993,7 @@ static void jerk_tip(byte *img, byte dir) {
 
 static byte jerk_fish(void) {
     byte ticks = 0;
-    debris = garbage;
+    debris = sprites + 15;
 
     reset_jerk();
     while (not_late()) {
@@ -1002,13 +1016,6 @@ static void draw_fish(byte fish) {
     if (fish > 0) show_frame(fishes + fish);
 }
 
-static const Frame raise[] = {
-    { .img = velk1,  .pos = POS(13, 11) },
-    { .img = aukla2, .pos = POS(15, 14) },
-    { .img = loms,   .pos = POS(15, 11) },
-    { .img = NULL },
-};
-
 static void moment_of_weight(byte fish, byte weight) {
     const char *str = reports[fish];
 
@@ -1021,7 +1028,7 @@ static void moment_of_weight(byte fish, byte weight) {
     hole_now->weight = weight;
     put_str(str, center(str), 64);
     memset(COLOUR(0xe0), 5, 0x60);
-    show_series(raise);
+    show_series(sprites + 0);
     draw_fish(fish);
 
     wait_space();
@@ -1090,12 +1097,11 @@ static byte pull_fish(void) {
     show_forest();
     for (byte i = 0; i < PULL_MOVES; i++) {
 	advance_time(1);
-	show_frame(raise);
+	show_frame(sprites + 0);
 	if (wait_pull(CTRL_LEFT, i)) {
 	    return false;
 	}
-	show_image(velk2, 14, 12);
-	show_image(aukla1, 15, 16);
+	show_series(sprites + 4);
 	if (wait_pull(CTRL_RIGHT, 1)) {
 	    return false;
 	}
@@ -1109,8 +1115,7 @@ static byte ice_fish(void) {
     memset(COLOUR(0x00), 0x78, 0x20);
     decompress(COPENE1, copene1);
     decompress(COPENE2, copene2);
-    show_image(copene1, 16, 0);
-    show_image(hole, 12, 19);
+    show_series(sprites + 12);
     starting_line();
     put_time();
 
