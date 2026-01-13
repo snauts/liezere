@@ -172,13 +172,14 @@ static const Text day1_text[] = {
 };
 
 static const Text day2_text[] = {
-    { .pos = POS(72, 26), .str = "Zini, kas ir j`adara, kad izcelies?" },
+    { .pos = POS(72, 26), .str = "Kad ir no^kerts lielais makans," },
     TEXT_SENTINEL,
 
-    { .pos = POS(16, 90), .str = "Pareizi, tev ir j`auzst`ajas." },
+    { .pos = POS(16, 90), .str = "rodas dab`iga v`elme atz`im`et." },
     TEXT_SENTINEL,
 
-    { .pos = POS(88, 154), .str = "L`idz neklausa vairs k`ajas." },
+    { .pos = POS(88, 148), .str = "Parasti tas beidzas" },
+    { .pos = POS(88, 160), .str = "t`a k`a tas beidzas." },
     TEXT_SENTINEL,
 
     { .pos = POS(255,  64), .str = "- Otr`a diena -" },
