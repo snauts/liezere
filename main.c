@@ -333,6 +333,28 @@ static byte center(const char *msg) {
     return 128 - (str_len(msg) >> 1);
 }
 
+static byte to_decimal(char *str, word num, word pad) {
+    byte index = 0;
+    static const word pow[] = {
+	10000, 1000, 100, 10, 1
+    };
+    for (byte i = 0; i < SIZE(pow); i++) {
+	byte count = 0;
+	word x = pow[i];
+	while (num >= x) {
+	    num -= x;
+	    count++;
+	}
+	if (count > 0 || index > 0 || x == pad) {
+	    str[index++] = '0' + count;
+	}
+	if (pad > 1 && x == pad) {
+	    str[index++] = '.';
+	}
+    }
+    return index;
+}
+
 static void *decompress(byte *dst, const byte *src) {
     while (*src) {
         byte n = *src & 0x7f;
@@ -511,6 +533,7 @@ static byte steps;
 static Hole *hole_now;
 static Hole *hole_end;
 static Hole hole_map[64];
+static byte hole_check;
 
 static byte cooldown;
 static byte minute;
@@ -651,6 +674,26 @@ static byte total_distance(void) {
     return minimum;
 }
 
+static void show_weight(byte weight) {
+    if (weight > 0) {
+	char buf[6];
+	byte index = to_decimal(buf, weight, 1);
+	buf[index++] = 'g';
+	buf[index++] = 0;
+	for (byte y = 16; y < 24; y++) {
+	    memset(map_y[y], 0, 8);
+	}
+	put_str(buf, 0, 16);
+	memset(COLOUR(0x40), 7, 8);
+    }
+}
+
+static void check_hole(void) {
+    if (visited(pos.x, pos.y) && total_distance() == hole_now->distance) {
+	show_weight(hole_now->weight);
+    }
+}
+
 static void move_cursor(void) {
     byte button = read_input();
     byte moves = 0;
@@ -674,6 +717,8 @@ static void move_cursor(void) {
 	x++;
     }
     if (moves == 0) {
+	if (!hole_check) check_hole();
+	hole_check = true;
 	cooldown = 0;
 	return;
     }
@@ -683,6 +728,10 @@ static void move_cursor(void) {
     }
     if (cooldown <= MOVE_COOLDOWN) {
 	cooldown++;
+    }
+    if (hole_check) {
+	memset(COLOUR(0x40), 0, 8);
+	hole_check = false;
     }
 }
 
@@ -776,6 +825,7 @@ static void put_fish(void) {
 
 static void show_lake(void) {
     clear_screen();
+    hole_check = false;
     show_image(ezers, 0, 0);
     show_series(apkaime);
     draw_holes();
@@ -915,28 +965,6 @@ static byte jerk_fish(void) {
 
 static void draw_fish(byte fish) {
     if (fish > 0) show_image(fishes[fish], 18, 12);
-}
-
-static byte to_decimal(char *str, word num, word pad) {
-    byte index = 0;
-    static const word pow[] = {
-	10000, 1000, 100, 10, 1
-    };
-    for (byte i = 0; i < SIZE(pow); i++) {
-	byte count = 0;
-	word x = pow[i];
-	while (num >= x) {
-	    num -= x;
-	    count++;
-	}
-	if (count > 0 || index > 0 || x == pad) {
-	    str[index++] = '0' + count;
-	}
-	if (pad > 1 && x == pad) {
-	    str[index++] = '.';
-	}
-    }
-    return index;
 }
 
 static const Frame raise[] = {
