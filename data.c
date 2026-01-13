@@ -100,8 +100,16 @@ static const Frame day3_frame[] = {
     { .img = panel_3c, .pos = POS( 0, 16) },
 };
 
-const byte* const fishes[] = {
-    NULL, mormene, weeds, ruffe, perch, asaris, decent, large, makans
+const Frame fishes[] = {
+    { .img = NULL },
+    { .img = mormene, .pos = POS(18, 12) },
+    { .img = weeds,   .pos = POS(18, 12) },
+    { .img = ruffe,   .pos = POS(18, 12) },
+    { .img = perch,   .pos = POS(18, 12) },
+    { .img = asaris,  .pos = POS(18, 12) },
+    { .img = decent,  .pos = POS(18, 12) },
+    { .img = large,   .pos = POS(18, 12) },
+    { .img = makans , .pos = POS(18, 12) },
 };
 
 const Text tutorial[] = {

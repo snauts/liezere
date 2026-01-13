@@ -28,9 +28,9 @@ static word seed;
 extern const char* const stat_strs[];
 extern const char* const rank_strs[];
 extern const char* const reports[];
-extern const byte* const fishes[];
 extern const Frame horizonts[];
 extern const Frame apkaime[];
+extern const Frame fishes[];
 extern const Text stat_title[];
 extern const Text tutorial[];
 extern const Text choices[];
@@ -999,7 +999,7 @@ static byte jerk_fish(void) {
 }
 
 static void draw_fish(byte fish) {
-    if (fish > 0) show_image(fishes[fish], 18, 12);
+    if (fish > 0) show_frame(fishes + fish);
 }
 
 static const Frame raise[] = {
