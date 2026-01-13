@@ -1108,11 +1108,13 @@ static void report_weight(char *buf, word amount) {
 static void report_amount(byte i, byte y) {
     char buf[8];
     word amount = stats[i];
-    if (i == STATS_SVARS) {
+    switch (i) {
+    case STATS_SVARS:
 	report_weight(buf, amount);
-    }
-    else {
+	break;
+    default:
 	report_number(buf, amount);
+	break;
     }
     put_str(buf, 144, y);
 }
