@@ -407,6 +407,10 @@ static void show_image(const byte *src, byte x, byte y) {
     draw_image(cache_image(src), x, y);
 }
 
+static void load_special_symbols(void) {
+    decompress(STAGING_AREA, symbols);
+}
+
 static byte use_joy;
 static byte last_input;
 
@@ -828,6 +832,7 @@ static void show_lake(void) {
     hole_check = false;
     show_image(ezers, 0, 0);
     show_series(apkaime);
+    load_special_symbols();
     draw_holes();
     put_fish();
     put_time();
@@ -1156,6 +1161,7 @@ static void statistics(void) {
     byte y = 64;
     clear_screen();
     reset_attributes(0x4);
+    load_special_symbols();
     show_text_series(stat_title);
     for (byte i = 0; i < STATS_COUNT; i++) {
 	const char *str = stat_strs[i];
@@ -1187,7 +1193,7 @@ static void game_fail(void) {
 }
 
 static void show_tutorial(void) {
-    decompress(STAGING_AREA, symbols);
+    load_special_symbols();
     wall_of_text(tutorial);
     reset();
 }
