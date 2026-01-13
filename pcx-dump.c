@@ -58,10 +58,13 @@ static char replace_char(char c) {
     }
 }
 
+static void rm_ext_to(char *dst, const char *src) {
+    while (*src) { *dst++ = replace_char(*src++); }
+}
+
 static char *rm_ext(const char *src) {
     static char buf[256];
-    char *dst = buf;
-    while (*src) { *dst++ = replace_char(*src++); }
+    rm_ext_to(buf, src);
     return buf;
 }
 
@@ -275,6 +278,7 @@ static void save_series(const char *name, char **files, int count) {
     }
 
     compress_and_save(name, all);
+
     for (int i = 0; i < count; i++) {
 	free(bufs[i].ptr);
     }
