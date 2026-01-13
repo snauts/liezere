@@ -736,6 +736,8 @@ static void animate_drill(void) {
 static void add_hole(void) {
     hole_now = hole_end;
     hole_now->pos = pos;
+    hole_now->weight = 0;
+    hole_now->distance = 0;
     hole_end++;
 }
 
@@ -953,6 +955,7 @@ static void moment_of_weight(byte fish, byte weight) {
 	stats[STATS_ASARI]++;
     }
 
+    hole_now->weight = weight;
     put_str(str, center(str), 64);
     memset(COLOUR(0xe0), 5, 0x60);
     show_series(raise);
@@ -984,6 +987,8 @@ static byte get_weight(byte distance) {
 }
 
 static byte report_fish(byte distance) {
+    hole_now->distance = distance;
+
     if (distance <= 1) {
 	moment_of_truth(FISH_MAKANS);
 	remove_fish(closest);

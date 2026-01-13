@@ -49,6 +49,8 @@ typedef struct {
 
 typedef struct {
     Pos pos;
+    byte weight;
+    byte distance;
 } Hole;
 
 enum {
