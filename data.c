@@ -140,7 +140,14 @@ const char* const reports[] = {
 };
 
 const char* const stat_strs[] = {
-    "Makani:", "Asari:", "^K`i~si:", "Svars:",
+    "Makani:", "Asari:", "^K`i~si:", "Svars:", "Rangs:",
+};
+
+const char* const rank_strs[] = {
+    "Za^lais gur^kis",
+    "Auklas p`ud`et`ajs",
+    "Atz`istams copmanis",
+    "Zivju bende",
 };
 
 static const Text day0_text[] = {
@@ -205,8 +212,8 @@ static const Text day3_text[] = {
 };
 
 const Text stat_title[] = {
-    { .pos = POS(255, 24), .str = "Loms" },
-    { .pos = POS(255, 32), .str = "====" },
+    { .pos = POS(255, 24), .str = "Statistika" },
+    { .pos = POS(255, 32), .str = "=========" },
     TEXT_SENTINEL,
 };
 

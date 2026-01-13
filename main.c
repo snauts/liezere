@@ -26,6 +26,7 @@ static byte no_text;
 static word seed;
 
 extern const char* const stat_strs[];
+extern const char* const rank_strs[];
 extern const char* const reports[];
 extern const byte* const fishes[];
 extern const Frame horizonts[];
@@ -1150,30 +1151,61 @@ static void report_weight(char *buf, word amount) {
     strcpy(to_decimal(buf, amount, 1000) - 2, "kg");
 }
 
-static void report_amount(byte i, byte y) {
+static const word ranges_makani[] = {    1,    2,    4 };
+static const word ranges_ruffes[] = {    3,    6,    9 };
+static const word ranges_asari[]  = {   10,   20,   30 };
+static const word ranges_svari[]  = { 3000, 4000, 5000 };
+
+static const word * const ranges[] = {
+    ranges_makani, ranges_asari, ranges_ruffes, ranges_svari
+};
+
+static byte get_rank(byte i) {
+    byte rank;
+    const word *ptr = ranges[i];
+    for (rank = 0; rank < 3; rank++) {
+	if (stats[i] < ptr[rank]) break;
+    }
+    return rank;
+}
+
+static byte show_stars(byte i, byte y) {
+    byte rank = get_rank(i);
+    static const char str[] = "&4&4&4";
+    put_str(str + ((3 - rank) << 1), 196, y);
+    memset(COLOUR((y & ~7) << 2) + 0x18, 0x46, 4);
+    return rank;
+}
+
+static byte report_amount(byte i, byte y, byte rank) {
     static char buf[8];
     word amount = stats[i];
     switch (i) {
     case STATS_SVARS:
 	report_weight(buf, amount);
 	break;
+    case STATS_RANGS:
+	put_str(rank_strs[rank >> 2], 136, y);
+	return 0;
     default:
 	report_number(buf, amount);
 	break;
     }
-    put_str(buf, 144, y);
+    put_str(buf, 136, y);
+    return show_stars(i, y);
 }
 
 static void statistics(void) {
-    byte y = 64;
+    byte rank = 0, y = 64;
+
     clear_screen();
     reset_attributes(0x4);
     load_special_symbols();
     show_text_series(stat_title);
     for (byte i = 0; i < STATS_COUNT; i++) {
 	const char *str = stat_strs[i];
-	put_str(str, 128 - str_len(str), y);
-	report_amount(i, y);
+	put_str(str, 120 - str_len(str), y);
+	rank += report_amount(i, y, rank);
 	y = y + 16;
     }
     wait_space();

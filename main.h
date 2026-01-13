@@ -70,5 +70,6 @@ enum {
     STATS_ASARI,
     STATS_RUFFES,
     STATS_SVARS,
+    STATS_RANGS,
     STATS_COUNT, // this shoud be last
 };
