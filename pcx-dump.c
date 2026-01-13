@@ -7,12 +7,18 @@
 #include <stdio.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <ctype.h>
 
 static char option;
 
 struct Header {
     short w, h;
 } header;
+
+typedef struct {
+    unsigned char *ptr;
+    int size;
+} Buffer;
 
 int estimate(int size);
 int compress(void *dst, void *src, int size);
@@ -52,8 +58,11 @@ static char replace_char(char c) {
     }
 }
 
-static void remove_extension(char *dst, const char *src) {
+static char *rm_ext(const char *src) {
+    static char buf[256];
+    char *dst = buf;
     while (*src) { *dst++ = replace_char(*src++); }
+    return buf;
 }
 
 static unsigned char get_color(unsigned char *color) {
@@ -118,19 +127,13 @@ static unsigned char *read_pcx(const char *file) {
     return pixels;
 }
 
-static void compress_and_save(const char *name, void *buf, int length) {
-    unsigned char dst[estimate(length)];
-    int size = compress(dst, buf, length);
+static void compress_and_save(const char *name, Buffer buf) {
+    unsigned char dst[estimate(buf.size)];
+    fprintf(stderr, "compress \"%s\" ", name);
+    int size = compress(dst, buf.ptr, buf.size);
     printf("const byte %s[] = {\n", name);
     dump_buffer(dst, size, 1);
     printf("};\n");
-}
-
-static void save_array(const char *file_name, void *data, int size) {
-    char name[256];
-    remove_extension(name, file_name);
-    fprintf(stderr, "compress \"%s\" ", name);
-    compress_and_save(name, data, size);
 }
 
 static int ink_index(int i) {
@@ -227,21 +230,76 @@ static unsigned char *add_header(unsigned char *buf) {
     return img;
 }
 
+static Buffer read_bitmap(const char *name) {
+    Buffer buf = {
+	.ptr = add_header(convert_bitmap(read_pcx(name))),
+	.size = total_size() + HEADER_SIZE,
+    };
+    return buf;
+}
+
 static void save_image(const char *name) {
-    unsigned char *buf = add_header(convert_bitmap(read_pcx(name)));
-    save_array(name, buf, total_size() + HEADER_SIZE);
-    free(buf);
+    Buffer buf = read_bitmap(name);
+    compress_and_save(rm_ext(name), buf);
+    free(buf.ptr);
+}
+
+static char *upcase(char *str) {
+    char *ptr = str;
+    while (*ptr) {
+	*ptr = toupper(*ptr);
+	ptr++;
+    }
+    return str;
+}
+
+static void save_offset(const char *file_name, int offset) {
+    printf("#define %s 0x%04x\n", upcase(rm_ext(file_name)), offset);
+}
+
+static void save_series(const char *name, char **files, int count) {
+    int total = 0;
+    Buffer bufs[count];
+
+    for (int i = 0; i < count; i++) {
+	bufs[i] = read_bitmap(files[i]);
+	save_offset(files[i], total);
+	total += bufs[i].size;
+    }
+
+    Buffer all = { .ptr = malloc(total), .size = 0 };
+
+    for (int i = 0; i < count; i++) {
+	memcpy(all.ptr + all.size, bufs[i].ptr, bufs[i].size);
+	all.size += bufs[i].size;
+    }
+
+    compress_and_save(name, all);
+    for (int i = 0; i < count; i++) {
+	free(bufs[i].ptr);
+    }
+    free(all.ptr);
 }
 
 int main(int argc, char **argv) {
     if (argc < 3) {
 	fprintf(stderr, "USAGE: pcx-dump [option] file.pcx\n");
 	fprintf(stderr, "  -i   dump compressed image\n");
+	fprintf(stderr, "  -s   dump compressed series\n");
 	return 0;
     }
 
     option = argv[1][1];
-    save_image(argv[2]);
 
+    switch (option) {
+    case 'i':
+	save_image(argv[2]);
+	break;
+    case 's':
+	save_series(argv[2], argv + 3, argc - 3);
+	break;
+    default:
+	break;
+    }
     return 0;
 }
