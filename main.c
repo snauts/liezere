@@ -522,6 +522,7 @@ static byte wait_asserted(byte ctrl) {
 }
 
 static byte wait_space(void) {
+    last_input = read_input();
     return wait_asserted(CTRL_FIRE);
 }
 
