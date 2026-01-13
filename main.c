@@ -1171,9 +1171,9 @@ static void report_weight(char *buf, word amount) {
 }
 
 static const word ranges_makani[] = {    1,    2,    4 };
-static const word ranges_ruffes[] = {    3,    6,    9 };
-static const word ranges_asari[]  = {   10,   20,   30 };
-static const word ranges_svari[]  = { 3000, 4000, 5000 };
+static const word ranges_ruffes[] = {    2,    4,    8 };
+static const word ranges_asari[]  = {   10,   20,   40 };
+static const word ranges_svari[]  = { 2000, 4000, 8000 };
 
 static const word * const ranges[] = {
     ranges_makani, ranges_asari, ranges_ruffes, ranges_svari
