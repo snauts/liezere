@@ -73,3 +73,17 @@ enum {
     STATS_RANGS,
     STATS_COUNT, // this shoud be last
 };
+
+#define SPRITES(x)	(sprites + (x))
+#define IMG_REPORT	SPRITES(0)
+#define IMG_PULL1	SPRITES(0)
+#define IMG_PULL2	SPRITES(4)
+#define IMG_DRILL1	SPRITES(7)
+#define IMG_DRILL2	SPRITES(8)
+#define IMG_HOLE	SPRITES(13)
+#define IMG_DEBRIS	SPRITES(16)
+#define IMG_TITLE	SPRITES(21)
+#define IMG_EZERS	SPRITES(22)
+#define IMG_ENDING	SPRITES(23)
+#define IMG_SYMBOL	SPRITES(24)
+#define IMG_COPENE(x)	SPRITES(14 - x)

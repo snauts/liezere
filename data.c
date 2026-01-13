@@ -100,6 +100,34 @@ static const Frame day3_frame[] = {
     { .img = panel_3c, .pos = POS( 0, 16) },
 };
 
+const Frame sprites[] = {
+    { .img = velk1,   .pos = POS(13, 11) },
+    { .img = aukla2,  .pos = POS(15, 14) },
+    { .img = loms,    .pos = POS(15, 11) },
+    { .img = NULL },
+    { .img = velk2,   .pos = POS(14, 12) },
+    { .img = aukla1,  .pos = POS(15, 16) },
+    { .img = NULL },
+    { .img = urbis,   .pos = POS(14,  8) },
+    { .img = swirl,   .pos = POS(14, 10) },
+    { .img = drill,   .pos = POS(16, 15) },
+    { .img = NULL },
+    { .img = copene3, .pos = POS(16,  0) },
+    { .img = copene2, .pos = POS(16,  0) },
+    { .img = copene1, .pos = POS(16,  0) },
+    { .img = hole,    .pos = POS(12, 19) },
+    { .img = NULL },
+    { .img = motils,  .pos = POS( 9, 18) },
+    { .img = motils,  .pos = POS(24, 20) },
+    { .img = motils,  .pos = POS(21, 19) },
+    { .img = motils,  .pos = POS( 6, 21) },
+    { .img = NULL },
+    { .img = title,   .pos = POS( 0,  0) },
+    { .img = ezers,   .pos = POS( 0,  0) },
+    { .img = beigas,  .pos = POS( 0,  0) },
+    { .img = symbols },
+};
+
 const Frame fishes[] = {
     { .img = NULL },
     { .img = mormene, .pos = POS(18, 12) },

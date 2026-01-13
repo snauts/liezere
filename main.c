@@ -1,5 +1,4 @@
 #include "main.h"
-#include "image.h"
 
 #define MOVE_COOLDOWN	5
 #define JERK_INTERVAL	15
@@ -30,6 +29,7 @@ extern const char* const rank_strs[];
 extern const char* const reports[];
 extern const Frame horizonts[];
 extern const Frame apkaime[];
+extern const Frame sprites[];
 extern const Frame fishes[];
 extern const Text stat_title[];
 extern const Text tutorial[];
@@ -413,7 +413,7 @@ static void show_image(const byte *src, byte x, byte y) {
 }
 
 static void load_special_symbols(void) {
-    decompress(STAGING_AREA, symbols);
+    decompress(STAGING_AREA, IMG_SYMBOL->img);
 }
 
 static byte use_joy;
@@ -785,36 +785,13 @@ static void show_forest(void) {
     wait_vblank();
 }
 
-static const Frame sprites[] = {
-    { .img = velk1,   .pos = POS(13, 11) },
-    { .img = aukla2,  .pos = POS(15, 14) },
-    { .img = loms,    .pos = POS(15, 11) },
-    { .img = NULL },
-    { .img = velk2,   .pos = POS(14, 12) },
-    { .img = aukla1,  .pos = POS(15, 16) },
-    { .img = NULL },
-    { .img = urbis,   .pos = POS(14,  8) },
-    { .img = swirl,   .pos = POS(14, 10) },
-    { .img = drill,   .pos = POS(16, 15) },
-    { .img = NULL },
-    { .img = copene3, .pos = POS(16,  0) },
-    { .img = copene1, .pos = POS(16,  0) },
-    { .img = hole,    .pos = POS(12, 19) },
-    { .img = NULL },
-    { .img = motils,  .pos = POS( 9, 18) },
-    { .img = motils,  .pos = POS(24, 20) },
-    { .img = motils,  .pos = POS(21, 19) },
-    { .img = motils,  .pos = POS( 6, 21) },
-    { .img = NULL },
-};
-
 static void animate_drill(void) {
     for (byte i = 0; i < DRILL_MOVES; i++) {
 	advance_time(1);
-	show_frame(sprites + 7);
+	show_frame(IMG_DRILL1);
 	wait_asserted(CTRL_LEFT);
 	swoosh(1, 3, 1);
-	show_series(sprites + 8);
+	show_series(IMG_DRILL2);
 	wait_asserted(CTRL_RIGHT);
 	swoosh(4, 2, -1);
     }
@@ -863,7 +840,7 @@ static void put_fish(void) {
 static void show_lake(void) {
     clear_screen();
     hole_check = false;
-    show_image(ezers, 0, 0);
+    show_frame(IMG_EZERS);
     show_series(apkaime);
     load_special_symbols();
     draw_holes();
@@ -962,7 +939,7 @@ static void hook_failure(void) {
 
 static byte fish_bite(void) {
     byte ticks = BITE_INTERVAL;
-    show_frame(sprites + 11);
+    show_frame(IMG_COPENE(3));
     last_input = read_input();
     while (ticks > 0) {
 	if (asserted(CTRL_UP)) {
@@ -993,7 +970,7 @@ static void jerk_tip(byte *img, byte dir) {
 
 static byte jerk_fish(void) {
     byte ticks = 0;
-    debris = sprites + 15;
+    debris = IMG_DEBRIS;
 
     reset_jerk();
     while (not_late()) {
@@ -1028,7 +1005,7 @@ static void moment_of_weight(byte fish, byte weight) {
     hole_now->weight = weight;
     put_str(str, center(str), 64);
     memset(COLOUR(0xe0), 5, 0x60);
-    show_series(sprites + 0);
+    show_series(IMG_REPORT);
     draw_fish(fish);
 
     wait_space();
@@ -1097,11 +1074,11 @@ static byte pull_fish(void) {
     show_forest();
     for (byte i = 0; i < PULL_MOVES; i++) {
 	advance_time(1);
-	show_frame(sprites + 0);
+	show_frame(IMG_PULL1);
 	if (wait_pull(CTRL_LEFT, i)) {
 	    return false;
 	}
-	show_series(sprites + 4);
+	show_series(IMG_PULL2);
 	if (wait_pull(CTRL_RIGHT, 1)) {
 	    return false;
 	}
@@ -1113,9 +1090,9 @@ static byte ice_fish(void) {
     clear_screen();
     reset_attributes(0x7d);
     memset(COLOUR(0x00), 0x78, 0x20);
-    decompress(COPENE1, copene1);
-    decompress(COPENE2, copene2);
-    show_series(sprites + 12);
+    decompress(COPENE1, IMG_COPENE(1)->img);
+    decompress(COPENE2, IMG_COPENE(2)->img);
+    show_series(IMG_HOLE);
     starting_line();
     put_time();
 
@@ -1250,7 +1227,7 @@ static void fade_out_screen(void) {
 
 static void game_done(void) {
     fade_out_screen();
-    show_image(beigas, 0, 0);
+    show_frame(IMG_ENDING);
     show_text(&the_end);
     wait_space();
     statistics();
@@ -1277,7 +1254,7 @@ static void show_tutorial(void) {
 }
 
 static void show_title(void) {
-    show_image(title, 0, 0);
+    show_frame(IMG_TITLE);
     show_text_series(choices);
     memset(COLOUR(0x140), 0x47, 0x100);
     if (wait_123() & 4) show_tutorial();

@@ -20,25 +20,24 @@ msg:
 
 pcx:
 	@gcc pcx-dump.c lz.c -Wall -o pcx-dump
-	@./pcx-dump -i title.pcx	 > image.h
-	@./pcx-dump -i ezers.pcx	>> image.h
-	@./pcx-dump -i beigas.pcx	>> image.h
-	@./pcx-dump -i hole.pcx		>> image.h
-	@./pcx-dump -i copene1.pcx	>> image.h
-	@./pcx-dump -i copene2.pcx	>> image.h
-	@./pcx-dump -i copene3.pcx	>> image.h
-	@./pcx-dump -i urbis.pcx	>> image.h
-	@./pcx-dump -i swirl.pcx	>> image.h
-	@./pcx-dump -i drill.pcx	>> image.h
-	@./pcx-dump -i velk1.pcx	>> image.h
-	@./pcx-dump -i velk2.pcx	>> image.h
-	@./pcx-dump -i aukla1.pcx	>> image.h
-	@./pcx-dump -i aukla2.pcx	>> image.h
-	@./pcx-dump -i loms.pcx		>> image.h
-	@./pcx-dump -i symbols.pcx	>> image.h
-	@./pcx-dump -i motils.pcx	>> image.h
-
-	@./pcx-dump -i niedres.pcx	 > data.h
+	@./pcx-dump -i title.pcx	 > data.h
+	@./pcx-dump -i ezers.pcx	>> data.h
+	@./pcx-dump -i beigas.pcx	>> data.h
+	@./pcx-dump -i hole.pcx		>> data.h
+	@./pcx-dump -i copene1.pcx	>> data.h
+	@./pcx-dump -i copene2.pcx	>> data.h
+	@./pcx-dump -i copene3.pcx	>> data.h
+	@./pcx-dump -i urbis.pcx	>> data.h
+	@./pcx-dump -i swirl.pcx	>> data.h
+	@./pcx-dump -i drill.pcx	>> data.h
+	@./pcx-dump -i velk1.pcx	>> data.h
+	@./pcx-dump -i velk2.pcx	>> data.h
+	@./pcx-dump -i aukla1.pcx	>> data.h
+	@./pcx-dump -i aukla2.pcx	>> data.h
+	@./pcx-dump -i loms.pcx		>> data.h
+	@./pcx-dump -i symbols.pcx	>> data.h
+	@./pcx-dump -i motils.pcx	>> data.h
+	@./pcx-dump -i niedres.pcx	>> data.h
 	@./pcx-dump -i puduris1.pcx	>> data.h
 	@./pcx-dump -i puduris2.pcx	>> data.h
 	@./pcx-dump -i krasts.pcx	>> data.h
@@ -71,7 +70,6 @@ zxs:
 	@bin2tap -b liezere.bin
 
 data.o: data.h
-main.o: image.h
 
 %.o: %.c main.h
 	@echo compile source file $<
@@ -86,4 +84,4 @@ fuse: zxs
 	@fuse --machine 128 --no-confirm-actions liezere.tap >/dev/null
 
 clean:
-	rm -f pcx-dump data.h image.h liezere* *.asm *.lst *.sym *.o
+	rm -f pcx-dump data.h liezere* *.asm *.lst *.sym *.o
