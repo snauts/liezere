@@ -948,6 +948,7 @@ static void hook_failure(void) {
 static byte fish_bite(void) {
     byte ticks = BITE_INTERVAL;
     show_image(copene3, 16, 0);
+    last_input = read_input();
     while (ticks > 0) {
 	if (asserted(CTRL_UP)) {
 	    return true;
