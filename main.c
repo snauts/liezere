@@ -119,6 +119,10 @@ void memset(byte *ptr, byte data, word len) {
     while (len-- > 0) { *ptr++ = data; }
 }
 
+static void strcpy(char *dst, const char *src) {
+    do { *(dst++) = *(src++); } while (src[-1]);
+}
+
 void memcpy(void *dst, const void *src, word len) __naked {
     __asm__("ex de, hl");
     __asm__("pop iy");
@@ -333,7 +337,7 @@ static byte center(const char *msg) {
     return 128 - (str_len(msg) >> 1);
 }
 
-static byte to_decimal(char *str, word num, word pad) {
+static char *to_decimal(char *str, word num, word pad) {
     byte index = 0;
     static const word pow[] = {
 	10000, 1000, 100, 10, 1
@@ -352,7 +356,7 @@ static byte to_decimal(char *str, word num, word pad) {
 	    str[index++] = '.';
 	}
     }
-    return index;
+    return str + index;
 }
 
 static void *decompress(byte *dst, const byte *src) {
@@ -678,16 +682,22 @@ static byte total_distance(void) {
     return minimum;
 }
 
+static void clear_weight(void) {
+    for (byte y = 16; y < 24; y++) {
+	memset(map_y[y], 0, 8);
+    }
+}
+
+static void print_weight(byte weight) {
+    static const char str[] = "&5 100g";
+    strcpy(to_decimal(str + 3, weight, 1), "g");
+    put_str(str, 0, 16);
+}
+
 static void show_weight(byte weight) {
     if (weight > 0) {
-	char buf[6];
-	byte index = to_decimal(buf, weight, 1);
-	buf[index++] = 'g';
-	buf[index++] = 0;
-	for (byte y = 16; y < 24; y++) {
-	    memset(map_y[y], 0, 8);
-	}
-	put_str(buf, 0, 16);
+	clear_weight();
+	print_weight(weight);
 	memset(COLOUR(0x40), 7, 8);
     }
 }
@@ -1133,18 +1143,15 @@ static void draw_panel(Panel *panel) {
 }
 
 static void report_number(char *buf, word amount) {
-    buf[to_decimal(buf, amount, 1)] = 0;
+    *to_decimal(buf, amount, 1) = 0;
 }
 
 static void report_weight(char *buf, word amount) {
-    buf += to_decimal(buf, amount, 1000) - 2;
-    *(buf++) = 'k';
-    *(buf++) = 'g';
-    *buf = 0;
+    strcpy(to_decimal(buf, amount, 1000) - 2, "kg");
 }
 
 static void report_amount(byte i, byte y) {
-    char buf[8];
+    static char buf[8];
     word amount = stats[i];
     switch (i) {
     case STATS_SVARS:
