@@ -805,13 +805,12 @@ static void add_hole(void) {
     hole_end++;
 }
 
-static byte drill_hole(void) {
+static void drill_hole(void) {
     if (!visited(pos.x, pos.y) && not_late()) {
 	add_hole();
 	show_forest();
 	animate_drill();
     }
-    return true;
 }
 
 static void draw_holes(void) {
@@ -1124,7 +1123,8 @@ static byte fishing(void) {
     while (not_late()) {
 	show_lake();
 	walk_lake();
-	if (drill_hole() && catch_fish()) {
+	drill_hole();
+	if (catch_fish()) {
 	    return true;
 	}
     }
