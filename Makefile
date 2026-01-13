@@ -15,6 +15,9 @@ all:	msg zxs
 	@echo liezere build done
 	@echo binary size $(shell $(SIZE))
 
+english:
+	@$(MAKE) CFLAGS=-DENGLISH all
+
 msg:
 	@echo building liezere
 
