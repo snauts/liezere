@@ -1229,7 +1229,20 @@ static void statistics(void) {
     wait_space();
 }
 
+static void fade_out_screen(void) {
+    for (byte i = 0; i < 8; i++) {
+	wait_vblank();
+	for (word addr = 0x5800; addr < 0x5b00; addr++) {
+	    byte x = BYTE(addr);
+	    if (x & 0x07) x -= 0x01;
+	    if (x & 0x38) x -= 0x08;
+	    BYTE(addr) = x;
+	}
+    }
+}
+
 static void game_done(void) {
+    fade_out_screen();
     show_image(beigas, 0, 0);
     show_text(&the_end);
     wait_space();
@@ -1244,6 +1257,7 @@ static void current_panel(byte num) {
 }
 
 static void game_fail(void) {
+    fade_out_screen();
     current_panel(0);
     statistics();
     reset();
