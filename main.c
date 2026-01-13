@@ -930,6 +930,22 @@ static void clear_tip(void) {
     }
 }
 
+static const Frame *debris;
+static const Frame garbage[] = {
+    { .img = motils, .pos = POS( 9, 18) },
+    { .img = motils, .pos = POS(24, 20) },
+    { .img = motils, .pos = POS(21, 19) },
+    { .img = motils, .pos = POS( 6, 21) },
+    { .img = NULL },
+};
+
+static void hook_failure(void) {
+    if (debris->img) {
+	show_frame(debris);
+	debris++;
+    }
+}
+
 static byte fish_bite(void) {
     byte ticks = BITE_INTERVAL;
     show_image(copene3, 16, 0);
@@ -944,6 +960,7 @@ static byte fish_bite(void) {
     }
     clear_tip();
     reset_jerk();
+    hook_failure();
     return false;
 }
 
@@ -961,6 +978,7 @@ static void jerk_tip(byte *img, byte dir) {
 
 static byte jerk_fish(void) {
     byte ticks = 0;
+    debris = garbage;
 
     reset_jerk();
     while (not_late()) {

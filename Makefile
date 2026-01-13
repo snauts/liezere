@@ -36,6 +36,7 @@ pcx:
 	@./pcx-dump -i aukla2.pcx	>> image.h
 	@./pcx-dump -i loms.pcx		>> image.h
 	@./pcx-dump -i symbols.pcx	>> image.h
+	@./pcx-dump -i motils.pcx	>> image.h
 
 	@./pcx-dump -i niedres.pcx	 > data.h
 	@./pcx-dump -i puduris1.pcx	>> data.h
