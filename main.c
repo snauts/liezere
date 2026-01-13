@@ -408,10 +408,6 @@ static byte *cache_image(const byte *src) {
     return ptr;
 }
 
-static void show_image(const byte *src, byte x, byte y) {
-    draw_image(cache_image(src), x, y);
-}
-
 static void load_special_symbols(void) {
     decompress(STAGING_AREA, IMG_SYMBOL->img);
 }
@@ -454,7 +450,7 @@ static byte wait_123(void) {
 }
 
 static void show_frame(const Frame *frame) {
-    show_image(frame->img, frame->pos.x, frame->pos.y);
+    draw_image(cache_image(frame->img), frame->pos.x, frame->pos.y);
 }
 
 static void show_series(const Frame *series) {
