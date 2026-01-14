@@ -1175,6 +1175,10 @@ static byte show_stars(byte i, byte y) {
     return rank;
 }
 
+static const byte rank_map[] = {
+    0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3,
+};
+
 static byte report_amount(byte i, byte y, byte rank) {
     static char buf[8];
     word amount = stats[i];
@@ -1183,7 +1187,7 @@ static byte report_amount(byte i, byte y, byte rank) {
 	report_weight(buf, amount);
 	break;
     case STATS_RANGS:
-	put_str(rank_strs[rank >> 2], 136, y);
+	put_str(rank_strs[rank_map[rank]], 136, y);
 	return 0;
     default:
 	report_number(buf, amount);
