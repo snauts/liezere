@@ -18,7 +18,7 @@ const Text tutorial[] = {
 };
 
 const char* const reports[] = {
-    "You pulled too fast, fishing line snapped!",
+    "You pulled too fast, line snapped!",
     "You pulled too snow, fish escaped!",
     "A twig, fish is not even close.",
     "Measly ruffe.",
@@ -36,7 +36,8 @@ const char* const stat_strs[] = {
 const char* const rank_strs[] = {
     "Greenhorn",
     "Line waster",
-    "Cool Fisherman",
+    "Cool fisherman",
+    "Master baiter",
     "Fish butcher",
 };
 

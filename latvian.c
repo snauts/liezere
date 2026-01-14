@@ -44,6 +44,7 @@ const char* const rank_strs[] = {
     "Za^lais gur^kis",
     "Auklas p`ud`et`ajs",
     "V`esais copmanis",
+    "Copes meistars",
     "Zivju bende",
 };
 

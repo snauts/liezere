@@ -1176,7 +1176,7 @@ static byte show_stars(byte i, byte y) {
 }
 
 static const byte rank_map[] = {
-    0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3,
+    0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4,
 };
 
 static byte report_amount(byte i, byte y, byte rank) {
