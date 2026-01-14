@@ -77,6 +77,10 @@ zxs:
 
 data.o: data.h
 
+latvian.o: data.h
+
+english.o: data.h
+
 %.o: %.c main.h
 	@echo compile source file $<
 	@sdcc $(ARCH) $(CFLAGS) $(TYPE) -c $< -o $@
