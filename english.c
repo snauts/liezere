@@ -3,16 +3,16 @@
 #ifdef ENGLISH
 const Text tutorial[] = {
     { .pos = POS(32,   8), .str = "To keep motivation go ice fishing," },
-    { .pos = POS(32,  20), .str = "each day you need to catch the lunker." },
+    { .pos = POS(32,  20), .str = "you need to catch the lunker every day." },
     { .pos = POS(32,  48), .str = "1. Walk around the lake Q&0 A&1 O&2 P&3" },
     { .pos = POS(32,  60), .str = "2. Choose place to fish with SPACE" },
     { .pos = POS(32,  72), .str = "3. Use O&2 P&3 to drill hole in ice" },
     { .pos = POS(32,  84), .str = "4. Jerk mormyshka by mashing SPACE" },
-    { .pos = POS(46,  96), .str = "Fish won't bite if you mash to slow" },
+    { .pos = POS(46,  96), .str = "Fish won't bite if you mash too slow" },
     { .pos = POS(32, 108), .str = "5. To hook the fish press Q&0" },
     { .pos = POS(32, 120), .str = "6. Pull fish in with keys O&2 P&3" },
-    { .pos = POS(46, 132), .str = "If you pull too fast line will snap" },
-    { .pos = POS(46, 144), .str = "If you pull too slow fish will escape" },
+    { .pos = POS(46, 132), .str = "Pull too fast and the line will snap" },
+    { .pos = POS(46, 144), .str = "Pull too slow and the fish will escape" },
     { .pos = POS(32, 172), .str = "Larger fish are closer to the lunker" },
     TEXT_SENTINEL,
 };
@@ -38,6 +38,66 @@ const char* const rank_strs[] = {
     "Line waster",
     "Distinguished fisherman",
     "Fish butcher",
+};
+
+const Text day0_text[] = {
+    { .pos = POS(64, 26), .str = "What fun is in freezing my ass off?" },
+    TEXT_SENTINEL,
+
+    { .pos = POS(0, 90), .str = "If winter break could be spent," },
+    TEXT_SENTINEL,
+
+    { .pos = POS(64, 154), .str = "doing more enjoyable things." },
+    TEXT_SENTINEL,
+    TEXT_SENTINEL,
+};
+
+const Text day1_text[] = {
+    { .pos = POS(64, 22), .str = "Hey guys, would you like to come to" },
+    { .pos = POS(64, 34), .str = "my countryside during winter break?" },
+    TEXT_SENTINEL,
+
+    { .pos = POS(24, 90), .str = "Hell yeah, but where is it?" },
+    TEXT_SENTINEL,
+
+    { .pos = POS(96, 154), .str = "It is in Liezere!" },
+    TEXT_SENTINEL,
+
+    { .pos = POS(255, 64), .str = "- Day One -" },
+    { .pos = POS(255, 116), .str = "Fish is going to bite like crazy, right?" },
+    TEXT_SENTINEL,
+};
+
+const Text day2_text[] = {
+    { .pos = POS(72, 26), .str = "When you catch the lunker," },
+    TEXT_SENTINEL,
+
+    { .pos = POS(16, 90), .str = "a desire to celebrate arises." },
+    TEXT_SENTINEL,
+
+    { .pos = POS(80, 154), .str = "Usually it ends how it ends." },
+    TEXT_SENTINEL,
+
+    { .pos = POS(255,  64), .str = "- Day Two -" },
+    { .pos = POS(255, 116), .str = "Who would have thought, guys slept in." },
+    TEXT_SENTINEL,
+};
+
+const Text day3_text[] = {
+    { .pos = POS(72, 18), .str = "It would be a shame" },
+    { .pos = POS(72, 30), .str = "to waste such a catch." },
+    TEXT_SENTINEL,
+
+    { .pos = POS(24, 90), .str = "Big fish we ate ourselves," },
+    TEXT_SENTINEL,
+
+    { .pos = POS(64, 154), .str = "but small fish were fed to cats." },
+    TEXT_SENTINEL,
+
+    { .pos = POS(255,  64), .str = "- Day Three -" },
+    { .pos = POS(255, 116), .str = "Appetite comes with eating." },
+    { .pos = POS(255, 128), .str = "Today you need to catch two lunkers." },
+    TEXT_SENTINEL,
 };
 
 const Text choices[] = {
