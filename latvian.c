@@ -87,8 +87,8 @@ const Text day2_text[] = {
     TEXT_SENTINEL,
 
     { .pos = POS(255,  64), .str = "- Otr`a diena -" },
-    { .pos = POS(255, 116), .str = "Neizprotamu apst`ak^lu d`e^l "
-				   "d~zeki aizgul`ejas." },
+    { .pos = POS(255, 116), .str = "Kur~s to b`utu dom`ajis, "
+				   "ka d~zeki aizgul`esies?" },
     TEXT_SENTINEL,
 };
 
