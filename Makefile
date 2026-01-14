@@ -3,12 +3,15 @@ ARCH ?= -mz80
 MAKE := make --no-print-directory
 SIZE := ls -l liezere.bin | cut -d " " -f 5
 
+LANGUAGE ?= LATVIAN
+
 CFLAGS += --nostdinc --nostdlib --no-std-crt0
 CFLAGS += --code-loc $(CODE) --data-loc $(DATA)
+CFLAGS += -D$(LANGUAGE)
 
 LFLAGS += -n -m -i -b _CODE=$(CODE) -b _DATA=$(DATA)
 
-SRC := main.c data.c play.c
+SRC := main.c data.c play.c english.c latvian.c
 OBJ := $(subst .c,.o,$(SRC))
 
 all:	msg zxs
