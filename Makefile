@@ -19,7 +19,7 @@ all:	msg zxs
 	@echo binary size $(shell $(SIZE))
 
 english:
-	@$(MAKE) CFLAGS=-DENGLISH all
+	@LANGUAGE=ENGLISH $(MAKE)
 
 msg:
 	@echo building liezere
