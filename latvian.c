@@ -43,7 +43,7 @@ const char* const stat_strs[] = {
 const char* const rank_strs[] = {
     "Za^lais gur^kis",
     "Auklas p`ud`et`ajs",
-    "Atz`istams copmanis",
+    "V`esais copmanis",
     "Zivju bende",
 };
 
