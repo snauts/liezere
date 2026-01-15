@@ -89,7 +89,7 @@ const Text day3_text[] = {
     { .pos = POS(72, 30), .str = "to waste such a catch." },
     TEXT_SENTINEL,
 
-    { .pos = POS(24, 90), .str = "Big fish we ate ourselves," },
+    { .pos = POS(24, 90), .str = "Big fish were eaten by ourselves," },
     TEXT_SENTINEL,
 
     { .pos = POS(64, 154), .str = "but small fish were fed to cats." },
