@@ -2,12 +2,15 @@
 
 #ifdef ENGLISH
 void put_dash(char c, byte x, byte y) {
+    c; x; y;
 }
 
 void put_check(char c, byte x, byte y) {
+    c; x; y;
 }
 
 void put_tick(char c, byte x, byte y) {
+    c; x; y;
 }
 
 const Text tutorial[] = {
