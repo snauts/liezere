@@ -114,5 +114,15 @@ const Text stat_title[] = {
     TEXT_SENTINEL,
 };
 
+const Text goodbye[] = {
+    { .pos = POS(12, 78),
+      .str = "On the eve of the third day comes a feeling" },
+    { .pos = POS(12, 90),
+      .str = "of satisfaction. The realization that a lake" },
+    { .pos = POS(12, 102),
+      .str = "can not provide indefinitely sets in." },
+    TEXT_SENTINEL,
+};
+
 const Text the_end = { .pos = POS(16, 35), .str = "THE END" };
 #endif

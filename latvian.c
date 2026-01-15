@@ -88,8 +88,8 @@ const Text day2_text[] = {
     TEXT_SENTINEL,
 
     { .pos = POS(255,  64), .str = "- Otr`a diena -" },
-    { .pos = POS(255, 116), .str = "Kur~s to b`utu dom`ajis, "
-				   "ka d~zeki aizgul`esies?" },
+    { .pos = POS(255, 116),
+      .str = "Kur~s to b`utu dom`ajis, ka d~zeki aizgul`esies?" },
     TEXT_SENTINEL,
 };
 
@@ -112,6 +112,13 @@ const Text day3_text[] = {
 const Text stat_title[] = {
     { .pos = POS(255, 24), .str = "Statistika" },
     { .pos = POS(255, 32), .str = "=========" },
+    TEXT_SENTINEL,
+};
+
+const Text goodbye[] = {
+    { .pos = POS(24, 78), .str = "Tre~s`as dienas vakar`a beidzot iest`ajas" },
+    { .pos = POS(24, 90), .str = "gandar`ijuma saj`uta. P`ar^nem apzi^na," },
+    { .pos = POS(24, 102), .str = "ka ezers nevar dot bezgal`igi daudz." },
     TEXT_SENTINEL,
 };
 

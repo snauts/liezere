@@ -34,6 +34,7 @@ extern const Frame fishes[];
 extern const Text stat_title[];
 extern const Text tutorial[];
 extern const Text choices[];
+extern const Text goodbye[];
 extern const Text the_end;
 extern const Panel panels[];
 
@@ -1226,6 +1227,8 @@ static void fade_out_screen(void) {
 }
 
 static void game_done(void) {
+    fade_out_screen();
+    wall_of_text(goodbye);
     fade_out_screen();
     show_frame(IMG_ENDING);
     show_text(&the_end);
