@@ -258,48 +258,9 @@ static byte trailing(char symbol) {
     return 8 - i;
 }
 
-#ifdef SPANISH
 void put_dash(char c, byte x, byte y);
 void put_check(char c, byte x, byte y);
 void put_tick(char c, byte x, byte y);
-
-#else
-static void put_dash(char c, byte x, byte y) {
-    static const byte dash[] = { 0x3c, 0x00, 0x00, 0x38, 0x00, 0x00, 0x70 };
-    const byte *ptr = dash;
-
-    if (c == 'i') {
-	ptr += 4;
-    }
-    else if (c == 'I') {
-	ptr += 3;
-    }
-    else if (LOWER_CASE(c)) {
-	ptr += 2;
-    }
-
-    put_diacritic(ptr, x, y - 1);
-}
-
-static void put_check(char c, byte x, byte y) {
-    static const byte check[] = { 0x24, 0x18, 0x00, 0x28, 0x10 };
-    const byte *ptr = check;
-
-    if (LOWER_CASE(c)) ptr += 2;
-
-    put_diacritic(ptr, x, y - 2);
-}
-
-static void put_tick(char c, byte x, byte y) {
-    static const byte tick[] = { 0x08, 0x10, 0x00 };
-
-    if (LOWER_CASE(c)) x--;
-
-    if (c == 'k') x--;
-
-    put_diacritic(tick, x, y + 7);
-}
-#endif
 
 static byte special_symbol(char c, byte x, byte y) {
     put_symbol(IMAGE_DATA(STAGING_AREA) + ((c - '0') << 3), x, y, 8);
