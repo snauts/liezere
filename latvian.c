@@ -116,9 +116,9 @@ const Text stat_title[] = {
 };
 
 const Text goodbye[] = {
-    { .pos = POS(24, 78), .str = "Tre~s`as dienas vakar`a beidzot iest`ajas" },
-    { .pos = POS(24, 90), .str = "gandar`ijuma saj`uta. P`ar^nem apzi^na," },
-    { .pos = POS(24, 102), .str = "ka ezers nevar dot bezgal`igi daudz." },
+    { .pos = POS(32, 78), .str = "Tre~s`as dienas vakar`a p`ar^nem apzi^na," },
+    { .pos = POS(32, 90), .str = "ka ezers nevar dot bezgal`igi daudz." },
+    { .pos = POS(32, 102), .str = "Beidzot iest`ajas gandar`ijuma saj`uta." },
     TEXT_SENTINEL,
 };
 

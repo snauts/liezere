@@ -115,12 +115,14 @@ const Text stat_title[] = {
 };
 
 const Text goodbye[] = {
-    { .pos = POS(12, 78),
-      .str = "On the eve of the third day comes a feeling" },
-    { .pos = POS(12, 90),
-      .str = "of satisfaction. The realization that a lake" },
-    { .pos = POS(12, 102),
-      .str = "can not provide indefinitely sets in." },
+    { .pos = POS(40, 72),
+      .str = "On the evening of the third day" },
+    { .pos = POS(40, 84),
+      .str = "comes the realization that a lake" },
+    { .pos = POS(40, 96),
+      .str = "can not provide indefinitely." },
+    { .pos = POS(40, 108),
+      .str = "A feeling of satisfaction sets in." },
     TEXT_SENTINEL,
 };
 
