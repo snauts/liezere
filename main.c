@@ -1116,6 +1116,7 @@ static void init_variables(void) {
     memset(stats, 0, sizeof(stats));
     last_input = read_input();
     init_fishing_line();
+    seed = 0xfeed;
     day = 1;
 }
 
