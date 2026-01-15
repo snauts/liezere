@@ -1257,6 +1257,7 @@ static void show_tutorial(void) {
 }
 
 static void show_title(void) {
+    clear_screen();
     show_frame(IMG_TITLE);
     show_text_series(choices);
     memset(COLOUR(0x140), 0x47, 0x100);
@@ -1282,7 +1283,6 @@ void reset(void) {
     stop_music();
     setup_system();
     precalculate();
-    clear_screen();
     show_title();
     game_loop();
     reset();
