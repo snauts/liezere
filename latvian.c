@@ -1,6 +1,42 @@
 #include "main.h"
 
 #ifdef LATVIAN
+void put_dash(char c, byte x, byte y) {
+    static const byte dash[] = { 0x3c, 0x00, 0x00, 0x38, 0x00, 0x00, 0x70 };
+    const byte *ptr = dash;
+
+    if (c == 'i') {
+	ptr += 4;
+    }
+    else if (c == 'I') {
+	ptr += 3;
+    }
+    else if (LOWER_CASE(c)) {
+	ptr += 2;
+    }
+
+    put_diacritic(ptr, x, y - 1);
+}
+
+void put_check(char c, byte x, byte y) {
+    static const byte check[] = { 0x24, 0x18, 0x00, 0x28, 0x10 };
+    const byte *ptr = check;
+
+    if (LOWER_CASE(c)) ptr += 2;
+
+    put_diacritic(ptr, x, y - 2);
+}
+
+void put_tick(char c, byte x, byte y) {
+    static const byte tick[] = { 0x08, 0x10, 0x00 };
+
+    if (LOWER_CASE(c)) x--;
+
+    if (c == 'k') x--;
+
+    put_diacritic(tick, x, y + 7);
+}
+
 const Text tutorial[] = {
     { .pos = POS(32,   8), .str = "Lai saglab`atu motiv`aciju iet cop`et," },
     { .pos = POS(32,  20), .str = "katru dienu j`ano^ker lielais makans." },

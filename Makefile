@@ -11,7 +11,7 @@ CFLAGS += -D$(LANGUAGE)
 
 LFLAGS += -n -m -i -b _CODE=$(CODE) -b _DATA=$(DATA)
 
-SRC := main.c data.c play.c english.c latvian.c
+SRC := main.c data.c play.c english.c latvian.c spanish.c
 OBJ := $(subst .c,.o,$(SRC))
 
 all:	msg zxs

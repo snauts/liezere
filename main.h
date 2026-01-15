@@ -24,6 +24,9 @@ typedef unsigned short word;
 #define POS(X, Y)	{ .x = X, .y = Y }
 #define TEXT_SENTINEL	{ .str = NULL }
 
+#define LOWER_CASE(c)	((c) & 0x20)
+
+void put_diacritic(const byte *addr, byte x, byte y);
 void memset(byte *ptr, byte data, word len);
 void select_music(void *ptr);
 void stop_music(void);

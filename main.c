@@ -223,7 +223,7 @@ static void put_char(char symbol, byte x, byte y) {
     put_symbol(FONT_ADDRESS + (symbol << 3), x, y, 8);
 }
 
-static void put_diacritic(const byte *addr, byte x, byte y) {
+void put_diacritic(const byte *addr, byte x, byte y) {
     put_symbol(addr, x, y, 3);
 }
 
@@ -257,8 +257,6 @@ static byte trailing(char symbol) {
   done:
     return 8 - i;
 }
-
-#define LOWER_CASE(c) ((c) & 0x20)
 
 #ifdef SPANISH
 void put_dash(char c, byte x, byte y);

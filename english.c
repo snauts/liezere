@@ -1,6 +1,15 @@
 #include "main.h"
 
 #ifdef ENGLISH
+void put_dash(char c, byte x, byte y) {
+}
+
+void put_check(char c, byte x, byte y) {
+}
+
+void put_tick(char c, byte x, byte y) {
+}
+
 const Text tutorial[] = {
     { .pos = POS(32,   8), .str = "To keep motivation go ice fishing," },
     { .pos = POS(32,  20), .str = "you need to catch the lunker every day." },
