@@ -117,6 +117,8 @@ const Text choices[] = {
     { .pos = POS(88,  96), .str = "1 - Keyboard" },
     { .pos = POS(88, 112), .str = "2 - Joystick" },
     { .pos = POS(88, 128), .str = "3 - Tutorial" },
+    { .pos = POS( 4, 174), .str = "Game: snauts" },
+    { .pos = POS( 1, 184), .str = "Music: hazard_pht" },
     TEXT_SENTINEL,
 };
 

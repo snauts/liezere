@@ -1227,7 +1227,7 @@ static void show_title(void) {
     clear_screen();
     show_frame(IMG_TITLE);
     show_text_series(choices);
-    memset(COLOUR(0x140), 0x47, 0x100);
+    memset(COLOUR(0x140), 0x47, 0x1c0);
     if (wait_123() & 4) show_tutorial();
 }
 
