@@ -260,6 +260,12 @@ static byte trailing(char symbol) {
 
 #define LOWER_CASE(c) ((c) & 0x20)
 
+#ifdef SPANISH
+void put_dash(char c, byte x, byte y);
+void put_check(char c, byte x, byte y);
+void put_tick(char c, byte x, byte y);
+
+#else
 static void put_dash(char c, byte x, byte y) {
     static const byte dash[] = { 0x3c, 0x00, 0x00, 0x38, 0x00, 0x00, 0x70 };
     const byte *ptr = dash;
@@ -295,6 +301,7 @@ static void put_tick(char c, byte x, byte y) {
 
     put_diacritic(tick, x, y + 7);
 }
+#endif
 
 static byte special_symbol(char c, byte x, byte y) {
     put_symbol(IMAGE_DATA(STAGING_AREA) + ((c - '0') << 3), x, y, 8);

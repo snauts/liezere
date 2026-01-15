@@ -21,6 +21,9 @@ all:	msg zxs
 english:
 	@LANGUAGE=ENGLISH $(MAKE)
 
+spanish:
+	@LANGUAGE=SPANISH $(MAKE)
+
 msg:
 	@echo building liezere
 
@@ -80,6 +83,8 @@ data.o: data.h
 latvian.o: data.h
 
 english.o: data.h
+
+spanish.o: data.h
 
 %.o: %.c main.h
 	@echo compile source file $<
