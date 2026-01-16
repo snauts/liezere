@@ -14,18 +14,19 @@ void put_tick(char c, byte x, byte y) {
 }
 
 const Text tutorial[] = {
-    { .pos = POS(32,   8), .str = "To keep motivation go ice fishing," },
-    { .pos = POS(32,  20), .str = "you need to catch the lunker every day." },
-    { .pos = POS(32,  48), .str = "1. Walk around the lake Q&0 A&1 O&2 P&3" },
-    { .pos = POS(32,  60), .str = "2. Choose place to fish with SPACE" },
-    { .pos = POS(32,  72), .str = "3. Use O&2 P&3 to drill hole in ice" },
-    { .pos = POS(32,  84), .str = "4. Jerk mormyshka by mashing SPACE" },
-    { .pos = POS(46,  96), .str = "Fish won't bite if you mash too slow" },
-    { .pos = POS(32, 108), .str = "5. To hook the fish press Q&0" },
-    { .pos = POS(32, 120), .str = "6. Pull fish in with keys O&2 P&3" },
-    { .pos = POS(46, 132), .str = "Pull too fast and the line will snap" },
-    { .pos = POS(46, 144), .str = "Pull too slow and the fish will escape" },
-    { .pos = POS(32, 172), .str = "Larger fish are closer to the lunker" },
+    { .pos = POS(24,   8), .str = "To keep motivation go ice fishing," },
+    { .pos = POS(24,  20), .str = "you need to catch the lunker every day." },
+    { .pos = POS(24,  48), .str = "1. Walk around the lake Q&0 A&1 O&2 P&3" },
+    { .pos = POS(24,  60), .str = "2. Choose place to fish with SPACE" },
+    { .pos = POS(24,  72), .str = "3. Use O&2 P&3 to drill hole in ice" },
+    { .pos = POS(24,  84), .str = "4. Jerk mormyshka by mashing SPACE" },
+    { .pos = POS(38,  96), .str = "Fish won't bite if you mash too slow" },
+    { .pos = POS(24, 108), .str = "5. To hook the fish press Q&0" },
+    { .pos = POS(24, 120), .str = "6. Pull fish in with keys O&2 P&3" },
+    { .pos = POS(38, 132), .str = "Pull too fast and the line will snap" },
+    { .pos = POS(38, 144), .str = "Pull too slow and the fish will escape" },
+    { .pos = POS(24, 172),
+      .str = "The bigger the fish, the closer the lunker" },
     TEXT_SENTINEL,
 };
 
