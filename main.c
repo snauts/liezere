@@ -14,8 +14,6 @@
 
 void reset(void);
 void start_up(void) __naked {
-    __asm__("ld a, #1");
-    __asm__("ld (_hints), a");
     __asm__("jp _reset");
 }
 
@@ -1114,6 +1112,7 @@ static void init_variables(void) {
     last_input = read_input();
     init_fishing_line();
     seed = 0xfeed;
+    hints = true;
     day = 1;
 }
 
