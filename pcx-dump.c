@@ -223,6 +223,19 @@ static void *convert_bitmap(unsigned char *buf) {
     return buf;
 }
 
+static int translate(int y) {
+    return ((y & 7) << 3) | ((y >> 3) & 7) | (y & 0xc0);
+}
+
+static unsigned char *swizzle(unsigned char *buf) {
+    unsigned char tmp[pixel_size()];
+    for (int y = 0; y < header.h; y++) {
+	memcpy(tmp + 32 * translate(y), buf + 32 * y, 32);
+    }
+    memcpy(buf, tmp, pixel_size());
+    return buf;
+}
+
 const int HEADER_SIZE = 2;
 static unsigned char *add_header(unsigned char *buf) {
     unsigned char *img = malloc(total_size() + HEADER_SIZE);
@@ -243,7 +256,14 @@ static Buffer read_bitmap(const char *name) {
 static Buffer raw_bitmap(const char *name) {
     return (Buffer) {
 	.ptr = convert_bitmap(read_pcx(name)),
-	.size = total_size() - color_size(),
+	.size = pixel_size(),
+    };
+}
+
+static Buffer read_screen(const char *name) {
+    return (Buffer) {
+	.ptr = swizzle(convert_bitmap(read_pcx(name))),
+	.size = total_size(),
     };
 }
 
@@ -258,6 +278,10 @@ static void save_image(const char *name) {
 
 static void save_bitmap(const char *name) {
     save_buffer(name, raw_bitmap(name));
+}
+
+static void save_screen(const char *name) {
+    save_buffer(name, read_screen(name));
 }
 
 static char *upcase(char *str) {
@@ -304,6 +328,7 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "  -i   dump compressed image\n");
 	fprintf(stderr, "  -s   dump compressed series\n");
 	fprintf(stderr, "  -b   dump compressed bitmap\n");
+	fprintf(stderr, "  -x   dump compressed screen\n");
 	return 0;
     }
 
@@ -315,6 +340,9 @@ int main(int argc, char **argv) {
 	break;
     case 'b':
 	save_bitmap(argv[2]);
+	break;
+    case 'x':
+	save_screen(argv[2]);
 	break;
     case 's':
 	save_series(argv[2], argv + 3, argc - 3);
