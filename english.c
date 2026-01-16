@@ -77,7 +77,7 @@ const Text day1_text[] = {
     { .pos = POS(96, 154), .str = "It is in Liezere!" },
     TEXT_SENTINEL,
 
-    { .pos = POS(255, 64), .str = "- Day One -" },
+    { .pos = POS(255, 64), .str = "- Day 1 -" },
     { .pos = POS(255, 116), .str = "Fish is going to bite like crazy, right?" },
     TEXT_SENTINEL,
 };
@@ -92,7 +92,7 @@ const Text day2_text[] = {
     { .pos = POS(80, 154), .str = "Usually it ends how it ends." },
     TEXT_SENTINEL,
 
-    { .pos = POS(255,  64), .str = "- Day Two -" },
+    { .pos = POS(255,  64), .str = "- Day 2 -" },
     { .pos = POS(255, 116), .str = "Who would have thought, guys slept in." },
     TEXT_SENTINEL,
 };
@@ -108,7 +108,7 @@ const Text day3_text[] = {
     { .pos = POS(64, 154), .str = "but small fish were fed to cats." },
     TEXT_SENTINEL,
 
-    { .pos = POS(255,  64), .str = "- Day Three -" },
+    { .pos = POS(255,  64), .str = "- Day 3 -" },
     { .pos = POS(255, 116), .str = "Appetite comes with eating." },
     { .pos = POS(255, 128), .str = "Today you need to catch two lunkers." },
     TEXT_SENTINEL,
