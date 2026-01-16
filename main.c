@@ -311,13 +311,13 @@ static byte center(const char *msg) {
 }
 
 static void corner_symbol(byte *sym) {
-    for (byte *ptr = SCREEN(0x10ff); ptr < SCREEN(0x1800); ptr += 0x100) {
+    for (byte *ptr = SCREEN(0x10de); ptr < SCREEN(0x1800); ptr += 0x100) {
 	*ptr = *sym++;
     }
 }
 
 static void corner_color(byte color) {
-    *COLOUR(0x2ff) = color;
+    *COLOUR(0x2de) = color;
 }
 
 static void hint_symbol(byte *sym) {
