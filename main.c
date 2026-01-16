@@ -318,10 +318,14 @@ static void corner_symbol(byte *sym) {
     }
 }
 
+static void corner_color(byte color) {
+    *COLOUR(0x2ff) = color;
+}
+
 static void hint_symbol(byte *sym) {
     if (hints) {
 	corner_symbol(sym);
-	*COLOUR(0x2ff) = 0x78;
+	corner_color(0x78);
     }
 }
 
@@ -876,6 +880,10 @@ static void eye_cue_for_pull(void) {
     set_pixel(129, 97);
 }
 
+static void pull_hint(byte button) {
+    hint_symbol(button == CTRL_LEFT ? SYMBOL(2) : SYMBOL(3));
+}
+
 static byte wait_button(byte button, byte state, byte cutoff) {
     byte ticks = 0;
     while ((read_input() & button) != state) {
@@ -883,6 +891,7 @@ static byte wait_button(byte button, byte state, byte cutoff) {
 	    vblank = 0;
 	    if (cutoff && ticks == PULL_FAST) {
 		eye_cue_for_pull();
+		pull_hint(button);
 	    }
 	    if (++ticks == cutoff) {
 		return cutoff;
@@ -920,6 +929,7 @@ static void hook_failure(void) {
 static byte fish_bite(void) {
     byte ticks = BITE_INTERVAL;
     show_frame(IMG_COPENE(3));
+    hint_symbol(SYMBOL(0));
     last_input = read_input();
     while (ticks > 0) {
 	if (asserted(CTRL_UP)) {
@@ -997,6 +1007,8 @@ static void moment_of_truth(byte fish) {
 
 static byte wait_pull(byte button, byte fast) {
     byte ticks = wait_button(button, button, PULL_SLOW);
+
+    corner_color(0x7f);
     if (fast && ticks <= PULL_FAST) {
 	advance_time(SNAP_PENALTY);
 	moment_of_truth(FISH_SNAP);
