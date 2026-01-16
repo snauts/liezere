@@ -234,31 +234,30 @@ static unsigned char *add_header(unsigned char *buf) {
 }
 
 static Buffer read_bitmap(const char *name) {
-    Buffer buf = {
+    return (Buffer) {
 	.ptr = add_header(convert_bitmap(read_pcx(name))),
 	.size = total_size() + HEADER_SIZE,
     };
-    return buf;
-}
-
-static void save_image(const char *name) {
-    Buffer buf = read_bitmap(name);
-    compress_and_save(rm_ext(name), buf);
-    free(buf.ptr);
 }
 
 static Buffer raw_bitmap(const char *name) {
-    Buffer buf = {
+    return (Buffer) {
 	.ptr = convert_bitmap(read_pcx(name)),
 	.size = total_size() - color_size(),
     };
-    return buf;
+}
+
+static void save_buffer(const char *name, Buffer buf) {
+    compress_and_save(rm_ext(name), buf);
+    free(buf.ptr);
+}
+
+static void save_image(const char *name) {
+    save_buffer(name, read_bitmap(name));
 }
 
 static void save_bitmap(const char *name) {
-    Buffer buf = raw_bitmap(name);
-    compress_and_save(rm_ext(name), buf);
-    free(buf.ptr);
+    save_buffer(name, raw_bitmap(name));
 }
 
 static char *upcase(char *str) {
