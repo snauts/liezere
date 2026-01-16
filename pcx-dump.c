@@ -247,6 +247,20 @@ static void save_image(const char *name) {
     free(buf.ptr);
 }
 
+static Buffer raw_bitmap(const char *name) {
+    Buffer buf = {
+	.ptr = convert_bitmap(read_pcx(name)),
+	.size = total_size() - color_size(),
+    };
+    return buf;
+}
+
+static void save_bitmap(const char *name) {
+    Buffer buf = raw_bitmap(name);
+    compress_and_save(rm_ext(name), buf);
+    free(buf.ptr);
+}
+
 static char *upcase(char *str) {
     char *ptr = str;
     while (*ptr) {
@@ -290,6 +304,7 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "USAGE: pcx-dump [option] file.pcx\n");
 	fprintf(stderr, "  -i   dump compressed image\n");
 	fprintf(stderr, "  -s   dump compressed series\n");
+	fprintf(stderr, "  -b   dump compressed bitmap\n");
 	return 0;
     }
 
@@ -298,6 +313,9 @@ int main(int argc, char **argv) {
     switch (option) {
     case 'i':
 	save_image(argv[2]);
+	break;
+    case 'b':
+	save_bitmap(argv[2]);
 	break;
     case 's':
 	save_series(argv[2], argv + 3, argc - 3);
