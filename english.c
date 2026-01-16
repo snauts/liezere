@@ -48,7 +48,7 @@ const char* const stat_strs[] = {
 const char* const rank_strs[] = {
     "Greenhorn",
     "Line waster",
-    "Cool fisherman",
+    "Ice grinder",
     "Master baiter",
     "Fish butcher",
 };
