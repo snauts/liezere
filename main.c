@@ -14,6 +14,8 @@
 
 void reset(void);
 void start_up(void) __naked {
+    __asm__("ld a, #1");
+    __asm__("ld (_hints), a");
     __asm__("jp _reset");
 }
 
@@ -22,6 +24,7 @@ static const byte *cached;
 static byte *map_y[192];
 static byte *line[96];
 static byte no_text;
+static byte hints;
 static word seed;
 
 static void *decompress(byte *dst, const byte *src);
@@ -190,7 +193,7 @@ static void setup_system(void) {
 
 static void precalculate(void) {
     no_text = false;
-    decompress(SYMBOLS, symbols);
+    decompress(SYMBOL(0), symbols);
     for (byte y = 0; y < 192; y++) {
 	byte f = ((y & 7) << 3) | ((y >> 3) & 7) | (y & 0xc0);
 	map_y[y] = SCREEN(f << 5);
@@ -267,7 +270,7 @@ void put_check(char c, byte x, byte y);
 void put_tick(char c, byte x, byte y);
 
 static byte special_symbol(char c, byte x, byte y) {
-    put_symbol(SYMBOLS + ((c - '0') << 3), x, y, 8);
+    put_symbol(SYMBOL(c - '0'), x, y, 8);
     return 8;
 }
 
@@ -307,6 +310,19 @@ static byte str_len(const char *msg) {
 
 static byte center(const char *msg) {
     return 128 - (str_len(msg) >> 1);
+}
+
+static void corner_symbol(byte *sym) {
+    for (byte *ptr = SCREEN(0x10ff); ptr < SCREEN(0x1800); ptr += 0x100) {
+	*ptr = *sym++;
+    }
+}
+
+static void hint_symbol(byte *sym) {
+    if (hints) {
+	corner_symbol(sym);
+	*COLOUR(0x2ff) = 0x78;
+    }
 }
 
 static char *to_decimal(char *str, word num, word pad) {
@@ -751,9 +767,11 @@ static void show_forest(void) {
 static void animate_drill(void) {
     for (byte i = 0; i < DRILL_MOVES; i++) {
 	advance_time(1);
+	hint_symbol(SYMBOL(2));
 	show_frame(IMG_DRILL1);
 	wait_asserted(CTRL_LEFT);
 	swoosh(1, 3, 1);
+	hint_symbol(SYMBOL(3));
 	show_series(IMG_DRILL2);
 	wait_asserted(CTRL_RIGHT);
 	swoosh(4, 2, -1);
@@ -997,6 +1015,8 @@ static byte get_weight(byte distance) {
 
 static byte report_fish(byte distance) {
     hole_now->distance = distance;
+
+    hints = false;
 
     if (distance <= 1) {
 	moment_of_truth(FISH_MAKANS);

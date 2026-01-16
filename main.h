@@ -19,8 +19,8 @@ typedef unsigned short word;
 
 #define SCREEN(x)	PTR(0x4000 + (x))
 #define COLOUR(x)	PTR(0x5800 + (x))
+#define SYMBOL(x) 	PTR(0x7700 + ((x) << 3))
 #define STAGING_AREA	PTR(0x5b00)
-#define SYMBOLS 	PTR(0x7700)
 
 #define POS(X, Y)	{ .x = X, .y = Y }
 #define TEXT_SENTINEL	{ .str = NULL }
