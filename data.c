@@ -125,7 +125,6 @@ const Frame sprites[] = {
     { .img = title,   .pos = POS( 0,  0) },
     { .img = ezers,   .pos = POS( 0,  0) },
     { .img = beigas,  .pos = POS( 0,  0) },
-    { .img = symbols },
 };
 
 const Frame fishes[] = {

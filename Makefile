@@ -44,7 +44,6 @@ pcx:
 	@./pcx-dump -i aukla1.pcx	>> data.h
 	@./pcx-dump -i aukla2.pcx	>> data.h
 	@./pcx-dump -i loms.pcx		>> data.h
-	@./pcx-dump -i symbols.pcx	>> data.h
 	@./pcx-dump -i motils.pcx	>> data.h
 	@./pcx-dump -i niedres.pcx	>> data.h
 	@./pcx-dump -i puduris1.pcx	>> data.h
@@ -73,6 +72,7 @@ pcx:
 	@./pcx-dump -i panel_3a.pcx	>> data.h
 	@./pcx-dump -i panel_3b.pcx	>> data.h
 	@./pcx-dump -i panel_3c.pcx	>> data.h
+	@./pcx-dump -b symbols.pcx	>> data.h
 
 zxs:
 	@$(MAKE) CODE=0x8000 DATA=0x7800 prg

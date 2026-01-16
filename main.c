@@ -24,6 +24,8 @@ static byte *line[96];
 static byte no_text;
 static word seed;
 
+static void *decompress(byte *dst, const byte *src);
+
 extern const char* const stat_strs[];
 extern const char* const rank_strs[];
 extern const char* const reports[];
@@ -37,6 +39,7 @@ extern const Text choices[];
 extern const Text goodbye[];
 extern const Text the_end;
 extern const Panel panels[];
+extern const byte symbols[];
 
 #define DISABLE_IRQ()	__asm__("di");
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
@@ -187,6 +190,7 @@ static void setup_system(void) {
 
 static void precalculate(void) {
     no_text = false;
+    decompress(SYMBOLS, symbols);
     for (byte y = 0; y < 192; y++) {
 	byte f = ((y & 7) << 3) | ((y >> 3) & 7) | (y & 0xc0);
 	map_y[y] = SCREEN(f << 5);
@@ -263,7 +267,7 @@ void put_check(char c, byte x, byte y);
 void put_tick(char c, byte x, byte y);
 
 static byte special_symbol(char c, byte x, byte y) {
-    put_symbol(IMAGE_DATA(STAGING_AREA) + ((c - '0') << 3), x, y, 8);
+    put_symbol(SYMBOLS + ((c - '0') << 3), x, y, 8);
     return 8;
 }
 
@@ -373,10 +377,6 @@ static byte *cache_image(const byte *src) {
 	cached = src;
     }
     return ptr;
-}
-
-static void load_special_symbols(void) {
-    decompress(STAGING_AREA, IMG_SYMBOL->img);
 }
 
 static byte use_joy;
@@ -805,7 +805,6 @@ static void show_lake(void) {
     hole_check = false;
     show_frame(IMG_EZERS);
     show_series(apkaime);
-    load_special_symbols();
     draw_holes();
     put_fish();
     put_time();
@@ -1170,7 +1169,6 @@ static void statistics(void) {
 
     clear_screen();
     reset_attributes(0x4);
-    load_special_symbols();
     show_text_series(stat_title);
     for (byte i = 0; i < STATS_COUNT; i++) {
 	const char *str = stat_strs[i];
@@ -1218,7 +1216,6 @@ static void game_fail(void) {
 }
 
 static void show_tutorial(void) {
-    load_special_symbols();
     wall_of_text(tutorial);
     reset();
 }

@@ -20,6 +20,7 @@ typedef unsigned short word;
 #define SCREEN(x)	PTR(0x4000 + (x))
 #define COLOUR(x)	PTR(0x5800 + (x))
 #define STAGING_AREA	PTR(0x5b00)
+#define SYMBOLS 	PTR(0x7700)
 
 #define POS(X, Y)	{ .x = X, .y = Y }
 #define TEXT_SENTINEL	{ .str = NULL }
@@ -88,5 +89,4 @@ enum {
 #define IMG_TITLE	SPRITES(21)
 #define IMG_EZERS	SPRITES(22)
 #define IMG_ENDING	SPRITES(23)
-#define IMG_SYMBOL	SPRITES(24)
 #define IMG_COPENE(x)	SPRITES(14 - x)
