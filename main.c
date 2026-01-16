@@ -882,6 +882,11 @@ static void pull_hint(byte button) {
     hint_symbol(button == CTRL_LEFT ? SYMBOL(2) : SYMBOL(3));
 }
 
+static void hint_mashing(void) {
+    static byte blink;
+    hint_symbol(blink++ & 4 ? SYMBOL(6) : SYMBOL(7));
+}
+
 static byte wait_button(byte button, byte state, byte cutoff) {
     byte ticks = 0;
     while ((read_input() & button) != state) {
@@ -890,6 +895,9 @@ static byte wait_button(byte button, byte state, byte cutoff) {
 	    if (cutoff && ticks == PULL_FAST) {
 		eye_cue_for_pull();
 		pull_hint(button);
+	    }
+	    if (hints && button == CTRL_FIRE) {
+		hint_mashing();
 	    }
 	    if (++ticks == cutoff) {
 		return cutoff;
