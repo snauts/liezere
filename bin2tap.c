@@ -42,37 +42,10 @@ static void put_number(char *ptr, int num) {
     ptr[5] = '"';
 }
 
-#define POKE(addr, val) \
-    "\xF4\xB0\"" #addr "\",\xB0\"" #val "\":"
-
-static int add_loader(unsigned char *ptr) {
-    const char *loader =
-	"****"
-	"\xD9\xB0\"7\":"
-	"\xDA\xB0\"7\":"
-	"\xE7\xB0\"7\":"
-	"\xFB:"
-
-	POKE(20702, 6)
-	POKE(20958, 15)
-	POKE(21214, 11)
-	POKE(21470, 15)
-	POKE(21726, 78)
-	POKE(21982, 140)
-	POKE(22238, 152)
-	POKE(22494, 112)
-	POKE(23262, 56)
-
-	"\xEF\"\"\xAF:"
-	"\xF9\xC0\xB0\"*****\"";
-
-    int size = strlen(loader);
-    memcpy(ptr, loader, size);
-    put_number(ptr + size - 6, ADDRESS);
+static void put_line(unsigned char *ptr, int line, int size) {
     memset(ptr, 0, 4);
-    ptr[1] = LINE_NUM;
-    ptr[2] = size - 4;
-    return size;
+    ptr[1] = line;
+    ptr[2] = size;
 }
 
 static int add_binary(char *name, unsigned char *ptr) {
@@ -85,6 +58,32 @@ static int add_binary(char *name, unsigned char *ptr) {
 	close(fd);
     }
     return size;
+}
+
+static int add_loader(unsigned char *ptr, char *name) {
+    const char *loader =
+	"\xD9\xB0\"7\":"
+	"\xDA\xB0\"7\":"
+	"\xE7\xB0\"7\":"
+	"\xFB:"
+	"\xF9\xC0\xB0\"ADDR1\":"
+	"\xEF\"\"\xAF:"
+	"\xF9\xC0\xB0\"ADDR2\"";
+
+    int size = strlen(loader);
+    put_line(ptr, LINE_NUM, size);
+
+    ptr += 4;
+    strcpy(ptr, loader);
+    put_number(strstr(ptr, "ADDR1"), 0x5CCB + 4 + size + 4);
+    put_number(strstr(ptr, "ADDR2"), ADDRESS);
+
+    ptr += size;
+
+    int code_size = add_binary(name, ptr + 4);
+    put_line(ptr, LINE_NUM + 10, code_size);
+
+    return 4 + size + 4 + code_size;
 }
 
 static int add_checksum(unsigned char *ptr, int amount) {
@@ -116,8 +115,8 @@ static int fill_header(unsigned char *ptr, int size, int type) {
 }
 
 int main(int argc, char **argv) {
-    if (argc < 3) {
-	fprintf(stderr, "usage: bin2tap [input.bin] [output.tap]\n");
+    if (argc < 4) {
+	fprintf(stderr, "usage: bin2tap [load.bin] [in.bin] [out.tap]\n");
 	return 0;
     }
 
@@ -127,7 +126,7 @@ int main(int argc, char **argv) {
     unsigned char *ptr = tap;
 
     /* loader data */
-    len = add_loader(add_header(ptr));
+    len = add_loader(add_header(ptr), argv[1]);
 
     add_name(ptr, "Liezere");
     add_word(ptr, HDR_ARG1, LINE_NUM);
@@ -135,14 +134,14 @@ int main(int argc, char **argv) {
     ptr += fill_header(ptr, len, 0);
 
     /* program data */
-    len = add_binary(argv[1], add_header(ptr));
+    len = add_binary(argv[2], add_header(ptr));
 
     add_name(ptr, "program");
     add_word(ptr, HDR_ARG1, ADDRESS);
     add_word(ptr, HDR_ARG2, 0x8000);
     ptr += fill_header(ptr, len, 3);
 
-    save_tap(argv[2], tap, ptr - tap);
+    save_tap(argv[3], tap, ptr - tap);
 
     free(tap);
     return 0;

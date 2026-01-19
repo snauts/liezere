@@ -79,7 +79,7 @@ pcx:
 
 tap:
 	@gcc bin2tap.c -DADDRESS=$(CODE) -o bin2tap
-	@./bin2tap liezere.bin liezere.tap
+	@./bin2tap loader.bin liezere.bin liezere.tap
 
 zxs: prg tap
 
