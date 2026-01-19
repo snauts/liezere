@@ -1,6 +1,7 @@
 data.h
 liezere*
 pcx-dump
+bin2tap
 *.asm
 *.lst
 *.sym

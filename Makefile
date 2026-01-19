@@ -1,5 +1,8 @@
 ARCH ?= -mz80
 
+CODE ?= 0x8000
+DATA ?= 0x7800
+
 MAKE := make --no-print-directory
 SIZE := ls -l liezere.bin | cut -d " " -f 5
 
@@ -74,9 +77,11 @@ pcx:
 	@./pcx-dump -i panel_3c.pcx	>> data.h
 	@./pcx-dump -b symbols.pcx	>> data.h
 
-zxs:
-	@$(MAKE) CODE=0x8000 DATA=0x7800 prg
-	@bin2tap -b liezere.bin
+tap:
+	@gcc bin2tap.c -DADDRESS=$(CODE) -o bin2tap
+	@./bin2tap liezere.bin liezere.tap
+
+zxs: prg tap
 
 data.o: data.h
 
@@ -99,4 +104,4 @@ fuse: zxs
 	@fuse --machine 128 --no-confirm-actions liezere.tap >/dev/null
 
 clean:
-	rm -f pcx-dump data.h liezere* *.asm *.lst *.sym *.o
+	rm -f pcx-dump bin2tap data.h liezere* *.asm *.lst *.sym *.o
