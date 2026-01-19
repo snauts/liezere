@@ -77,7 +77,12 @@ pcx:
 	@./pcx-dump -i panel_3c.pcx	>> data.h
 	@./pcx-dump -b symbols.pcx	>> data.h
 
-tap:
+loader:
+	@sdasz80 -o loader.o loader.S
+	@sdld -n -m -i -b _CODE=0 loader.ihx loader.o
+	@makebin -p -yo A -o 0 loader.ihx loader.bin
+
+tap: loader
 	@gcc bin2tap.c -DADDRESS=$(CODE) -o bin2tap
 	@./bin2tap loader.bin liezere.bin liezere.tap
 
@@ -103,5 +108,10 @@ fuse: zxs
 	@echo running fuse emulator...
 	@fuse --machine 128 --no-confirm-actions liezere.tap >/dev/null
 
+slow: zxs
+	@fuse --no-traps --no-accelerate-loader --no-fastload liezere.tap
+
 clean:
-	rm -f pcx-dump bin2tap data.h liezere* *.asm *.lst *.sym *.o
+	rm -f pcx-dump bin2tap data.h
+	rm -f *.asm *.lst *.sym *.ihx
+	rm -f *.bin *.map *.tap *.o

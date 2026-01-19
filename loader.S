@@ -1,0 +1,2 @@
+	.area _CODE
+	ret

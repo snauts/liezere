@@ -1,8 +1,11 @@
 data.h
-liezere*
 pcx-dump
 bin2tap
 *.asm
 *.lst
 *.sym
+*.ihx
+*.bin
+*.map
+*.tap
 *.o
