@@ -38,19 +38,22 @@ static void add_word(unsigned char *ptr, int offset, unsigned short word) {
 }
 
 static int add_loader(unsigned char *ptr) {
-    static unsigned char loader[] = {
-	0x00, LINE_NUM, 0x00, 0x00,
-	0xD9, 0xB0, '"', '0', '"', ':',
-	0xDA, 0xB0, '"', '0', '"', ':',
-	0xE7, 0xB0, '"', '0', '"', ':',
-	0xFB, ':',
-	0xEF, '"', '"', 0xAF, ':',
-	0xF9, 0xC0, 0xB0, '"', 0, 0, 0, 0, 0, '"',
-    };
-    memcpy(ptr, loader, sizeof(loader));
-    sprintf(ptr + sizeof(loader) - 6, "%d\"", ADDRESS);
-    ptr[2] = sizeof(loader) - 4;
-    return sizeof(loader);
+    const char *loader =
+	"****"
+	"\xD9\xB0\"7\":"
+	"\xDA\xB0\"7\":"
+	"\xE7\xB0\"7\":"
+	"\xFB:"
+	"\xEF\"\"\xAF:"
+	"\xF9\xC0\xB0\"*****\"";
+
+    int size = strlen(loader);
+    memcpy(ptr, loader, size);
+    sprintf(ptr + size - 6, "%d\"", ADDRESS);
+    memset(ptr, 0, 4);
+    ptr[1] = LINE_NUM;
+    ptr[2] = size - 4;
+    return size;
 }
 
 static int add_binary(char *name, unsigned char *ptr) {
