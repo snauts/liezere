@@ -92,7 +92,7 @@ spanish.o: data.h
 
 prg: pcx $(OBJ)
 	@sdld $(LFLAGS) liezere.ihx $(OBJ)
-	@hex2bin liezere.ihx > /dev/null
+	@makebin -p -yo A -o $(CODE) liezere.ihx liezere.bin
 
 fuse: zxs
 	@echo running fuse emulator...
