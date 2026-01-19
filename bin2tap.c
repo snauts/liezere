@@ -44,6 +44,17 @@ static int add_loader(unsigned char *ptr) {
 	"\xDA\xB0\"7\":"
 	"\xE7\xB0\"7\":"
 	"\xFB:"
+
+	"\xF4\xB0\"20702\",\xB0\"6\":"
+	"\xF4\xB0\"20958\",\xB0\"15\":"
+	"\xF4\xB0\"21214\",\xB0\"11\":"
+	"\xF4\xB0\"21470\",\xB0\"15\":"
+	"\xF4\xB0\"21726\",\xB0\"78\":"
+	"\xF4\xB0\"21982\",\xB0\"140\":"
+	"\xF4\xB0\"22238\",\xB0\"152\":"
+	"\xF4\xB0\"22494\",\xB0\"112\":"
+	"\xF4\xB0\"23262\",\xB0\"56\":"
+
 	"\xEF\"\"\xAF:"
 	"\xF9\xC0\xB0\"*****\"";
 
@@ -110,7 +121,7 @@ int main(int argc, char **argv) {
     /* loader data */
     len = add_loader(add_header(ptr));
 
-    add_name(ptr, "loader");
+    add_name(ptr, "Liezere");
     add_word(ptr, HDR_ARG1, LINE_NUM);
     add_word(ptr, HDR_ARG2, len);
     ptr += fill_header(ptr, len, 0);
