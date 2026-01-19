@@ -1267,8 +1267,13 @@ static void show_title(void) {
     if (wait_123() & 4) show_tutorial();
 }
 
+static void music(void) {
+    __asm__(".incbin \"music.pt3\"");
+}
+
 static void game_loop(void) {
     init_variables();
+    select_music(&music);
     while (day <= 3) {
 	current_panel(day);
 	reset_cursor();
