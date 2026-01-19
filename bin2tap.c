@@ -37,6 +37,11 @@ static void add_word(unsigned char *ptr, int offset, unsigned short word) {
     memcpy(ptr + offset, &word, sizeof(word));
 }
 
+static void put_number(char *ptr, int num) {
+    sprintf(ptr, "%d", num);
+    ptr[5] = '"';
+}
+
 #define POKE(addr, val) \
     "\xF4\xB0\"" #addr "\",\xB0\"" #val "\":"
 
@@ -63,7 +68,7 @@ static int add_loader(unsigned char *ptr) {
 
     int size = strlen(loader);
     memcpy(ptr, loader, size);
-    sprintf(ptr + size - 6, "%d\"", ADDRESS);
+    put_number(ptr + size - 6, ADDRESS);
     memset(ptr, 0, 4);
     ptr[1] = LINE_NUM;
     ptr[2] = size - 4;
