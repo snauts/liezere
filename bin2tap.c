@@ -37,6 +37,9 @@ static void add_word(unsigned char *ptr, int offset, unsigned short word) {
     memcpy(ptr + offset, &word, sizeof(word));
 }
 
+#define POKE(addr, val) \
+    "\xF4\xB0\"" #addr "\",\xB0\"" #val "\":"
+
 static int add_loader(unsigned char *ptr) {
     const char *loader =
 	"****"
@@ -45,15 +48,15 @@ static int add_loader(unsigned char *ptr) {
 	"\xE7\xB0\"7\":"
 	"\xFB:"
 
-	"\xF4\xB0\"20702\",\xB0\"6\":"
-	"\xF4\xB0\"20958\",\xB0\"15\":"
-	"\xF4\xB0\"21214\",\xB0\"11\":"
-	"\xF4\xB0\"21470\",\xB0\"15\":"
-	"\xF4\xB0\"21726\",\xB0\"78\":"
-	"\xF4\xB0\"21982\",\xB0\"140\":"
-	"\xF4\xB0\"22238\",\xB0\"152\":"
-	"\xF4\xB0\"22494\",\xB0\"112\":"
-	"\xF4\xB0\"23262\",\xB0\"56\":"
+	POKE(20702, 6)
+	POKE(20958, 15)
+	POKE(21214, 11)
+	POKE(21470, 15)
+	POKE(21726, 78)
+	POKE(21982, 140)
+	POKE(22238, 152)
+	POKE(22494, 112)
+	POKE(23262, 56)
 
 	"\xEF\"\"\xAF:"
 	"\xF9\xC0\xB0\"*****\"";
