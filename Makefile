@@ -2,6 +2,7 @@ ARCH ?= -mz80
 
 CODE ?= 0x8000
 DATA ?= 0x7800
+HOOK ?= 0x5d01
 
 MAKE := make --no-print-directory
 SIZE := ls -l liezere.bin | cut -d " " -f 5
@@ -79,8 +80,8 @@ pcx:
 
 loader:
 	@sdasz80 -o loader.o loader.S
-	@sdld -n -m -i -b _CODE=0 loader.ihx loader.o
-	@makebin -p -yo A -o 0 loader.ihx loader.bin
+	@sdld -n -m -i -b _CODE=$(HOOK) loader.ihx loader.o
+	@makebin -p -yo A -o $(HOOK) loader.ihx loader.bin
 
 tap: loader
 	@gcc bin2tap.c -DADDRESS=$(CODE) -o bin2tap

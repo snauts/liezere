@@ -75,7 +75,9 @@ static int add_loader(unsigned char *ptr, char *name) {
 
     ptr += 4;
     strcpy(ptr, loader);
-    put_number(strstr(ptr, "ADDR1"), 0x5CCB + 4 + size + 4);
+    int hook = 0x5CCB + 4 + size + 4;
+    printf("hook address 0x%04x\n", hook);
+    put_number(strstr(ptr, "ADDR1"), hook);
     put_number(strstr(ptr, "ADDR2"), ADDRESS);
 
     ptr += size;
