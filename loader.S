@@ -1,4 +1,4 @@
-	.area LOADER
+	.area CODE
 _entry:
 	ld	hl, #0x8000
 	ld	(hl), #0xc9
