@@ -1,15 +1,16 @@
 	.area _CODE
 _entry:
 	ld	hl, #_data
-	ld	de, #0x50de
+	ld	de, #0x4fdf
 	ld	bc, #0x000b
 
 _loop:
-	ldi
-	ret	po
 	dec	e
 	inc	d
-	jp	_loop
+	ldi
+	jp	pe, _loop
+
+	ret
 
 _data:
 	.db	#0x06
