@@ -1,20 +1,43 @@
 	.area CODE
 _entry:
-	ld	hl, #0x8000
-	ld	(hl), #0xc9
-	call	0x8000
+	;; disable text
+	ld	hl, #0x5cbb
+	ld	(hl), #111
 
-_near:
-	dec	sp
-	dec	sp
-	pop	hl
-
-	ld	de, #_data - #_near
+	;; draw line
+	ld	hl, #0x4310
+	ld	bc, #0x0fe0
+	ld	de, #0x0800
+	ld	a, #8
+_line:
+	ld	(hl), #4
 	add	hl, de
+	ld	(hl), #4
+	add	hl, de
+	ld	(hl), #4
+	sbc	hl, bc
 
-	ld	de, #0x50de
-	ld	a, #0xb
+	dec	a
+	jr	nz, _line
 
+	;; line color
+	ld	hl, #0x5810
+	ld	bc, #0x0020
+	ld	a, #22
+_color:
+	ld	(hl), #0x3d
+	add	hl, bc
+	dec	a
+	jr	nz, _color
+
+	ld	(hl), #0x38
+	add	hl, bc
+	ld	(hl), #0x3f
+
+	;; draw mormishka
+	ld	hl, #_data
+	ld	de, #0x50d0
+	ld	a, #8
 _loop:
 	ldi
 	dec	e
@@ -33,6 +56,3 @@ _data:
 	.db	#0x8c
 	.db	#0x98
 	.db	#0x70
-	.db	#0x3f
-	.db	#0x3f
-	.db	#0x38
