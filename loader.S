@@ -1,2 +1,25 @@
 	.area _CODE
-	ret
+_entry:
+	ld	hl, #_data
+	ld	de, #0x50de
+	ld	bc, #0x000b
+
+_loop:
+	ldi
+	ret	po
+	dec	e
+	inc	d
+	jp	_loop
+
+_data:
+	.db	#0x06
+	.db	#0x0f
+	.db	#0x0b
+	.db	#0x0f
+	.db	#0x4e
+	.db	#0x8c
+	.db	#0x98
+	.db	#0x70
+	.db	#0x3f
+	.db	#0x3f
+	.db	#0x38
