@@ -1,14 +1,26 @@
-	.area _CODE
+	.area LOADER
 _entry:
-	ld	hl, #_data
-	ld	de, #0x4fdf
-	ld	bc, #0x000b
+	ld	hl, #0x8000
+	ld	(hl), #0xc9
+	call	0x8000
+
+_near:
+	dec	sp
+	dec	sp
+	pop	hl
+
+	ld	de, #_data - #_near
+	add	hl, de
+
+	ld	de, #0x50de
+	ld	a, #0xb
 
 _loop:
+	ldi
 	dec	e
 	inc	d
-	ldi
-	jp	pe, _loop
+	dec	a
+	jr	nz, _loop
 
 	ret
 
