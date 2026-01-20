@@ -135,10 +135,10 @@ const Text day3_text[] = {
     { .pos = POS(72, 26), .str = "T`adu lomu b`utu gr`eks laist zudum`a." },
     TEXT_SENTINEL,
 
-    { .pos = POS(24, 90), .str = "Liel`as zivis j`a`ed pa~siem," },
+    { .pos = POS(24, 90), .str = "Liel`as zivis ap`ed`am pa~si," },
     TEXT_SENTINEL,
 
-    { .pos = POS(64, 154), .str = "bet maz`as j`aatdod ka^kiem." },
+    { .pos = POS(64, 154), .str = "bet maz`as izbaroj`am ka^kiem." },
     TEXT_SENTINEL,
 
     { .pos = POS(255,  64), .str = "- Tre~s`a diena -" },
