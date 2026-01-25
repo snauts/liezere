@@ -70,7 +70,7 @@ const char* const reports[] = {
     "70g - tas jau asar`itis.",
     "100g - asaris k`a asaris.",
     "100g - piekl`aj`igs asaris.",
-    "100g - krup^naks, makanam j`abut tuvu.",
+    "100g - krup^naks, makanam j`ab`ut tuvu.",
     "Jopcik, vot tas ir makans!",
 };
 
