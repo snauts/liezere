@@ -123,6 +123,14 @@ const Text choices[] = {
     TEXT_SENTINEL,
 };
 
+const Text fish_map[] = {
+    { .pos = POS(132,  92), .str = "Lunker" },
+    { .pos = POS(94,  122), .str = "Perches" },
+    { .pos = POS(70,  142), .str = "Ruffes" },
+    { .pos = POS(30,  170), .str = "Twigs" },
+    TEXT_SENTINEL,
+};
+
 const Text stat_title[] = {
     { .pos = POS(255, 24), .str = "Statistics" },
     { .pos = POS(255, 32), .str = "=========" },
