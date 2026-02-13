@@ -33,7 +33,7 @@ const Text tutorial[] = {
 const char* const reports[] = {
     "You pulled too fast, line snapped!",
     "You pulled too snow, fish escaped!",
-    "A twig, fish is not even close.",
+    "A snag, fish is not even close.",
     "Measly ruffe.",
     "70g - small perch.",
     "100g - perch as a perch.",
@@ -127,7 +127,7 @@ const Text fish_map[] = {
     { .pos = POS(132,  92), .str = "Lunker" },
     { .pos = POS(94,  122), .str = "Perches" },
     { .pos = POS(70,  142), .str = "Ruffes" },
-    { .pos = POS(30,  170), .str = "Twigs" },
+    { .pos = POS(30,  170), .str = "Snags" },
     TEXT_SENTINEL,
 };
 
