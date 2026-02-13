@@ -1256,6 +1256,9 @@ static void game_fail(void) {
 
 static void show_tutorial(void) {
     wall_of_text(tutorial);
+    clear_screen();
+    show_frame(IMG_RANGES);
+    wait_space();
     reset();
 }
 

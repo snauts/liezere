@@ -89,4 +89,5 @@ enum {
 #define IMG_TITLE	SPRITES(21)
 #define IMG_EZERS	SPRITES(22)
 #define IMG_ENDING	SPRITES(23)
+#define IMG_RANGES	SPRITES(24)
 #define IMG_COPENE(x)	SPRITES(14 - x)

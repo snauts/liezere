@@ -35,6 +35,7 @@ pcx:
 	@gcc pcx-dump.c lz.c -Wall -o pcx-dump
 	@./pcx-dump -i title.pcx	 > data.h
 	@./pcx-dump -i ezers.pcx	>> data.h
+	@./pcx-dump -i ranges.pcx	>> data.h
 	@./pcx-dump -i beigas.pcx	>> data.h
 	@./pcx-dump -i hole.pcx		>> data.h
 	@./pcx-dump -i copene1.pcx	>> data.h
