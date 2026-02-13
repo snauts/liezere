@@ -62,6 +62,14 @@ const Text choices[] = {
     TEXT_SENTINEL,
 };
 
+const Text fish_map[] = {
+    { .pos = POS(132,  92),  .str = "Makans" },
+    { .pos = POS(92,  120), .str = "Asari" },
+    { .pos = POS(70,  140), .str = "^K`i~si" },
+    { .pos = POS(30,  170), .str = "Zacepi" },
+    TEXT_SENTINEL,
+};
+
 const char* const reports[] = {
     "P`ar`ak stauji vilki, p`arr`avi auklu!",
     "P`ar`ak l`eni vilki, nokabin`aj`as maita!",

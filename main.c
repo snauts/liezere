@@ -35,6 +35,7 @@ extern const Frame apkaime[];
 extern const Frame sprites[];
 extern const Frame fishes[];
 extern const Text stat_title[];
+extern const Text fish_map[];
 extern const Text tutorial[];
 extern const Text choices[];
 extern const Text goodbye[];
@@ -1258,6 +1259,7 @@ static void show_tutorial(void) {
     wall_of_text(tutorial);
     clear_screen();
     show_frame(IMG_RANGES);
+    show_text_series(fish_map);
     wait_space();
     reset();
 }
