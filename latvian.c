@@ -63,10 +63,10 @@ const Text choices[] = {
 };
 
 const Text fish_map[] = {
-    { .pos = POS(132,  92), .str = "Makans" },
-    { .pos = POS(92,  120), .str = "Asari" },
-    { .pos = POS(70,  140), .str = "^K`i~si" },
-    { .pos = POS(30,  170), .str = "Zacepi" },
+    { .pos = POS(204,  92), .str = "Makans" },
+    { .pos = POS(145, 115), .str = "Asari" },
+    { .pos = POS(85,  145), .str = "^K`i~si" },
+    { .pos = POS(22,  170), .str = "Zacepi" },
     TEXT_SENTINEL,
 };
 
