@@ -1277,12 +1277,15 @@ static void music(void) {
 }
 
 static void game_loop(void) {
+    byte done;
     init_variables();
-    select_music(&music);
     while (day <= 3) {
 	current_panel(day);
+	select_music(&music);
 	reset_cursor();
-	if (!fishing()) {
+	done = fishing();
+	stop_music();
+	if (!done) {
 	    game_fail();
 	}
 	day++;
