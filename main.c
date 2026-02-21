@@ -1035,8 +1035,6 @@ static byte get_weight(byte distance) {
 static byte report_fish(byte distance) {
     hole_now->distance = distance;
 
-    hints = false;
-
     if (distance <= 1) {
 	moment_of_truth(FISH_MAKANS);
 	remove_fish(closest);
@@ -1284,6 +1282,7 @@ static void game_loop(void) {
 	select_music(&music);
 	reset_cursor();
 	done = fishing();
+	hints = false;
 	stop_music();
 	if (!done) {
 	    game_fail();
