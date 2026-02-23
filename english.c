@@ -32,7 +32,7 @@ const Text tutorial[] = {
 
 const char* const reports[] = {
     "You pulled too fast, line snapped!",
-    "You pulled too snow, fish escaped!",
+    "You pulled too slow, fish escaped!",
     "A snag, fish is not even close.",
     "Measly ruffe.",
     "70g - small perch.",
