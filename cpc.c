@@ -56,5 +56,5 @@ static const byte pal[] = {
 };
 
 static void amstrad_cpc_select_palette(byte offset) {
-    init_gate_array(offset, 11);
+    init_gate_array(pal + offset, 11);
 }
