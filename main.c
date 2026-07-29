@@ -131,6 +131,7 @@ static void strcpy(char *dst, const char *src) {
 }
 
 void memcpy(void *dst, const void *src, word len) __naked {
+    __asm__("___memcpy:");
     __asm__("ex de, hl");
     __asm__("pop iy");
     __asm__("pop bc");
