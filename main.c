@@ -46,6 +46,7 @@ extern const byte symbols[];
 #define DISABLE_IRQ()	__asm__("di");
 
 #if defined(ZXS)
+#define ZXS_CPC(a, b)	(a)
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
 #define IRQ_BASE	0xfe00
@@ -55,6 +56,7 @@ extern const byte symbols[];
 #endif
 
 #if defined(CPC)
+#define ZXS_CPC(a, b)	(b)
 #define SETUP_STACK()	__asm__("ld sp, #0x95fc")
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
 #define IRQ_BASE	0x9600
@@ -466,8 +468,8 @@ static byte read_123(void) {
 
 static void animate_title_line(void) {
     for (byte y = 0; y < 34; y++) {
-	byte *ptr = map_y[y] + 22;
-	*ptr ^= 0x10;
+	byte *ptr = map_y[y] + (22 << BPP_SHIFT);
+	*ptr ^= ZXS_CPC(0x10, 0x11);
     }
 }
 
