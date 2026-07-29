@@ -3,6 +3,7 @@ ARCH ?= -mz80
 CODE ?= 0x8000
 DATA ?= 0x7800
 HOOK ?= 0x5d01
+TYPE ?= -DZXS
 
 MAKE := make --no-print-directory
 SIZE := ls -l liezere.bin | cut -d " " -f 5
@@ -87,6 +88,9 @@ loader:
 tap: loader
 	@gcc bin2tap.c -DADDRESS=$(CODE) -o bin2tap
 	@./bin2tap loader.bin liezere.bin liezere.tap
+
+cpc:
+	CODE=0x1000 DATA=0x8B00	TYPE=-DCPC make prg
 
 zxs: prg tap
 

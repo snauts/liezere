@@ -182,6 +182,10 @@ static void swoosh(int8 f, int8 n, int8 s) {
     }
 }
 
+#if defined(CPC)
+#include "cpc.c"
+#endif
+
 static void setup_system(void) {
     byte top = (byte) ((IRQ_BASE >> 8) - 1);
     word jmp_addr = (top << 8) | top;
@@ -189,6 +193,10 @@ static void setup_system(void) {
     WORD(jmp_addr + 1) = ADDR(&interrupt);
     memset((byte *) IRQ_BASE, top, 0x101);
     setup_irq(IRQ_BASE >> 8);
+
+#if defined(CPC)
+    setup_system_amstrad_cpc();
+#endif
 }
 
 static void precalculate(void) {
