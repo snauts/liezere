@@ -57,9 +57,9 @@ extern const byte symbols[];
 
 #if defined(CPC)
 #define ZXS_CPC(a, b)	(b)
-#define SETUP_STACK()	__asm__("ld sp, #0x95fc")
+#define SETUP_STACK()	__asm__("ld sp, #0x81fc")
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
-#define IRQ_BASE	0x9600
+#define IRQ_BASE	0x8200
 #define BPP_SHIFT	1
 
 #define set_attributes(from, c, len)

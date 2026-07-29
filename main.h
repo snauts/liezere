@@ -25,8 +25,8 @@ typedef unsigned short word;
 
 #if defined(CPC)
 #define SCREEN(x)	PTR(0xc000 + (x))
-#define SYMBOL(x) 	PTR(0xb700 + ((x) << 3))
-#define STAGING_AREA	PTR(0x9b00)
+#define SYMBOL(x) 	PTR(0xb800 + ((x) << 3))
+#define STAGING_AREA	PTR(0x8400)
 #endif
 
 #define POS(X, Y)	{ .x = X, .y = Y }

@@ -94,7 +94,7 @@ dsk:
 	iDSK liezere.dsk -f -t 1 -c 1000 -e 1000 -i liezere.bin
 
 cpc:
-	CODE=0x1000 DATA=0x8B00	TYPE=-DCPC make prg dsk
+	CODE=0x1000 DATA=0x7800	TYPE=-DCPC make prg dsk
 
 zxs: prg tap
 
