@@ -8,4 +8,5 @@ bin2tap
 *.bin
 *.map
 *.tap
+*.dsk
 *.o

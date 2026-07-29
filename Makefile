@@ -127,4 +127,4 @@ slow: zxs
 clean:
 	rm -f pcx-dump bin2tap data.h
 	rm -f *.asm *.lst *.sym *.ihx
-	rm -f *.bin *.map *.tap *.o
+	rm -f *.bin *.map *.tap *.dsk *.o
