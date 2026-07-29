@@ -19,7 +19,7 @@ LFLAGS += -n -m -i -b _CODE=$(CODE) -b _DATA=$(DATA)
 SRC := main.c data.c play.c english.c latvian.c spanish.c
 OBJ := $(subst .c,.o,$(SRC))
 
-all:	msg zxs
+all:	msg cpc
 	@echo liezere build done
 	@echo binary size $(shell $(SIZE))
 
