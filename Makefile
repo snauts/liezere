@@ -33,7 +33,7 @@ msg:
 	@echo building liezere
 
 pcx:
-	@gcc pcx-dump.c lz.c -Wall -o pcx-dump
+	@gcc $(TYPE) pcx-dump.c lz.c -Wall -o pcx-dump
 	@./pcx-dump -i title.pcx	 > data.h
 	@./pcx-dump -i ezers.pcx	>> data.h
 	@./pcx-dump -i ranges.pcx	>> data.h

@@ -9,6 +9,14 @@
 #include <fcntl.h>
 #include <ctype.h>
 
+#if defined(ZXS)
+#define PiB 8
+#endif
+
+#if defined(CPC)
+#define PiB 4
+#endif
+
 static char option;
 
 struct Header {
@@ -139,6 +147,7 @@ static void compress_and_save(const char *name, Buffer buf) {
     printf("};\n");
 }
 
+#if defined(ZXS)
 static int ink_index(int i) {
     return (i / header.w / 8) * (header.w / 8) + i % header.w / 8;
 }
@@ -185,17 +194,33 @@ static unsigned short on_pixel(unsigned char *buf, int i, int w) {
     if (pixel != 0) other = other & ~0x40;
     return encode_pixel(other, pixel);
 }
+#endif
+
+#if defined(CPC)
+static unsigned char consume_pixels(unsigned char *buf) {
+    unsigned char ret = 0;
+    for (int i = 0; i < PiB; i++) {
+	ret = ret << 1;
+	ret |= ((buf[i] >> 1) & 1) | ((buf[i] << 4) & 0x10);
+    }
+    return ret;
+}
+#endif
 
 static int image_size(void) {
     return header.w * header.h;
 }
 
 static int pixel_size(void) {
-    return image_size() / 8;
+    return image_size() / PiB;
 }
 
 static int color_size(void) {
+#if defined(ZXS)
     return pixel_size() / 8;
+#else
+    return 0;
+#endif
 }
 
 static int total_size(void) {
@@ -203,8 +228,10 @@ static int total_size(void) {
 }
 
 static void *convert_bitmap(unsigned char *buf) {
-    int j = 0;
     unsigned char pixel[total_size()];
+
+#if defined(ZXS)
+    int j = 0;
     unsigned char *color = pixel + pixel_size();
     unsigned short on[color_size()];
 
@@ -218,6 +245,13 @@ static void *convert_bitmap(unsigned char *buf) {
     for (int i = 0; i < color_size(); i++) {
 	color[i] = encode_ink(on[i]);
     }
+#endif
+
+#if defined(CPC)
+    for (int i = 0; i < image_size(); i += PiB) {
+	pixel[i / PiB] = consume_pixels(buf + i);
+    }
+#endif
 
     memcpy(buf, pixel, total_size());
     return buf;
@@ -240,7 +274,7 @@ const int HEADER_SIZE = 2;
 static unsigned char *add_header(unsigned char *buf) {
     unsigned char *img = malloc(total_size() + HEADER_SIZE);
     memcpy(img + HEADER_SIZE, buf, total_size());
-    img[0] = header.w / 8;
+    img[0] = header.w / PiB;
     img[1] = header.h;
     free(buf);
     return img;
