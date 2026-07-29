@@ -98,6 +98,8 @@ cpc:
 
 zxs: prg tap
 
+main.o: cpc.c
+
 data.o: data.h
 
 latvian.o: data.h
