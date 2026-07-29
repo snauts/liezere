@@ -89,8 +89,12 @@ tap: loader
 	@gcc bin2tap.c -DADDRESS=$(CODE) -o bin2tap
 	@./bin2tap loader.bin liezere.bin liezere.tap
 
+dsk:
+	iDSK -n liezere.dsk
+	iDSK liezere.dsk -f -t 1 -c 1000 -e $(shell $(ENTRY)) -i liezere.bin
+
 cpc:
-	CODE=0x1000 DATA=0x8B00	TYPE=-DCPC make prg
+	CODE=0x1000 DATA=0x8B00	TYPE=-DCPC make prg dsk
 
 zxs: prg tap
 
@@ -113,6 +117,9 @@ prg: pcx $(OBJ)
 fuse: zxs
 	@echo running fuse emulator...
 	@fuse --machine 128 --no-confirm-actions liezere.tap >/dev/null
+
+cp32: cpc
+	cap32 liezere.dsk -a "RUN \"LIEZERE.BIN\""
 
 slow: zxs
 	@fuse --no-traps --no-accelerate-loader --no-fastload liezere.tap
