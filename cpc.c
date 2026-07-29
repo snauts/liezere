@@ -40,3 +40,21 @@ static void setup_system_amstrad_cpc(void) {
 static void font_rom(void) {
     __asm__(".incbin \"font.rom\"");
 }
+
+static void gate_array(byte reg) {
+    __asm__("ld bc, #0x7f00");
+    __asm__("out (c), a"); reg;
+}
+
+static void init_gate_array(const byte *ptr, byte size) {
+    for (byte i = 0; i < size; i++) gate_array(ptr[i]);
+}
+
+static const byte pal[] = {
+    0x9D, 0x10, 0x54, 0, 0x54, 1, 0x57, 2, 0x5D, 3, 0x4A,
+    0x9D, 0x10, 0x54, 0, 0x54, 1, 0x5A, 2, 0x5D, 3, 0x4B,
+};
+
+static void amstrad_cpc_select_palette(byte offset) {
+    init_gate_array(offset, 11);
+}

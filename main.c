@@ -241,7 +241,13 @@ static void clear_screen(void) {
     out_fe(0);
     cached = NULL;
     reset_attributes(0);
+#if defined(ZXS)
     memset(SCREEN(0), 0, 0x1800);
+#endif
+#if defined(CPC)
+    memset(SCREEN(0), 0, 0x4000);
+    amstrad_cpc_select_palette(0);
+#endif
 }
 
 static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
