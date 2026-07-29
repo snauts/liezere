@@ -32,3 +32,7 @@ static void setup_system_amstrad_cpc(void) {
     cpc_psg(7, 0xB8);
     cpc_psg(8, 0x00);
 }
+
+static void font_rom(void) {
+    __asm__(".incbin \"font.rom\"");
+}

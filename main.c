@@ -44,8 +44,17 @@ extern const Panel panels[];
 extern const byte symbols[];
 
 #define DISABLE_IRQ()	__asm__("di");
+
+#if defined(ZXS)
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
+#endif
+
+#if defined(CPC)
+#define SETUP_STACK()	__asm__("ld sp, #0x95fc")
+#define FONT_PTR	(((byte *) &font_rom) - 0x100)
+#endif
+
 #define IRQ_BASE	0xfe00
 
 #define	CTRL_FIRE	0x10
