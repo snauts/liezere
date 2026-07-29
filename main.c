@@ -49,12 +49,14 @@ extern const byte symbols[];
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
 #define IRQ_BASE	0xfe00
+#define BPP_SHIFT	0
 #endif
 
 #if defined(CPC)
 #define SETUP_STACK()	__asm__("ld sp, #0x95fc")
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
 #define IRQ_BASE	0x9600
+#define BPP_SHIFT	1
 #endif
 
 #define	CTRL_FIRE	0x10
@@ -229,13 +231,20 @@ static void clear_screen(void) {
 }
 
 static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
-    byte shift = x & 7;
-    byte offset = x >> 3;
+    byte shift = x & (7 >> BPP_SHIFT);
+    byte offset = x >> (3 - BPP_SHIFT);
     for (byte i = 0; i < n; i++) {
 	byte data = *addr++;
 	byte *ptr = map_y[y + i] + offset;
+#if defined(ZXS)
 	ptr[0] |= (data >> shift);
 	ptr[1] |= (data << (8 - shift));
+#elif defined(CPC)
+	byte value = data >> shift;
+	ptr[0] |= value >> 4;
+	ptr[1] |= value & 0xf;
+	ptr[2] |= (data << (4 - shift)) & 0xf;
+#endif
     }
 }
 
