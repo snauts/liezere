@@ -114,13 +114,24 @@ static void setup_irq(byte base) {
     __asm__("ei");
 }
 
+#if defined(CPC)
+#include "cpc.c"
+#endif
+
 static void wait_vblank(void) {
     vblank = 0;
     while (!vblank) { }
 }
 
 static byte in_key(byte a) {
+#if defined(ZXS)
     __asm__("in a, (#0xfe)");
+#endif
+#if defined(CPC)
+    __asm__("di");
+    a = cpc_key(a);
+    __asm__("ei");
+#endif
     return a;
 }
 
@@ -198,10 +209,6 @@ static void swoosh(int8 f, int8 n, int8 s) {
 	f += s;
     }
 }
-
-#if defined(CPC)
-#include "cpc.c"
-#endif
 
 static void setup_system(void) {
     byte top = (byte) ((IRQ_BASE >> 8) - 1);
@@ -463,7 +470,12 @@ static byte input_change(byte input) {
 }
 
 static byte read_123(void) {
+#if defined(ZXS)
     return ~in_key(0xf7) & 7;
+#endif
+#if defined(CPC)
+    return (~in_key(8) & 3) | ((~in_key(7) & 2) << 1);
+#endif
 }
 
 static void animate_title_line(void) {
