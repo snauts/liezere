@@ -1,3 +1,7 @@
+static word mul80(word x) {
+    return (x << 6) + (x << 4);
+}
+
 static byte cpc_psg(byte reg, byte val) __naked {
     __asm__("di");
     __asm__("ld b, #0xf4");

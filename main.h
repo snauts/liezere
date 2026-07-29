@@ -16,10 +16,18 @@ typedef unsigned short word;
 #define PTR(addr)	((byte *) (addr))
 #define BIT(pos)	(1 << (pos))
 
+#if defined(ZXS)
 #define SCREEN(x)	PTR(0x4000 + (x))
 #define COLOUR(x)	PTR(0x5800 + (x))
 #define SYMBOL(x) 	PTR(0x7700 + ((x) << 3))
 #define STAGING_AREA	PTR(0x5b00)
+#endif
+
+#if defined(CPC)
+#define SCREEN(x)	PTR(0xc000 + (x))
+#define SYMBOL(x) 	PTR(0xb800 + ((x) << 3))
+#define STAGING_AREA	PTR(0x9000)
+#endif
 
 #define POS(X, Y)	{ .x = X, .y = Y }
 #define TEXT_SENTINEL	{ .str = NULL }

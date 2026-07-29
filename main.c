@@ -50,6 +50,8 @@ extern const byte symbols[];
 #define FONT_ADDRESS	PTR(0x3c00)
 #define IRQ_BASE	0xfe00
 #define BPP_SHIFT	0
+
+#define set_attributes(from, c, len) memset(COLOUR(from), c, len);
 #endif
 
 #if defined(CPC)
@@ -57,6 +59,8 @@ extern const byte symbols[];
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
 #define IRQ_BASE	0x9600
 #define BPP_SHIFT	1
+
+#define set_attributes(from, c, len)
 #endif
 
 #define	CTRL_FIRE	0x10
@@ -214,14 +218,24 @@ static void precalculate(void) {
     no_text = false;
     decompress(SYMBOL(0), symbols);
     for (byte y = 0; y < 192; y++) {
+#if defined(ZXS)
 	byte f = ((y & 7) << 3) | ((y >> 3) & 7) | (y & 0xc0);
 	map_y[y] = SCREEN(f << 5);
+#endif
+#if defined(CPC)
+	word f = ((y & 7) << 11) | mul80(y >> 3);
+	map_y[y] = SCREEN(f);
+#endif
     }
 }
 
+#if defined(ZXS)
 static void reset_attributes(byte color) {
-    memset(COLOUR(0), color, 0x300);
+    set_attributes(0, color, 0x300);
 }
+#else
+#define reset_attributes(color)
+#endif
 
 static void clear_screen(void) {
     out_fe(0);
@@ -344,9 +358,13 @@ static void corner_symbol(byte *sym) {
     }
 }
 
+#if defined(ZXS)
 static void corner_color(byte color) {
     *COLOUR(0x2de) = color;
 }
+#else
+#define corner_color(color)
+#endif
 
 static void hint_symbol(byte *sym) {
     if (hints) {
@@ -408,12 +426,14 @@ static void draw_image(byte *ptr, byte x, byte y) {
 	ptr += w;
     }
 
+#if defined(ZXS)
     byte *dst = COLOUR(y << 2) + x;
     for (byte i = 0; i < h; i += 8) {
 	memcpy(dst, ptr, w);
 	dst += 0x20;
 	ptr += w;
     }
+#endif
 }
 
 static byte *cache_image(const byte *src) {
@@ -484,10 +504,12 @@ static const Text *show_text_series(const Text *text) {
 #define PIXEL(x, y) BYTE(map_y[y] + (x >> 3))
 #define PMASK(pos) (0x80 >> (pos))
 
+#if defined(ZXS)
 static byte is_white(byte x, byte y) {
     word offset = ((y & ~7) << 2) + (x >> 3);
     return BYTE(COLOUR(offset)) == 0x47;
 }
+#endif
 
 static byte get_pixel(byte x, byte y) {
     return PIXEL(x, y) & PMASK(x & 7);
@@ -498,7 +520,12 @@ static void set_pixel(byte x, byte y) {
 }
 
 static byte good_spot(byte x, byte y) {
+#if defined(ZXS)
     return is_white(x, y) && get_pixel(x, y);
+#endif
+#if defined(CPC)
+    return get_pixel(x, y);
+#endif
 }
 
 static byte read_QAOP(void) {
@@ -709,7 +736,7 @@ static void show_weight(byte weight) {
     if (weight > 0) {
 	clear_weight();
 	print_weight(weight);
-	memset(COLOUR(0x40), 7, 8);
+	set_attributes(0x40, 7, 8);
     }
 }
 
@@ -755,7 +782,7 @@ static void move_cursor(void) {
 	cooldown++;
     }
     if (hole_check) {
-	memset(COLOUR(0x40), 0, 8);
+	set_attributes(0x40, 0, 8);
 	hole_check = false;
     }
 }
@@ -788,8 +815,8 @@ static void walk_lake(void) {
 
 static void show_forest(void) {
     clear_screen();
-    memset(COLOUR(0), 0x28, 0x80);
-    memset(COLOUR(0x1c0), 0x7f, 0x140);
+    set_attributes(0x000, 0x28, 0x80);
+    set_attributes(0x1c0, 0x7f, 0x140);
     show_series(horizonts);
     wait_vblank();
 }
@@ -943,7 +970,9 @@ static void reset_jerk(void) {
 
 static void clear_tip(void) {
     draw_tip(COPENE1);
+#if defined(ZXS)
     BYTE(COLOUR(0x50)) = 0x7d;
+#endif
 
     byte *ptr = SCREEN(0x50);
     for (byte i = 0; i < 8; i++) {
@@ -1028,7 +1057,7 @@ static void moment_of_weight(byte fish, byte weight) {
 
     hole_now->weight = weight;
     put_str(str, center(str), 64);
-    memset(COLOUR(0xe0), 5, 0x60);
+    set_attributes(0xe0, 5, 0x60);
     show_series(IMG_REPORT);
     draw_fish(fish);
 
@@ -1115,7 +1144,7 @@ static byte pull_fish(void) {
 static byte ice_fish(void) {
     clear_screen();
     reset_attributes(0x7d);
-    memset(COLOUR(0x00), 0x78, 0x20);
+    set_attributes(0x00, 0x78, 0x20);
     decompress(COPENE1, IMG_COPENE(1)->img);
     decompress(COPENE2, IMG_COPENE(2)->img);
     show_series(IMG_HOLE);
@@ -1203,7 +1232,7 @@ static byte show_stars(byte i, byte y) {
     byte rank = get_rank(i);
     static const char str[] = "&4&4&4";
     put_str(str + ((3 - rank) << 1), 196, y);
-    memset(COLOUR((y & ~7) << 2) + 0x18, 0x46, 4);
+    set_attributes(((y & ~7) << 2) + 0x18, 0x46, 4);
     return rank;
 }
 
@@ -1293,7 +1322,7 @@ static void show_title(void) {
     clear_screen();
     show_frame(IMG_TITLE);
     show_text_series(choices);
-    memset(COLOUR(0x140), 0x47, 0x1c0);
+    set_attributes(0x140, 0x47, 0x1c0);
     if (wait_123() & 4) show_tutorial();
 }
 
