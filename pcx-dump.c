@@ -28,6 +28,12 @@ typedef struct {
     int size;
 } Buffer;
 
+static const char *file_name = NULL;
+
+static int is_file(const char *name) {
+    return strcmp(file_name, name) == 0;
+}
+
 int estimate(int size);
 int compress(void *dst, void *src, int size);
 
@@ -87,7 +93,27 @@ static unsigned char get_color(unsigned char *color) {
 	    break;
 	}
     }
+
+#if defined(CPC)
+    const unsigned char *ptr;
+    static const unsigned char ranges_map[] = {
+	0, 0, 0, 0, 0, 0, 0, 3,
+	0, 0, 0, 0, 0, 0, 0, 3,
+    };
+    static const unsigned char default_map[] = {
+	0, 0, 0, 0, 0, 0, 0, 3,
+	0, 0, 0, 0, 0, 0, 0, 3,
+    };
+    if (is_file("ranges.pcx")) {
+	ptr = ranges_map;
+    }
+    else {
+	ptr = default_map;
+    }
+    return ptr[(result & 0x07) + ((result & 0x40) >> 3)];
+#else
     return result;
+#endif
 }
 
 static int read_file(const char *file, unsigned char **buf) {
@@ -370,6 +396,7 @@ int main(int argc, char **argv) {
     }
 
     option = argv[1][1];
+    file_name = argv[2];
 
     switch (option) {
     case 'i':
