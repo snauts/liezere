@@ -382,10 +382,25 @@ static byte center(const char *msg) {
     return 128 - (str_len(msg) >> 1);
 }
 
+static byte mask_sym(byte b, byte f) {
+    return b == 0 ? (b | f) : (b & ~(f | (f << 4)));
+}
+
 static void corner_symbol(byte *sym) {
+#if defined(ZXS)
     for (byte *ptr = SCREEN(0x10de); ptr < SCREEN(0x1800); ptr += 0x100) {
 	*ptr = *sym++;
     }
+#endif
+#if defined(CPC)
+    byte *ptr = SCREEN(0x071c);
+    while (ptr != SCREEN(0xff1c)) {
+	byte data = *sym++;
+	ptr[0] = mask_sym(0xff, data >> 4);
+	ptr[1] = mask_sym(0xff, data & 0xf);
+	ptr += 0x800;
+    }
+#endif
 }
 
 #if defined(ZXS)
@@ -654,10 +669,6 @@ static void reset_cursor(void) {
 }
 
 static byte sky;
-static byte mask_sky(byte data) {
-    return sky == 0 ? (sky | data) : (sky & ~(data | (data << 4)));
-}
-
 static void put_digit(byte digit, byte x, byte y) {
     byte *addr = FONT_ADDRESS;
     addr += (('0' + digit) << 3);
@@ -670,8 +681,8 @@ static void put_digit(byte digit, byte x, byte y) {
 #endif
 #if defined(CPC)
 	byte bits = *addr++;
-	BYTE(map_y[y + i] + x + 0) = mask_sky(bits >> 4);
-	BYTE(map_y[y + i] + x + 1) = mask_sky(bits & 0xf);
+	BYTE(map_y[y + i] + x + 0) = mask_sym(sky, bits >> 4);
+	BYTE(map_y[y + i] + x + 1) = mask_sym(sky, bits & 0xf);
 #endif
     }
 }
