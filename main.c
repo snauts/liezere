@@ -1229,7 +1229,7 @@ static void wait_and_update_seed(void) {
 static void wall_of_text(const Text *text) {
     clear_screen();
     show_text_series(text);
-    select_palette(3, 0x5B);
+    select_palette(3, 0x53);
     reset_attributes(5);
     wait_space();
 }
