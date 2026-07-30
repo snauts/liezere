@@ -1187,6 +1187,7 @@ static byte get_weight(byte distance) {
 }
 
 static byte report_fish(byte distance) {
+    select_palette(2, 0x59);
     hole_now->distance = distance;
 
     if (distance <= 1) {
@@ -1212,11 +1213,13 @@ static byte report_fish(byte distance) {
 	return false;
     }
     else if (distance < 150) {
+	select_palette(2, 0x43);
 	moment_of_truth(FISH_RUFFE);
 	stats[STATS_RUFFES]++;
 	return false;
     }
     else {
+	select_palette(2, 0x4F);
 	moment_of_truth(FISH_WEEDS);
 	return false;
     }
@@ -1226,7 +1229,6 @@ static byte pull_fish(void) {
     text_mask = 0xf0;
     clear_screen();
     show_forest();
-    select_palette(2, 0x4F);
     for (byte i = 0; i < PULL_MOVES; i++) {
 	advance_time(1);
 	show_frame(IMG_PULL1);
