@@ -656,8 +656,18 @@ static void reset_cursor(void) {
 static void put_digit(byte digit, byte x, byte y) {
     byte *addr = FONT_ADDRESS;
     addr += (('0' + digit) << 3);
+#if defined(CPC)
+    x = x << 1;
+#endif
     for (byte i = 0; i < 8; i++) {
+#if defined(ZXS)
 	BYTE(map_y[y + i] + x) = *addr++;
+#endif
+#if defined(CPC)
+	byte bits = *addr++;
+	BYTE(map_y[y + i] + x + 0) = bits >> 4;
+	BYTE(map_y[y + i] + x + 1) = bits & 0xf;
+#endif
     }
 }
 
