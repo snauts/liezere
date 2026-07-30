@@ -446,7 +446,7 @@ static void draw_image(byte *ptr, byte x, byte y) {
     y = y << 3;
 
     for (byte i = 0; i < h; i++) {
-	byte *dst = map_y[y + i] + x;
+	byte *dst = map_y[y + i] + (x << BPP_SHIFT);
 	memcpy(dst, ptr, w);
 	ptr += w;
     }
