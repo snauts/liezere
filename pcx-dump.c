@@ -228,9 +228,8 @@ static unsigned char consume_pixels(unsigned char *buf) {
     for (int i = 0; i < PiB; i++) {
 	ret = ret << 1;
 	ret |= ((buf[i] >> 1) & 0x01);
-#if PiB == 4
+	if (PiB != 4) continue;
 	ret |= ((buf[i] << 4) & 0x10);
-#endif
     }
     return ret;
 }
