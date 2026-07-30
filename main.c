@@ -253,6 +253,7 @@ static void precalculate(void) {
 static void reset_attributes(byte color) {
     set_attributes(0, color, 0x300);
 }
+#define select_palette(index, color)
 #else
 #define reset_attributes(color)
 #endif
@@ -266,7 +267,7 @@ static void clear_screen(void) {
 #endif
 #if defined(CPC)
     memset(SCREEN(0), 0, 0x4000);
-    select_palette(3, 0x4B);
+    select_palette(0, 0x54);
 #endif
 }
 
@@ -1351,6 +1352,9 @@ static void game_fail(void) {
 static void show_tutorial(void) {
     wall_of_text(tutorial);
     clear_screen();
+    select_palette(1, 0x58);
+    select_palette(2, 0x56);
+    select_palette(3, 0x5E);
     show_frame(IMG_RANGES);
     show_text_series(fish_map);
     wait_space();
