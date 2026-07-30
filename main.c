@@ -77,7 +77,7 @@ extern const byte symbols[];
 #endif
 
 #if defined(CPC)
-#define	CTRL_FIRE	0x30
+#define	CTRL_FIRE	0x10
 #define	CTRL_DIR	0x0f
 #define	CTRL_DOWN	0x08
 #define	CTRL_RIGHT	0x04
@@ -160,11 +160,13 @@ static byte in_joy(byte a) {
     return a;
 }
 
-static void out_fe(byte data) {
 #if defined(ZXS)
+static void out_fe(byte data) {
     __asm__("out (#0xfe), a"); data;
-#endif
 }
+#else
+#define out_fe(data)
+#endif
 
 static byte inc10(byte a) __naked {
     __asm__("inc a"); a;
