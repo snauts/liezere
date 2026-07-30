@@ -51,7 +51,6 @@ extern const byte symbols[];
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
 #define IRQ_BASE	0xfe00
-#define BPP_SHIFT	0
 
 #define set_attributes(from, c, len) memset(COLOUR(from), c, len);
 #define reset_attributes(color) set_attributes(0, color, 0x300)
@@ -63,7 +62,6 @@ extern const byte symbols[];
 #define SETUP_STACK()	__asm__("ld sp, #0x81fc")
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
 #define IRQ_BASE	0x8200
-#define BPP_SHIFT	1
 
 #define set_attributes(from, c, len)
 #define reset_attributes(color)
@@ -268,8 +266,8 @@ static void clear_screen(void) {
 }
 
 static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
-    byte shift = x & (7 >> BPP_SHIFT);
-    byte offset = x >> (3 - BPP_SHIFT);
+    byte shift = x & ZXS_CPC(7, 3);
+    byte offset = x >> ZXS_CPC(3, 2);
     for (byte i = 0; i < n; i++) {
 	byte data = *addr++;
 	byte *ptr = map_y[y + i] + offset;
@@ -446,7 +444,7 @@ static void draw_image(byte *ptr, byte x, byte y) {
     y = y << 3;
 
     for (byte i = 0; i < h; i++) {
-	byte *dst = map_y[y + i] + (x << BPP_SHIFT);
+	byte *dst = map_y[y + i] + ZXS_CPC(x, x << 1);
 	memcpy(dst, ptr, w);
 	ptr += w;
     }
@@ -490,7 +488,7 @@ static byte read_123(void) {
 
 static void animate_title_line(void) {
     for (byte y = 0; y < 34; y++) {
-	byte *ptr = map_y[y] + (22 << BPP_SHIFT);
+	byte *ptr = map_y[y] + ZXS_CPC(22, 44);
 	*ptr ^= ZXS_CPC(0x10, 0x11);
     }
 }
@@ -535,8 +533,8 @@ static const Text *show_text_series(const Text *text) {
     return text + 1;
 }
 
-#define PIXEL(x, y) BYTE(map_y[y] + (x >> 3))
-#define PMASK(pos) (0x80 >> (pos))
+#define PIXEL(x, y) BYTE(map_y[y] + ((x) >> ZXS_CPC(3, 2)))
+#define MASK(x) (ZXS_CPC(0x80, 0x88) >> ZXS_CPC((x) & 7, (x) & 3))
 
 #if defined(ZXS)
 static byte is_white(byte x, byte y) {
@@ -546,11 +544,11 @@ static byte is_white(byte x, byte y) {
 #endif
 
 static byte get_pixel(byte x, byte y) {
-    return PIXEL(x, y) & PMASK(x & 7);
+    return PIXEL(x, y) & MASK(x);
 }
 
 static void set_pixel(byte x, byte y) {
-    PIXEL(x, y) ^= PMASK(x & 7);
+    PIXEL(x, y) ^= MASK(x);
 }
 
 static byte good_spot(byte x, byte y) {
