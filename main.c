@@ -653,6 +653,11 @@ static void reset_cursor(void) {
     minute = 0;
 }
 
+static byte sky;
+static byte mask_sky(byte data) {
+    return sky == 0 ? (sky | data) : (sky & ~(data | (data << 4)));
+}
+
 static void put_digit(byte digit, byte x, byte y) {
     byte *addr = FONT_ADDRESS;
     addr += (('0' + digit) << 3);
@@ -665,8 +670,8 @@ static void put_digit(byte digit, byte x, byte y) {
 #endif
 #if defined(CPC)
 	byte bits = *addr++;
-	BYTE(map_y[y + i] + x + 0) = bits >> 4;
-	BYTE(map_y[y + i] + x + 1) = bits & 0xf;
+	BYTE(map_y[y + i] + x + 0) = mask_sky(bits >> 4);
+	BYTE(map_y[y + i] + x + 1) = mask_sky(bits & 0xf);
 #endif
     }
 }
@@ -875,6 +880,7 @@ static void block_fill(byte y1, byte y2, byte color) {
 }
 
 static void show_forest(void) {
+    sky = 0xf0;
     clear_screen();
 #ifdef CPC
     block_fill(0x00, 0x20, 0xf0);
@@ -943,6 +949,7 @@ static void put_fish(void) {
 }
 
 static void show_lake(void) {
+    sky = 0x00;
     clear_screen();
     hole_check = false;
     show_frame(IMG_EZERS);
