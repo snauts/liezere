@@ -23,6 +23,7 @@ static byte cpc_psg(byte reg, byte val) __naked {
 }
 
 static byte cpc_key(byte line) __naked {
+    __asm__("di");
     __asm__("ld bc, #0xf782");
     __asm__("out (c), c");
     __asm__("ld bc, #0xf40e");
@@ -43,6 +44,7 @@ static byte cpc_key(byte line) __naked {
     __asm__("out (c), c");
     __asm__("ld bc, #0xf600");
     __asm__("out (c), c");
+    __asm__("ei");
     __asm__("ret");
 }
 
@@ -66,8 +68,10 @@ static void font_rom(void) {
 }
 
 static void gate_array(byte reg) {
+    __asm__("di");
     __asm__("ld bc, #0x7f00");
     __asm__("out (c), a"); reg;
+    __asm__("ei");
 }
 
 static const byte pal[] = {
