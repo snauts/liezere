@@ -870,8 +870,18 @@ static void walk_lake(void) {
     draw_cursor();
 }
 
+static void block_fill(byte y1, byte y2, byte color) {
+    for (; y1 < y2; y1++) memset(map_y[y1], color, 0x40);
+}
+
 static void show_forest(void) {
     clear_screen();
+#ifdef CPC
+    select_palette(1, 0x46);
+    select_palette(3, 0x4B);
+    block_fill(0x00, 0x20, 0xf0);
+    block_fill(0x70, 0xc0, 0xff);
+#endif
     set_attributes(0x000, 0x28, 0x80);
     set_attributes(0x1c0, 0x7f, 0x140);
     show_series(horizonts);
@@ -1413,7 +1423,7 @@ static void game_loop(void) {
     byte done;
     init_variables();
     while (day <= 3) {
-	current_panel(day);
+	// current_panel(day);
 	select_music(&music);
 	reset_cursor();
 	done = fishing();
@@ -1433,7 +1443,7 @@ void reset(void) {
     stop_music();
     setup_system();
     precalculate();
-    show_title();
+    // show_title();
     game_loop();
     reset();
 }
