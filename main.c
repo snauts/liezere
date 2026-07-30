@@ -527,7 +527,11 @@ static void show_text(const Text *text) {
 }
 
 static const Text *show_text_series(const Text *text) {
-    while (text->str) { show_text(text++); }
+    while (text->str) {
+	byte mask = text->mask;
+	if (mask) text_mask = mask;
+	show_text(text++);
+    }
     return text + 1;
 }
 
@@ -1351,9 +1355,9 @@ static void game_fail(void) {
 static void show_tutorial(void) {
     wall_of_text(tutorial);
     clear_screen();
-    select_palette(1, 0x58);
-    select_palette(2, 0x56);
-    select_palette(3, 0x5E);
+    select_palette(1, 0x4F);
+    select_palette(2, 0x59);
+    select_palette(3, 0x43);
     show_frame(IMG_RANGES);
     show_text_series(fish_map);
     wait_space();

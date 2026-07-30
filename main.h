@@ -50,6 +50,7 @@ typedef struct {
 
 typedef struct {
     const char *str;
+    byte mask;
     Pos pos;
 } Text;
 
