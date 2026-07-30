@@ -208,7 +208,7 @@ static word random(void) {
 static word mul(byte x, byte y) {
     word r = 0;
     word n = x;
-    for (int i = 0; i < 8; i++) {
+    for (byte i = 0; i < 8; i++) {
         if (y & 1) r += n;
         y = y >> 1;
         n = n << 1;
@@ -986,8 +986,8 @@ static void draw_tip(byte *ptr) {
 }
 
 static void starting_line(void) {
-    for (byte y = 16; y <= 152; y += 4) {
-	set_pixel(128, y);
+    for (byte y = 16; y < 152; y += 4) {
+	PIXEL(128, y) ^= ZXS_CPC(0x80, 0x08);
     }
 }
 
@@ -1009,9 +1009,10 @@ static void init_fishing_line(void) {
 }
 
 static void fishing_line(void) {
+    byte i = 0;
     byte **ptr = line;
     while (*ptr != NULL) {
-	**(ptr++) ^= ZXS_CPC(0x80, 0x88);
+	**(ptr++) ^= ZXS_CPC(0x80, i++ < 68 ? 0x08 : 0x88);
     }
 }
 
@@ -1073,7 +1074,7 @@ static void clear_tip(void) {
 #endif
 #if defined(CPC)
     for (byte i = 16; i < 24; i++) {
-	BYTE(map_y[i] + 32) = i & 3 ? 0xff : 0x77;
+	BYTE(map_y[i] + 32) = i & 3 ? 0xff : 0xf7;
     }
 #endif
 }
@@ -1249,7 +1250,7 @@ static byte ice_fish(void) {
     block_fill(0x00, 0xc0, 0xff);
 #endif
     show_series(IMG_HOLE);
-    select_palette(1, 0x43);
+    select_palette(1, 0x53);
     select_palette(2, 0x4c);
     select_palette(3, 0x4b);
     starting_line();
