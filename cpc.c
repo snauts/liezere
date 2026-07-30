@@ -70,15 +70,13 @@ static void gate_array(byte reg) {
     __asm__("out (c), a"); reg;
 }
 
-static void init_gate_array(const byte *ptr, byte size) {
-    for (byte i = 0; i < size; i++) gate_array(ptr[i]);
-}
-
 static const byte pal[] = {
-    0x9D, 0x10, 0x54, 0, 0x54, 1, 0x4B, 2, 0x4B, 3, 0x4B,
-    0x9D, 0x10, 0x54, 0, 0x54, 1, 0x5A, 2, 0x5D, 3, 0x4B,
+    0x9D, 0x10, 0x54, 0, 0x54, 1, 0x54, 2, 0x54, 3, 0x54,
 };
 
-static void amstrad_cpc_select_palette(byte offset) {
-    init_gate_array(pal + offset, 11);
+static void select_palette(byte index, byte color) {
+    BYTE(&pal[4 + (index << 1)]) = color;
+    for (byte i = 0; i < sizeof(pal); i++) {
+	gate_array(pal[i]);
+    }
 }

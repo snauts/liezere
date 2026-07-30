@@ -266,7 +266,7 @@ static void clear_screen(void) {
 #endif
 #if defined(CPC)
     memset(SCREEN(0), 0, 0x4000);
-    amstrad_cpc_select_palette(0);
+    select_palette(3, 0x4B);
 #endif
 }
 
