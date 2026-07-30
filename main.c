@@ -978,8 +978,8 @@ static void show_lake(void) {
     put_time();
 }
 
-#define COPENE1 (STAGING_AREA + 0x100)
-#define COPENE2 (STAGING_AREA + 0x200)
+#define COPENE1 (STAGING_AREA + 0x200)
+#define COPENE2 (STAGING_AREA + 0x400)
 
 static void draw_tip(byte *ptr) {
     draw_image(ptr, 16, 0);
@@ -1246,7 +1246,7 @@ static byte ice_fish(void) {
 #endif
     show_series(IMG_HOLE);
     select_palette(1, 0x43);
-    select_palette(2, 0x44);
+    select_palette(2, 0x4c);
     select_palette(3, 0x4b);
     starting_line();
     put_time();
