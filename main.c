@@ -1178,6 +1178,7 @@ static byte wait_pull(byte button, byte fast) {
 	return true;
     }
     if (ticks >= PULL_SLOW) {
+	select_palette(2, 0x4c);
 	moment_of_truth(FISH_ESCAPE);
 	return true;
     }
