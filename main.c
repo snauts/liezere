@@ -906,6 +906,7 @@ static void show_forest(void) {
 }
 
 static void animate_drill(void) {
+    select_palette(2, 0x55);
     for (byte i = 0; i < DRILL_MOVES; i++) {
 	advance_time(1);
 	hint_symbol(SYMBOL(2));
