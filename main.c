@@ -161,7 +161,9 @@ static byte in_joy(byte a) {
 }
 
 static void out_fe(byte data) {
+#if defined(ZXS)
     __asm__("out (#0xfe), a"); data;
+#endif
 }
 
 static byte inc10(byte a) __naked {
@@ -988,7 +990,7 @@ static void starting_line(void) {
 }
 
 static byte *line_addr(byte y) {
-    return map_y[y] + 16;
+    return map_y[y] + ZXS_CPC(16, 32);
 }
 
 static void init_fishing_line(void) {
@@ -1007,7 +1009,7 @@ static void init_fishing_line(void) {
 static void fishing_line(void) {
     byte **ptr = line;
     while (*ptr != NULL) {
-	**(ptr++) ^= 0x80;
+	**(ptr++) ^= ZXS_CPC(0x80, 0x88);
     }
 }
 
