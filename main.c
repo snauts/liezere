@@ -1065,13 +1065,17 @@ static void clear_tip(void) {
     draw_tip(COPENE1);
 #if defined(ZXS)
     BYTE(COLOUR(0x50)) = 0x7d;
-#endif
-
     byte *ptr = SCREEN(0x50);
     for (byte i = 0; i < 8; i++) {
 	BYTE(ptr) = i & 3 ? 0x00 : 0x80;
 	ptr += 0x100;
     }
+#endif
+#if defined(CPC)
+    for (byte i = 16; i < 24; i++) {
+	BYTE(map_y[i] + 32) = i & 3 ? 0xff : 0x77;
+    }
+#endif
 }
 
 static const Frame *debris;
