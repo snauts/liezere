@@ -1344,7 +1344,7 @@ static void game_done(void) {
 
 static void select_panel_color(byte num) {
     switch (num) {
-    case 0:
+    case 1:
 	select_palette(1, 0x55);
 	select_palette(2, 0x4A);
 	break;
