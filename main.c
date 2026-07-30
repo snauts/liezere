@@ -1423,7 +1423,7 @@ static void game_loop(void) {
     byte done;
     init_variables();
     while (day <= 3) {
-	// current_panel(day);
+	current_panel(day);
 	select_music(&music);
 	reset_cursor();
 	done = fishing();
@@ -1443,7 +1443,7 @@ void reset(void) {
     stop_music();
     setup_system();
     precalculate();
-    // show_title();
+    show_title();
     game_loop();
     reset();
 }
