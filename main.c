@@ -90,6 +90,14 @@ extern const byte symbols[];
 static void interrupt(void) __naked {
     __asm__("di");
     __asm__("push af");
+    __asm__("push bc");
+
+#if defined(CPC)
+    __asm__("ld b, #0xf5");
+    __asm__("in a, (c)");
+    __asm__("and a, #1");
+    __asm__("jp z, skip_irq");
+#endif
 
     __asm__("ld a, #1");
     __asm__("ld (_vblank), a");
@@ -97,9 +105,8 @@ static void interrupt(void) __naked {
 #if defined(AY)
     __asm__("ld a, (_enable_AY)");
     __asm__("and a");
-    __asm__("jp z, skip_AY");
+    __asm__("jp z, skip_irq");
 
-    __asm__("push bc");
     __asm__("push hl");
     __asm__("push de");
     __asm__("push ix");
@@ -110,11 +117,11 @@ static void interrupt(void) __naked {
     __asm__("pop ix");
     __asm__("pop de");
     __asm__("pop hl");
-    __asm__("pop bc");
-
-    __asm__("skip_AY:");
 #endif
 
+    __asm__("skip_irq:");
+
+    __asm__("pop bc");
     __asm__("pop af");
     __asm__("ei");
     __asm__("reti");
