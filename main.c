@@ -21,6 +21,7 @@ static volatile byte vblank;
 static const byte *cached;
 static byte *map_y[192];
 static byte *line[96];
+static byte text_mask;
 static byte no_text;
 static byte hints;
 static word seed;
@@ -53,6 +54,8 @@ extern const byte symbols[];
 #define BPP_SHIFT	0
 
 #define set_attributes(from, c, len) memset(COLOUR(from), c, len);
+#define reset_attributes(color) set_attributes(0, color, 0x300)
+#define select_palette(index, color)
 #endif
 
 #if defined(CPC)
@@ -63,6 +66,7 @@ extern const byte symbols[];
 #define BPP_SHIFT	1
 
 #define set_attributes(from, c, len)
+#define reset_attributes(color)
 #endif
 
 #if defined(ZXS)
@@ -230,6 +234,7 @@ static void setup_system(void) {
     setup_irq(IRQ_BASE >> 8);
 
 #if defined(CPC)
+    text_mask = 0xff;
     setup_system_amstrad_cpc();
 #endif
 }
@@ -249,25 +254,16 @@ static void precalculate(void) {
     }
 }
 
-#if defined(ZXS)
-static void reset_attributes(byte color) {
-    set_attributes(0, color, 0x300);
-}
-#define select_palette(index, color)
-#else
-#define reset_attributes(color)
-#endif
-
 static void clear_screen(void) {
     out_fe(0);
     cached = NULL;
-    reset_attributes(0);
 #if defined(ZXS)
+    reset_attributes(0);
     memset(SCREEN(0), 0, 0x1800);
 #endif
 #if defined(CPC)
+    reset_palette();
     memset(SCREEN(0), 0, 0x4000);
-    select_palette(0, 0x54);
 #endif
 }
 
@@ -282,9 +278,11 @@ static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
 	ptr[1] |= (data << (8 - shift));
 #elif defined(CPC)
 	byte value = data >> shift;
-	ptr[0] |= value >> 4;
-	ptr[1] |= value & 0xf;
-	ptr[2] |= (data << (4 - shift)) & 0xf;
+	ptr[0] |= ((value & 0xf0) | (value >> 4)) & text_mask;
+	ptr[1] |= ((value & 0x0f) | (value << 4)) & text_mask;
+
+	byte rest = (data << (4 - shift)) & 0xf;
+	ptr[2] |= (rest | (rest << 4)) & text_mask;
 #endif
     }
 }
@@ -1227,6 +1225,7 @@ static void wait_and_update_seed(void) {
 static void wall_of_text(const Text *text) {
     clear_screen();
     show_text_series(text);
+    select_palette(3, 0x5B);
     reset_attributes(5);
     wait_space();
 }
@@ -1364,6 +1363,7 @@ static void show_tutorial(void) {
 static void show_title(void) {
     clear_screen();
     show_frame(IMG_TITLE);
+    select_palette(3, 0x4B);
     show_text_series(choices);
     set_attributes(0x140, 0x47, 0x1c0);
     if (wait_123() & 4) show_tutorial();

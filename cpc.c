@@ -71,12 +71,15 @@ static void gate_array(byte reg) {
 }
 
 static const byte pal[] = {
-    0x9D, 0x10, 0x54, 0, 0x54, 1, 0x54, 2, 0x5B, 3, 0x4B,
+    0x9D, 0x10, 0x54, 0, 0x54, 1, 0x54, 2, 0x54, 3, 0x54,
 };
 
+static void reset_palette(void) {
+    for (byte i = 0; i < sizeof(pal); i++) gate_array(pal[i]);
+}
+
 static void select_palette(byte index, byte color) {
-    BYTE(&pal[4 + (index << 1)]) = color;
-    for (byte i = 0; i < sizeof(pal); i++) {
-	gate_array(pal[i]);
-    }
+    gate_array(0x9d);
+    gate_array(index);
+    gate_array(color);
 }
