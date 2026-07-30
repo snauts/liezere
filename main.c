@@ -1226,11 +1226,15 @@ static void wait_and_update_seed(void) {
     seed = (seed << 5) | (some & 0x1f);
 }
 
+static void text_to_cyan(void) {
+    select_palette(3, 0x53);
+    reset_attributes(5);
+}
+
 static void wall_of_text(const Text *text) {
     clear_screen();
     show_text_series(text);
-    select_palette(3, 0x53);
-    reset_attributes(5);
+    text_to_cyan();
     wait_space();
 }
 
@@ -1341,7 +1345,7 @@ static void game_done(void) {
 static void current_panel(byte num) {
     seed = 1;
     clear_screen();
-    reset_attributes(5);
+    text_to_cyan();
     draw_panel(panels + num);
 }
 
