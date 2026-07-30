@@ -394,7 +394,7 @@ static void corner_symbol(byte *sym) {
 #endif
 #if defined(CPC)
     byte *ptr = SCREEN(0x071c);
-    while (ptr != SCREEN(0xff1c)) {
+    while (ptr > SCREEN(0x0000)) {
 	byte data = *sym++;
 	ptr[0] = mask_sym(0xff, data >> 4);
 	ptr[1] = mask_sym(0xff, data & 0xf);
