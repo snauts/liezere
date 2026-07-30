@@ -65,12 +65,23 @@ extern const byte symbols[];
 #define set_attributes(from, c, len)
 #endif
 
+#if defined(ZXS)
 #define	CTRL_FIRE	0x10
 #define	CTRL_DIR	0x0f
 #define	CTRL_UP		0x08
 #define	CTRL_DOWN	0x04
 #define	CTRL_LEFT	0x02
 #define	CTRL_RIGHT	0x01
+#endif
+
+#if defined(CPC)
+#define	CTRL_FIRE	0x30
+#define	CTRL_DIR	0x0f
+#define	CTRL_DOWN	0x08
+#define	CTRL_RIGHT	0x04
+#define	CTRL_UP		0x02
+#define	CTRL_LEFT	0x01
+#endif
 
 #define	IMAGE_DATA(x)	((x) + 2)
 
@@ -549,6 +560,7 @@ static byte good_spot(byte x, byte y) {
 }
 
 static byte read_QAOP(void) {
+#if defined(ZXS)
     byte ret = 0;
     byte hit = in_key(0x7f);
     ret |= hit & (hit >> 2);
@@ -558,6 +570,13 @@ static byte read_QAOP(void) {
     ret |= (in_key(0xfd) & 1);
     ret <<= 2;
     ret |= (in_key(0xdf) & 3);
+#endif
+#if defined(CPC)
+    byte ret = 0;
+    ret |= (cpc_key(0x5) & 0x80) >> 3;
+    ret |= (cpc_key(0x0) & 0x07) << 1;
+    ret |= (cpc_key(0x1) & 0x01);
+#endif
     return ~ret;
 }
 
