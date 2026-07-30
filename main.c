@@ -924,6 +924,9 @@ static void put_fish(void) {
 
 static void show_lake(void) {
     clear_screen();
+    select_palette(1, 0x46);
+    select_palette(2, 0x40);
+    select_palette(3, 0x4B);
     hole_check = false;
     show_frame(IMG_EZERS);
     show_series(apkaime);

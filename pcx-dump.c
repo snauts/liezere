@@ -101,8 +101,8 @@ static unsigned char get_color(unsigned char *color) {
 	0, 0, 0, 1, 2, 2, 3, 0,
     };
     static const unsigned char default_map[] = {
-	0, 1, 0, 0, 0, 0, 2, 3,
-	0, 1, 0, 0, 0, 0, 2, 3,
+	0, 1, 0, 0, 0, 1, 2, 2,
+	0, 1, 0, 0, 0, 1, 2, 3,
     };
     if (is_file("ranges.pcx")) {
 	ptr = ranges_map;
