@@ -1226,15 +1226,15 @@ static void wait_and_update_seed(void) {
     seed = (seed << 5) | (some & 0x1f);
 }
 
-static void text_to_cyan(void) {
-    select_palette(3, 0x53);
+static void text_wall_color(void) {
+    select_palette(3, 0x4B);
     reset_attributes(5);
 }
 
 static void wall_of_text(const Text *text) {
     clear_screen();
     show_text_series(text);
-    text_to_cyan();
+    text_wall_color();
     wait_space();
 }
 
@@ -1342,10 +1342,20 @@ static void game_done(void) {
     statistics();
 }
 
+static void select_panel_color(byte num) {
+    switch (num) {
+    case 0:
+	select_palette(1, 0x55);
+	select_palette(2, 0x4A);
+	break;
+    }
+}
+
 static void current_panel(byte num) {
     seed = 1;
     clear_screen();
-    text_to_cyan();
+    text_wall_color();
+    select_panel_color(num);
     draw_panel(panels + num);
 }
 
