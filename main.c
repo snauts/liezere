@@ -877,14 +877,14 @@ static void block_fill(byte y1, byte y2, byte color) {
 static void show_forest(void) {
     clear_screen();
 #ifdef CPC
-    select_palette(1, 0x46);
-    select_palette(3, 0x4B);
     block_fill(0x00, 0x20, 0xf0);
     block_fill(0x70, 0xc0, 0xff);
 #endif
     set_attributes(0x000, 0x28, 0x80);
     set_attributes(0x1c0, 0x7f, 0x140);
     show_series(horizonts);
+    select_palette(1, 0x46);
+    select_palette(3, 0x4B);
     wait_vblank();
 }
 
@@ -944,12 +944,12 @@ static void put_fish(void) {
 
 static void show_lake(void) {
     clear_screen();
-    select_palette(1, 0x46);
-    select_palette(2, 0x40);
-    select_palette(3, 0x4B);
     hole_check = false;
     show_frame(IMG_EZERS);
     show_series(apkaime);
+    select_palette(1, 0x46);
+    select_palette(2, 0x40);
+    select_palette(3, 0x4B);
     draw_holes();
     put_fish();
     put_time();
@@ -1397,11 +1397,11 @@ static void game_fail(void) {
 static void show_tutorial(void) {
     wall_of_text(tutorial);
     clear_screen();
+    show_frame(IMG_RANGES);
+    show_text_series(fish_map);
     select_palette(1, 0x4F);
     select_palette(2, 0x59);
     select_palette(3, 0x43);
-    show_frame(IMG_RANGES);
-    show_text_series(fish_map);
     wait_space();
     reset();
 }
