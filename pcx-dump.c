@@ -10,11 +10,11 @@
 #include <ctype.h>
 
 #if defined(ZXS)
-#define PiB 8
+static int PiB = 8;
 #endif
 
 #if defined(CPC)
-#define PiB 4
+static int PiB = 4;
 #endif
 
 static char option;
@@ -201,7 +201,10 @@ static unsigned char consume_pixels(unsigned char *buf) {
     unsigned char ret = 0;
     for (int i = 0; i < PiB; i++) {
 	ret = ret << 1;
-	ret |= ((buf[i] >> 1) & 1) | ((buf[i] << 4) & 0x10);
+	ret |= ((buf[i] >> 1) & 0x01);
+#if PiB == 4
+	ret |= ((buf[i] << 4) & 0x10);
+#endif
     }
     return ret;
 }
@@ -373,6 +376,7 @@ int main(int argc, char **argv) {
 	save_image(argv[2]);
 	break;
     case 'b':
+	PiB = 8;
 	save_bitmap(argv[2]);
 	break;
     case 'x':
