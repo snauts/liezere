@@ -676,13 +676,13 @@ static void put_digit(byte digit, byte x, byte y) {
     x = x << 1;
 #endif
     for (byte i = 0; i < 8; i++) {
-#if defined(ZXS)
-	BYTE(map_y[y + i] + x) = *addr++;
-#endif
 #if defined(CPC)
 	byte bits = *addr++;
 	BYTE(map_y[y + i] + x + 0) = mask_sym(sky, bits >> 4);
 	BYTE(map_y[y + i] + x + 1) = mask_sym(sky, bits & 0xf);
+#endif
+#if defined(ZXS)
+	BYTE(map_y[y + i] + x) = *addr++;
 #endif
     }
 }
@@ -1231,12 +1231,19 @@ static byte pull_fish(void) {
 }
 
 static byte ice_fish(void) {
+    sky = 0xff;
     clear_screen();
     reset_attributes(0x7d);
     set_attributes(0x00, 0x78, 0x20);
     decompress(COPENE1, IMG_COPENE(1)->img);
     decompress(COPENE2, IMG_COPENE(2)->img);
+#ifdef CPC
+    block_fill(0x00, 0xc0, 0xff);
+#endif
     show_series(IMG_HOLE);
+    select_palette(1, 0x43);
+    select_palette(2, 0x44);
+    select_palette(3, 0x4b);
     starting_line();
     put_time();
 
