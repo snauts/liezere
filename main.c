@@ -890,17 +890,19 @@ static void walk_lake(void) {
     draw_cursor();
 }
 
+#if defined(CPC)
 static void block_fill(byte y1, byte y2, byte color) {
     for (; y1 < y2; y1++) memset(map_y[y1], color, 0x40);
 }
+#else
+#define block_fill(y1, y2, color)
+#endif
 
 static void show_forest(void) {
     sky = 0xf0;
     clear_screen();
-#ifdef CPC
     block_fill(0x00, 0x20, 0xf0);
     block_fill(0x70, 0xc0, 0xff);
-#endif
     set_attributes(0x000, 0x28, 0x80);
     set_attributes(0x1c0, 0x7f, 0x140);
     show_series(horizonts);
@@ -1250,9 +1252,7 @@ static byte ice_fish(void) {
     set_attributes(0x00, 0x78, 0x20);
     decompress(COPENE1, IMG_COPENE(1)->img);
     decompress(COPENE2, IMG_COPENE(2)->img);
-#ifdef CPC
     block_fill(0x00, 0xc0, 0xff);
-#endif
     show_series(IMG_HOLE);
     select_palette(1, 0x53);
     select_palette(2, 0x4c);
