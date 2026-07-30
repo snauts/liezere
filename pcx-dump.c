@@ -30,7 +30,7 @@ typedef struct {
 
 static const char *file_name = NULL;
 
-static int is_file(const char *name) {
+static int __attribute__((unused)) is_file(const char *name) {
     return strcmp(file_name, name) == 0;
 }
 
