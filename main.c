@@ -1434,7 +1434,7 @@ static void game_done(void) {
 
 static void select_panel_color(byte num) {
     static const byte c1[] = { 0x5B, 0x55, 0x4C, 0x4C };
-    static const byte c2[] = { 0x59, 0x4A, 0x59, 0x5e };
+    static const byte c2[] = { 0x59, 0x4A, 0x59, 0x43 };
     select_palette(1, c1[num]);
     select_palette(2, c2[num]);
 }
