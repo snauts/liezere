@@ -1422,7 +1422,11 @@ static void game_done(void) {
     fade_out_screen();
     wall_of_text(goodbye);
     fade_out_screen();
+    text_mask = 0xf0;
     show_frame(IMG_ENDING);
+    select_palette(1, 0x44);
+    select_palette(2, 0x43);
+    select_palette(3, 0x55);
     show_text(&the_end);
     wait_space();
     statistics();
@@ -1462,8 +1466,8 @@ static void show_tutorial(void) {
     show_frame(IMG_RANGES);
     show_text_series(fish_map);
     select_palette(1, 0x4F);
-    select_palette(2, 0x59);
-    select_palette(3, 0x43);
+    select_palette(2, 0x43);
+    select_palette(3, 0x59);
     wait_space();
     reset();
 }

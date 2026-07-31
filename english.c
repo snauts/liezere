@@ -124,10 +124,10 @@ const Text choices[] = {
 };
 
 const Text fish_map[] = {
-    { .pos = POS(204,  92), .str = "Lunker" },
-    { .pos = POS(145, 115), .str = "Perches" },
-    { .pos = POS(80,  143), .str = "Ruffes" },
-    { .pos = POS(22,  170), .str = "Snags" },
+    { .pos = POS(204,  92), .mask = 0xff, .str = "Lunker" },
+    { .pos = POS(145, 115), .mask = 0xff, .str = "Perches" },
+    { .pos = POS(80,  143), .mask = 0x0f, .str = "Ruffes" },
+    { .pos = POS(22,  170), .mask = 0xf0, .str = "Snags" },
     TEXT_SENTINEL,
 };
 

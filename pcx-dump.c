@@ -82,6 +82,14 @@ static char *rm_ext(const char *src) {
     return buf;
 }
 
+#if defined(CPC)
+static int use_alternate_mapping(void) {
+    return is_file("ranges.pcx")
+	|| is_file("beigas.pcx")
+	|| is_file("niedres.pcx");
+}
+#endif
+
 static unsigned char get_color(unsigned char *color) {
     unsigned char result = 0;
     if (color[0] >= 0x80) result |= 0x02;
@@ -96,16 +104,16 @@ static unsigned char get_color(unsigned char *color) {
 
 #if defined(CPC)
     const unsigned char *ptr;
-    static const unsigned char ranges_map[] = {
-	0, 0, 0, 1, 2, 2, 3, 2,
-	0, 0, 0, 1, 2, 2, 3, 0,
+    static const unsigned char alternate_map[] = {
+	0, 1, 0, 1, 3, 3, 2, 2,
+	0, 3, 0, 1, 3, 3, 2, 2,
     };
     static const unsigned char default_map[] = {
 	0, 1, 0, 2, 2, 1, 2, 3,
 	0, 2, 2, 2, 2, 1, 2, 3,
     };
-    if (is_file("ranges.pcx") || is_file("niedres.pcx")) {
-	ptr = ranges_map;
+    if (use_alternate_mapping()) {
+	ptr = alternate_map;
     }
     else {
 	ptr = default_map;
