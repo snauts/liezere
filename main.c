@@ -1345,10 +1345,12 @@ static byte get_rank(byte i) {
 }
 
 static byte show_stars(byte i, byte y) {
+    text_mask = 0xff;
     byte rank = get_rank(i);
     static const char str[] = "&4&4&4";
     put_str(str + ((3 - rank) << 1), 196, y);
     set_attributes(((y & ~7) << 2) + 0x18, 0x46, 4);
+    text_mask = 0x0f;
     return rank;
 }
 
@@ -1378,7 +1380,10 @@ static void statistics(void) {
     byte rank = 0, y = 64;
 
     clear_screen();
+    text_mask = 0x0f;
     reset_attributes(0x4);
+    select_palette(2, 0x59);
+    select_palette(3, 0x43);
     show_text_series(stat_title);
     for (byte i = 0; i < STATS_COUNT; i++) {
 	const char *str = stat_strs[i];
