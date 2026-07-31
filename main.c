@@ -79,10 +79,10 @@ extern const byte symbols[];
 #if defined(CPC)
 #define	CTRL_FIRE	0x10
 #define	CTRL_DIR	0x0f
-#define	CTRL_DOWN	0x08
-#define	CTRL_RIGHT	0x04
-#define	CTRL_UP		0x02
-#define	CTRL_LEFT	0x01
+#define	CTRL_RIGHT	0x08
+#define	CTRL_LEFT	0x04
+#define	CTRL_DOWN	0x02
+#define	CTRL_UP		0x01
 #endif
 
 #define	IMAGE_DATA(x)	((x) + 2)
@@ -600,10 +600,10 @@ static byte read_QAOP(void) {
     ret |= (in_key(0xdf) & 3);
 #endif
 #if defined(CPC)
-    byte ret = 0;
+    byte ret = 0, dir = cpc_key(0x0);
     ret |= (cpc_key(0x5) & 0x80) >> 3;
-    ret |= (cpc_key(0x0) & 0x07) << 1;
-    ret |= (cpc_key(0x1) & 0x01);
+    ret |= (dir & 0x01) | ((dir & 0x04) >> 1);
+    ret |= ((cpc_key(0x1) & 0x01) | (dir & 0x02)) << 2;
 #endif
     return ~ret;
 }
