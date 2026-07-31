@@ -96,6 +96,32 @@ static int use_alternate_mapping(void) {
 static int use_alternate_panel(void) {
     return is_prefix("panel_2") || is_prefix("panel_3");
 }
+
+const unsigned char *color_table = NULL;
+
+static void select_color(void) {
+    static const unsigned char alternate_map[] = {
+	0, 1, 0, 1, 3, 3, 2, 2,
+	0, 3, 0, 1, 3, 3, 2, 2,
+    };
+    static const unsigned char default_map[] = {
+	0, 1, 0, 2, 2, 1, 2, 3,
+	0, 2, 2, 2, 2, 1, 2, 3,
+    };
+    static const unsigned char panel_map[] = {
+	0, 1, 1, 2, 2, 3, 2, 3,
+	0, 2, 2, 2, 2, 1, 2, 3,
+    };
+    if (use_alternate_mapping()) {
+	color_table = alternate_map;
+    }
+    else if (use_alternate_panel()) {
+	color_table = panel_map;
+    }
+    else {
+	color_table = default_map;
+    }
+}
 #endif
 
 static unsigned char get_color(unsigned char *color) {
@@ -111,29 +137,7 @@ static unsigned char get_color(unsigned char *color) {
     }
 
 #if defined(CPC)
-    const unsigned char *ptr;
-    static const unsigned char alternate_map[] = {
-	0, 1, 0, 1, 3, 3, 2, 2,
-	0, 3, 0, 1, 3, 3, 2, 2,
-    };
-    static const unsigned char default_map[] = {
-	0, 1, 0, 2, 2, 1, 2, 3,
-	0, 2, 2, 2, 2, 1, 2, 3,
-    };
-    static const unsigned char panel_map[] = {
-	0, 1, 1, 2, 2, 3, 2, 3,
-	0, 2, 2, 2, 2, 1, 2, 3,
-    };
-    if (use_alternate_mapping()) {
-	ptr = alternate_map;
-    }
-    else if (use_alternate_panel()) {
-	ptr = panel_map;
-    }
-    else {
-	ptr = default_map;
-    }
-    return ptr[(result & 0x07) + ((result & 0x40) >> 3)];
+    return color_table[(result & 0x07) + ((result & 0x40) >> 3)];
 #else
     return result;
 #endif
@@ -178,6 +182,7 @@ static unsigned char *read_pcx(const char *file) {
 	}
     }
 
+    select_color();
     for (i = 0; i < unpacked_size; i++) {
 	int entry = palette_offset + 3 * pixels[i];
 	pixels[i] = get_color(buf + entry);
