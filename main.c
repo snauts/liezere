@@ -800,7 +800,7 @@ static byte total_distance(void) {
 
 static void clear_weight(void) {
     for (byte y = 16; y < 24; y++) {
-	memset(map_y[y], 0, 8);
+	memset(map_y[y], 0, ZXS_CPC(8, 16));
     }
 }
 
@@ -860,8 +860,8 @@ static void move_cursor(void) {
 	cooldown++;
     }
     if (hole_check) {
-	set_attributes(0x40, 0, 8);
 	hole_check = false;
+	clear_weight();
     }
 }
 
