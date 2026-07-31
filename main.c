@@ -1429,6 +1429,7 @@ static void fade_out_screen(void) {
 
 static void game_done(void) {
     fade_out_screen();
+    text_mask = 0xff;
     wall_of_text(goodbye);
     fade_out_screen();
     text_mask = 0xf0;
