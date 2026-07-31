@@ -1450,6 +1450,7 @@ static void select_panel_color(byte num) {
 static void current_panel(byte num) {
     seed = 1;
     clear_screen();
+    text_mask = 0xff;
     text_wall_color();
     select_panel_color(num);
     draw_panel(panels + num);
