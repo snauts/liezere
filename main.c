@@ -586,6 +586,7 @@ static void set_pixel(byte x, byte y) {
 }
 
 static byte good_spot(byte x, byte y) {
+    if (y >= 192) return false;
 #if defined(ZXS)
     return is_white(x, y) && get_pixel(x, y);
 #endif
