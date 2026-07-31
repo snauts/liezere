@@ -122,6 +122,8 @@ static void select_color(void) {
 	color_table = default_map;
     }
 }
+#else
+static void select_color(void) { }
 #endif
 
 static unsigned char get_color(unsigned char *color) {
