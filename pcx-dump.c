@@ -34,6 +34,10 @@ static int __attribute__((unused)) is_file(const char *name) {
     return strcmp(file_name, name) == 0;
 }
 
+static int __attribute__((unused)) is_prefix(const char *name) {
+    return strncmp(file_name, name, strlen(name)) == 0;
+}
+
 int estimate(int size);
 int compress(void *dst, void *src, int size);
 
@@ -88,6 +92,10 @@ static int use_alternate_mapping(void) {
 	|| is_file("beigas.pcx")
 	|| is_file("niedres.pcx");
 }
+
+static int use_alternate_panel(void) {
+    return is_prefix("panel_2") || is_prefix("panel_3");
+}
 #endif
 
 static unsigned char get_color(unsigned char *color) {
@@ -112,8 +120,15 @@ static unsigned char get_color(unsigned char *color) {
 	0, 1, 0, 2, 2, 1, 2, 3,
 	0, 2, 2, 2, 2, 1, 2, 3,
     };
+    static const unsigned char panel_map[] = {
+	0, 1, 1, 2, 2, 3, 2, 3,
+	0, 2, 2, 2, 2, 3, 2, 3,
+    };
     if (use_alternate_mapping()) {
 	ptr = alternate_map;
+    }
+    else if (use_alternate_panel()) {
+	ptr = panel_map;
     }
     else {
 	ptr = default_map;
