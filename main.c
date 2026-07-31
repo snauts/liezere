@@ -582,7 +582,8 @@ static byte good_spot(byte x, byte y) {
     return is_white(x, y) && get_pixel(x, y);
 #endif
 #if defined(CPC)
-    return get_pixel(x, y);
+    byte pixel = get_pixel(x, y);
+    return (pixel & 0x0f) && (pixel & 0xf0);
 #endif
 }
 
