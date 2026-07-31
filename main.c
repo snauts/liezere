@@ -757,6 +757,7 @@ static word square(byte value) {
 }
 
 static byte bisect(word value, byte a, byte b) {
+  repeat:
     if (a == b) {
 	return a;
     }
@@ -764,10 +765,12 @@ static byte bisect(word value, byte a, byte b) {
 	byte middle = a + ((b - a) >> 1);
 
 	if (value < square(middle)) {
-	    return bisect(value, a, middle);
+	    b = middle;
+	    goto repeat;
 	}
 	if (middle > a) {
-	    return bisect(value, middle, b);
+	    a = middle;
+	    goto repeat;
 	}
 	else {
 	    return b;
