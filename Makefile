@@ -98,7 +98,7 @@ cpc:
 
 zxs: prg tap
 
-main.o: cpc.c
+main.o: data.h
 
 data.o: data.h
 

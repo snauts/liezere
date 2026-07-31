@@ -122,7 +122,7 @@ static unsigned char get_color(unsigned char *color) {
     };
     static const unsigned char panel_map[] = {
 	0, 1, 1, 2, 2, 3, 2, 3,
-	0, 2, 2, 2, 2, 3, 2, 3,
+	0, 2, 2, 2, 2, 1, 2, 3,
     };
     if (use_alternate_mapping()) {
 	ptr = alternate_map;
