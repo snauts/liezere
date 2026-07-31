@@ -1392,12 +1392,24 @@ static void statistics(void) {
 static void fade_out_screen(void) {
     for (byte i = 0; i < 8; i++) {
 	wait_vblank();
+#if defined(ZXS)
 	for (word addr = 0x5800; addr < 0x5b00; addr++) {
 	    byte x = BYTE(addr);
 	    if (x & 0x07) x -= 0x01;
 	    if (x & 0x38) x -= 0x08;
 	    BYTE(addr) = x;
 	}
+#endif
+
+#if defined(CPC)
+	static const byte pal[] = {
+	    0x40, 0x40, 0x5E, 0x46, 0x56,
+	    0x58, 0x5C, 0x44, 0x54, 0x54,
+	};
+	select_palette(1, pal[i + 0]);
+	select_palette(2, pal[i + 1]);
+	select_palette(3, pal[i + 2]);
+#endif
     }
 }
 
@@ -1413,6 +1425,10 @@ static void game_done(void) {
 
 static void select_panel_color(byte num) {
     switch (num) {
+    case 0:
+	select_palette(1, 0x5B);
+	select_palette(2, 0x59);
+	break;
     case 1:
 	select_palette(1, 0x55);
 	select_palette(2, 0x4A);
