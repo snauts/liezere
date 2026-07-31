@@ -156,8 +156,16 @@ static byte in_key(byte a) {
 }
 
 static byte in_joy(byte a) {
+#if defined(ZXS)
     __asm__("in a, (#0x1f)"); a;
     return a;
+#endif
+#if defined(CPC)
+    __asm__("di");
+    a = cpc_key(9);
+    __asm__("ei");
+    return (~a & 0x1f) | ((~a >> 1) & 0x10);
+#endif
 }
 
 #if defined(ZXS)
