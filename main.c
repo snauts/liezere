@@ -316,6 +316,10 @@ static void setup_system(void) {
     text_mask = 0xff;
     setup_system_amstrad_cpc();
 #endif
+
+#if defined(C64)
+    setup_system_c64();
+#endif
 }
 
 static void precalculate(void) {
