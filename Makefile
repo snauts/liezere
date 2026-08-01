@@ -97,9 +97,9 @@ cpc:
 	CODE=0x1000 DATA=0x7800	TYPE=-DCPC make prg dsk
 
 c64:
-	LFLAGS="-n -m -i -b CODE=0x07ff -b BSS=0x6400 -b ZP=0x2" \
+	LFLAGS="-n -m -i -b CODE=0x07ff -b BSS=0x5400 -b ZP=0x2" \
 	CFLAGS="--no-zp-spill --opt-code-speed" ARCH=-mmos6502 \
-		CODE=0x07ff DATA=0x6400 TYPE=-DC64 make prg
+		CODE=0x07ff DATA=0x5400 TYPE=-DC64 make prg
 	c1541 -format liezere,00 d64 liezere.d64 \
 		-attach liezere.d64 -write liezere.bin liezere
 	x64 -autostartprgmode 1 +confirmonexit liezere.d64
