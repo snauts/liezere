@@ -9,4 +9,5 @@ bin2tap
 *.map
 *.tap
 *.dsk
+*.d64
 *.o
