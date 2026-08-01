@@ -40,6 +40,7 @@ void put_tick(char c, byte x, byte y) {
 const Text tutorial[] = {
     { .pos = POS(32,   8), .str = "Lai saglab`atu motiv`aciju iet cop`et," },
     { .pos = POS(32,  20), .str = "katru dienu j`ano^ker lielais makans." },
+#if defined(ZXS)
     { .pos = POS(32,  48), .str = "1. Valk`aties pa ezeru Q&0 A&1 O&2 P&3" },
     { .pos = POS(32,  60), .str = "2. Izv`el`eties copes vietu SPACE" },
     { .pos = POS(32,  72), .str = "3. Izurbt caurumu led`u O&2 P&3" },
@@ -47,6 +48,15 @@ const Text tutorial[] = {
     { .pos = POS(46,  96), .str = "Zivis ne^kersies, ja l`eni ~gorg`as" },
     { .pos = POS(32, 108), .str = "5. Lai piecirstu zivi j`aspie~z Q&0" },
     { .pos = POS(32, 120), .str = "6. Izvilkt zivi var spie~zot O&2 P&3" },
+#else
+    { .pos = POS(32,  48), .str = "1. Valk`aties pa ezeru &0 &1 &2 &3" },
+    { .pos = POS(32,  60), .str = "2. Izv`el`eties copes vietu SPACE" },
+    { .pos = POS(32,  72), .str = "3. Izurbt caurumu led`u &2 &3" },
+    { .pos = POS(32,  84), .str = "4. ^Gorg`at mormeni var ar SPACE" },
+    { .pos = POS(46,  96), .str = "Zivis ne^kersies, ja l`eni ~gorg`as" },
+    { .pos = POS(32, 108), .str = "5. Lai piecirstu zivi j`aspie~z &0" },
+    { .pos = POS(32, 120), .str = "6. Izvilkt zivi var spie~zot &2 &3" },
+#endif
     { .pos = POS(46, 132), .str = "Velkot p`ar`ak `atri p`artr`uks aukla" },
     { .pos = POS(46, 144), .str = "Velkot p`ar`ak l`eni zivs aizies" },
     { .pos = POS(32, 172), .str = "Jo liel`aka zivs, jo tuv`ak t`a makanam" },
