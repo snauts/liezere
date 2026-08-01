@@ -9,7 +9,7 @@
 #include <fcntl.h>
 #include <ctype.h>
 
-#if defined(ZXS)
+#if defined(ZXS) || defined(C64)
 static int PiB = 8;
 #endif
 

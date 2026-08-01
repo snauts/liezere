@@ -96,6 +96,9 @@ dsk:
 cpc:
 	CODE=0x1000 DATA=0x7800	TYPE=-DCPC make prg dsk
 
+c64:
+	CODE=0x07ff TYPE=-DC64 ARCH=-mmos6502 make prg
+
 zxs: prg tap
 
 main.o: data.h
