@@ -362,12 +362,12 @@ static void clear_screen(void) {
 static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
     byte shift = x & ZXS_CPC(7, 3);
 #if defined(C64)
-    byte *ptr = map_y[y] + (x & 0xf8);
     for (byte i = 0; i < n; i++) {
 	byte data = *addr++;
+	byte *ptr = map_y[y & 0xf8] + (y & 0x07) + (x & 0xf8);
 	ptr[0] |= (data >> shift);
 	ptr[8] |= (data << (8 - shift));
-	ptr++;
+	y++;
     }
 #else
     byte offset = x >> ZXS_CPC(3, 2);
