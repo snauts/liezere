@@ -13,6 +13,9 @@ static void interrupt(void) __naked {
 
 static void setup_system_c64(void) {
     __asm__ ("sei");
+    BYTE(0xdd00) = (BYTE(0xdc00) & ~3) | 1;
+
+    BYTE(0x0001) = 0x35;
     BYTE(0xd011) = 0x2b; /* bitmap mode */
     BYTE(0xd016) = 0xc8; /* standard mode */
     BYTE(0xd018) = 0x38; /* memory regions */
