@@ -14,12 +14,12 @@ CFLAGS += --nostdinc --nostdlib --no-std-crt0
 CFLAGS += --code-loc $(CODE) --data-loc $(DATA)
 CFLAGS += -D$(LANGUAGE)
 
-LFLAGS += -n -m -i -b _CODE=$(CODE) -b _DATA=$(DATA)
+LFLAGS ?= -n -m -i -b _CODE=$(CODE) -b _DATA=$(DATA)
 
 SRC := main.c data.c play.c english.c latvian.c spanish.c
 OBJ := $(subst .c,.o,$(SRC))
 
-all:	msg cpc
+all:	msg c64
 	@echo liezere build done
 	@echo binary size $(shell $(SIZE))
 
@@ -97,13 +97,17 @@ cpc:
 	CODE=0x1000 DATA=0x7800	TYPE=-DCPC make prg dsk
 
 c64:
-	CODE=0x07ff TYPE=-DC64 ARCH=-mmos6502 make prg
+	LFLAGS="-n -m -i -b CODE=0x07ff -b BSS=0x6c00 -b ZP=0x2" \
+	CFLAGS="--no-zp-spill --opt-code-speed" ARCH=-mmos6502 \
+		CODE=0x07ff DATA=0x6c00 TYPE=-DC64 make prg
 
 zxs: prg tap
 
 main.o: data.h
 
 data.o: data.h
+
+play.o: data.h
 
 latvian.o: data.h
 

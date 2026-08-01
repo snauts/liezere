@@ -13,9 +13,29 @@
 #define JERK_TIME	5
 
 void reset(void);
+#if defined(C64)
+static void start_up(void) __naked {
+    __asm__(".db 0x01, 0x08, 0x0c, 0x08, 0x0a, 0x00, 0x9e, 0x20");
+    __asm__(".db 0x32, 0x30, 0x36, 0x32, 0x00, 0x00, 0x00");
+    __asm__("jmp _reset");
+}
+#else
 void start_up(void) __naked {
     __asm__("jp _reset");
 }
+#endif
+
+#if defined(__SDCC_mos6502)
+void sdcc_deps(void) __naked {
+    __asm__(".area ZP (PAG)");
+    __asm__("REGTEMP::	.ds 8");
+    __asm__("DPTR::	.ds 2");
+    __asm__(".area CODE");
+}
+void _sdcc_indirect_jsr(void) __naked {
+    __asm__("jmp [REGTEMP]");
+}
+#endif
 
 static volatile byte vblank;
 static const byte *cached;
@@ -44,7 +64,11 @@ extern const Text the_end;
 extern const Panel panels[];
 extern const byte symbols[];
 
+#if defined(__SDCC_z80)
 #define DISABLE_IRQ()	__asm__("di");
+#else
+#define DISABLE_IRQ()	__asm__ ("sei");
+#endif
 
 #if defined(ZXS)
 #define ZXS_CPC(a, b)	(a)
@@ -62,6 +86,15 @@ extern const byte symbols[];
 #define SETUP_STACK()	__asm__("ld sp, #0x81fc")
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
 #define IRQ_BASE	0x8200
+
+#define set_attributes(from, c, len)
+#define reset_attributes(color)
+#endif
+
+#if defined(C64)
+#define ZXS_CPC(a, b)	(a)
+#define SETUP_STACK()	__asm__("ldx #0xff"); __asm__("txs");
+#define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
 
 #define set_attributes(from, c, len)
 #define reset_attributes(color)
@@ -87,6 +120,7 @@ extern const byte symbols[];
 
 #define	IMAGE_DATA(x)	((x) + 2)
 
+#if defined(__SDCC_z80)
 static void interrupt(void) __naked {
     __asm__("di");
     __asm__("push af");
@@ -133,9 +167,14 @@ static void setup_irq(byte base) {
     __asm__("im 2");
     __asm__("ei");
 }
+#endif
 
 #if defined(CPC)
 #include "cpc.c"
+#endif
+
+#if defined(C64)
+#include "c64.c"
 #endif
 
 static void wait_vblank(void) {
@@ -159,12 +198,13 @@ static byte in_joy(byte a) {
 #if defined(ZXS)
     __asm__("in a, (#0x1f)"); a;
     return a;
-#endif
-#if defined(CPC)
+#elif defined(CPC)
     __asm__("di");
     a = cpc_key(9);
     __asm__("ei");
     return (~a & 0x1f) | ((~a >> 1) & 0x10);
+#elif defined(C64)
+    return a;
 #endif
 }
 
@@ -177,9 +217,11 @@ static void out_fe(byte data) {
 #endif
 
 static byte inc10(byte a) __naked {
+#if defined(__SDCC_z80)
     __asm__("inc a"); a;
     __asm__("daa");
     __asm__("ret");
+#endif
 }
 
 void memset(byte *ptr, byte data, word len) {
@@ -191,6 +233,7 @@ static void strcpy(char *dst, const char *src) {
 }
 
 void memcpy(void *dst, const void *src, word len) __naked {
+#if defined(__SDCC_z80)
     __asm__("___memcpy:");
     __asm__("ex de, hl");
     __asm__("pop iy");
@@ -204,6 +247,7 @@ void memcpy(void *dst, const void *src, word len) __naked {
     __asm__("done:");
     __asm__("jp (iy)");
     dst; src; len;
+#endif
 }
 
 static word random(void) {
@@ -243,12 +287,14 @@ static void swoosh(int8 f, int8 n, int8 s) {
 }
 
 static void setup_system(void) {
+#if defined(__SDCC_z80)
     byte top = (byte) ((IRQ_BASE >> 8) - 1);
     word jmp_addr = (top << 8) | top;
     BYTE(jmp_addr + 0) = 0xc3;
     WORD(jmp_addr + 1) = ADDR(&interrupt);
     memset((byte *) IRQ_BASE, top, 0x101);
     setup_irq(IRQ_BASE >> 8);
+#endif
 
 #if defined(CPC)
     text_mask = 0xff;
@@ -403,8 +449,7 @@ static void corner_symbol(byte *sym) {
     for (byte *ptr = SCREEN(0x10de); ptr < SCREEN(0x1800); ptr += 0x100) {
 	*ptr = *sym++;
     }
-#endif
-#if defined(CPC)
+#elif defined(CPC)
     byte *ptr = SCREEN(0x071c);
     while (ptr > SCREEN(0x0000)) {
 	byte data = *sym++;

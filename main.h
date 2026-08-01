@@ -3,7 +3,9 @@ typedef signed short int16;
 typedef unsigned char byte;
 typedef unsigned short word;
 
+#if defined(__SDCC_z80)
 #define AY
+#endif
 
 #define false		0
 #define true		1
@@ -27,6 +29,10 @@ typedef unsigned short word;
 #define SCREEN(x)	PTR(0xc000 + (x))
 #define SYMBOL(x) 	PTR(0xb800 + ((x) << 3))
 #define STAGING_AREA	PTR(0x8400)
+#endif
+
+#if defined(C64)
+#define SYMBOL(x) 	PTR(0x0000 + ((x) << 3))
 #endif
 
 #define POS(X, Y)	{ .x = X, .y = Y }
