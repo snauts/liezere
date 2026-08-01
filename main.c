@@ -602,6 +602,9 @@ static byte read_123(void) {
 #if defined(CPC)
     return (~in_key(8) & 3) | ((~in_key(7) & 2) << 1);
 #endif
+#if defined(C64)
+    return c64_key(BIT(7), BIT(0));
+#endif
 }
 
 static void animate_title_line(void) {
