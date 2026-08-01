@@ -244,8 +244,8 @@ static void strcpy(char *dst, const char *src) {
     do { *(dst++) = *(src++); } while (src[-1]);
 }
 
-void memcpy(void *dst, const void *src, word len) __naked {
 #if defined(__SDCC_z80)
+void memcpy(void *dst, const void *src, word len) __naked {
     __asm__("___memcpy:");
     __asm__("ex de, hl");
     __asm__("pop iy");
@@ -259,8 +259,12 @@ void memcpy(void *dst, const void *src, word len) __naked {
     __asm__("done:");
     __asm__("jp (iy)");
     dst; src; len;
-#endif
 }
+#else
+static void memcpy(byte *dst, const byte *src, word len) {
+    while (len-- > 0) { *dst++ = *src++; }
+}
+#endif
 
 static word random(void) {
     seed ^= seed << 7;
@@ -847,9 +851,15 @@ static byte distance(byte i) {
     return (c >= a && c >= b) ? sqrt(c) : 255;
 }
 
+static void copy_pos(Pos *a, Pos *b) {
+    a->x = b->x;
+    a->y = b->y;
+}
+
 static void remove_fish(byte place) {
     for (byte i = place + 1; i < count; i++) {
-	fish[i - 1] = fish[i];
+	Pos *ptr = fish + i;
+	copy_pos(ptr - 1, ptr);
     }
     count--;
 }
@@ -998,9 +1008,9 @@ static void animate_drill(void) {
 
 static void add_hole(void) {
     hole_now = hole_end;
-    hole_now->pos = pos;
     hole_now->weight = 0;
     hole_now->distance = 0;
+    copy_pos(&hole_now->pos, &pos);
     hole_end++;
 }
 
