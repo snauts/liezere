@@ -1316,4 +1316,10 @@ void select_music(void *ptr) {
     start_music();
 }
 
-#endif // AY
+#else // AY
+void stop_music(void) {
+}
+
+void select_music(void *ptr) {
+}
+#endif

@@ -33,6 +33,7 @@ typedef unsigned short word;
 
 #if defined(C64)
 #define SYMBOL(x) 	PTR(0x0000 + ((x) << 3))
+#define STAGING_AREA	PTR(0x0000)
 #endif
 
 #define POS(X, Y)	{ .x = X, .y = Y }

@@ -78,7 +78,6 @@ extern const byte symbols[];
 
 #define set_attributes(from, c, len) memset(COLOUR(from), c, len);
 #define reset_attributes(color) set_attributes(0, color, 0x300)
-#define select_palette(index, color)
 #endif
 
 #if defined(CPC)
@@ -100,6 +99,10 @@ extern const byte symbols[];
 #define reset_attributes(color)
 #endif
 
+#if !defined(CPC)
+#define select_palette(index, color)
+#endif
+
 #if defined(ZXS)
 #define	CTRL_FIRE	0x10
 #define	CTRL_DIR	0x0f
@@ -110,6 +113,15 @@ extern const byte symbols[];
 #endif
 
 #if defined(CPC)
+#define	CTRL_FIRE	0x10
+#define	CTRL_DIR	0x0f
+#define	CTRL_RIGHT	0x08
+#define	CTRL_LEFT	0x04
+#define	CTRL_DOWN	0x02
+#define	CTRL_UP		0x01
+#endif
+
+#if defined(C64)
 #define	CTRL_FIRE	0x10
 #define	CTRL_DIR	0x0f
 #define	CTRL_RIGHT	0x08
@@ -642,8 +654,8 @@ static byte good_spot(byte x, byte y) {
 }
 
 static byte read_QAOP(void) {
-#if defined(ZXS)
     byte ret = 0;
+#if defined(ZXS)
     byte hit = in_key(0x7f);
     ret |= hit & (hit >> 2);
     ret <<= 1;
@@ -654,7 +666,7 @@ static byte read_QAOP(void) {
     ret |= (in_key(0xdf) & 3);
 #endif
 #if defined(CPC)
-    byte ret = 0, dir = cpc_key(0x0);
+    byte dir = cpc_key(0x0);
     ret |= (cpc_key(0x5) & 0x80) >> 3;
     ret |= (dir & 0x01) | ((dir & 0x04) >> 1);
     ret |= ((cpc_key(0x1) & 0x01) | (dir & 0x02)) << 2;
