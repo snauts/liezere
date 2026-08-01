@@ -334,6 +334,12 @@ static void precalculate(void) {
 	word f = ((y & 7) << 11) | mul80(y >> 3);
 	map_y[y] = SCREEN(f);
 #endif
+#if defined(C64)
+	word offset = (y << 5) + (y << 3);
+	map_y[y + 0] = (byte *) (0xa020 + offset);
+	map_y[y + 1] = (byte *) (0x8c04 + (offset >> 3));
+	y = y + 7;
+#endif
     }
 }
 
