@@ -1583,7 +1583,9 @@ static void show_title(void) {
 }
 
 static void music(void) {
+#if defined(__SDCC_z80)
     __asm__(".incbin \"music.pt3\"");
+#endif
 }
 
 static void game_loop(void) {
