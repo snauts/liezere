@@ -354,6 +354,9 @@ static void clear_screen(void) {
     reset_palette();
     memset(SCREEN(0), 0, 0x4000);
 #endif
+#if defined(C64)
+    memset((byte *) 0x8c00, 0x00, 1000);
+#endif
 }
 
 static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
