@@ -126,6 +126,11 @@ static void select_color(void) {
 static void select_color(void) { }
 #endif
 
+const unsigned char c64_look_up[] = {
+    0x00, 0x0e, 0x02, 0x04, 0x05, 0x03, 0x07, 0x0f,
+    0x06, 0x09, 0x02, 0x0a, 0x0c, 0x0d, 0x07, 0x01,
+};
+
 static unsigned char get_color(unsigned char *color) {
     unsigned char result = 0;
     if (color[0] >= 0x80) result |= 0x02;
@@ -138,8 +143,13 @@ static unsigned char get_color(unsigned char *color) {
 	}
     }
 
+    int __attribute__((unused)) index;
+    index = (result & 0x07) + ((result & 0x40) >> 3);
+
 #if defined(CPC)
-    return color_table[(result & 0x07) + ((result & 0x40) >> 3)];
+    return color_table[index];
+#elif defined(C64)
+    return c64_look_up[index];
 #else
     return result;
 #endif
@@ -203,7 +213,7 @@ static void compress_and_save(const char *name, Buffer buf) {
     printf("};\n");
 }
 
-#if defined(ZXS)
+#if defined(ZXS) || defined(C64)
 static int ink_index(int i) {
     return (i / header.w / 8) * (header.w / 8) + i % header.w / 8;
 }
@@ -212,6 +222,7 @@ static unsigned short encode_pixel(unsigned char a, unsigned char b) {
     return a > b ? (b << 8) | a : (a << 8) | b;
 }
 
+#if defined(ZXS)
 static unsigned char is_bright(unsigned char f, unsigned char b) {
     return (f > 7 || b > 7) ? 0x40 : 0x00;
 }
@@ -221,6 +232,11 @@ static unsigned char encode_ink(unsigned short colors) {
     unsigned char f = colors & 0xff;
     return is_bright(f, b) | (f & 7) | ((b & 7) << 3);
 }
+#else
+static unsigned char encode_ink(unsigned short colors) {
+    return ((colors & 0xff) << 4) | (colors >> 8);
+}
+#endif
 
 static unsigned char consume_pixels(unsigned char *buf, unsigned char on) {
     unsigned char ret = 0;
@@ -274,7 +290,7 @@ static int pixel_size(void) {
 }
 
 static int color_size(void) {
-#if defined(ZXS)
+#if defined(ZXS) || defined(C64)
     return pixel_size() / 8;
 #else
     return 0;
@@ -288,7 +304,7 @@ static int total_size(void) {
 static void *convert_bitmap(unsigned char *buf) {
     unsigned char pixel[total_size()];
 
-#if defined(ZXS)
+#if defined(ZXS) || defined(C64)
     int j = 0;
     unsigned char *color = pixel + pixel_size();
     unsigned short on[color_size()];
@@ -332,8 +348,13 @@ const int HEADER_SIZE = 2;
 static unsigned char *add_header(unsigned char *buf) {
     unsigned char *img = malloc(total_size() + HEADER_SIZE);
     memcpy(img + HEADER_SIZE, buf, total_size());
+#if defined(C64)
+    img[0] = header.w;
+    img[1] = header.h / PiB;
+#else
     img[0] = header.w / PiB;
     img[1] = header.h;
+#endif
     free(buf);
     return img;
 }
