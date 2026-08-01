@@ -502,7 +502,7 @@ static void *decompress(byte *dst, const byte *src) {
         byte n = *src & 0x7f;
         if (*(src++) & 0x80) {
 	    while (n-- > 0) {
-		*dst = *(dst - *src);
+		*dst = dst[-(*src)];
 		dst++;
 	    }
 	    src++;
