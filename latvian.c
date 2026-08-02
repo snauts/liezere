@@ -40,7 +40,7 @@ void put_tick(char c, byte x, byte y) {
 const Text tutorial[] = {
     { .pos = POS(32,   8), .str = "Lai saglab`atu motiv`aciju iet cop`et," },
     { .pos = POS(32,  20), .str = "katru dienu j`ano^ker lielais makans." },
-#if defined(ZXS)
+#if defined(ZXS) || defined(C64)
     { .pos = POS(32,  48), .str = "1. Valk`aties pa ezeru Q&0 A&1 O&2 P&3" },
     { .pos = POS(32,  60), .str = "2. Izv`el`eties copes vietu SPACE" },
     { .pos = POS(32,  72), .str = "3. Izurbt caurumu led`u O&2 P&3" },
