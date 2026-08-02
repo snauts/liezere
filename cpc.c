@@ -1,3 +1,6 @@
+#define reset_attributes(color)
+#define set_attributes(from, c, len)
+
 static word mul80(word x) {
     return (x << 6) + (x << 4);
 }

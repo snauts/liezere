@@ -77,13 +77,11 @@ extern const byte symbols[];
 #endif
 
 #if defined(ZXS)
+#define ZXS_C64(a, b)	(a)
 #define BP8_BP4(a, b)	(a)
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
 #define IRQ_BASE	0xfe00
-
-#define set_attributes(from, c, len) memset(COLOUR(from), c, len);
-#define reset_attributes(color) set_attributes(0, color, 0x300)
 #endif
 
 #if defined(CPC)
@@ -91,21 +89,24 @@ extern const byte symbols[];
 #define SETUP_STACK()	__asm__("ld sp, #0x81fc")
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
 #define IRQ_BASE	0x8200
-
-#define set_attributes(from, c, len)
-#define reset_attributes(color)
 #endif
 
 #if defined(C64)
+#define ZXS_C64(a, b)	(b)
 #define BP8_BP4(a, b)	(a)
 #define SETUP_STACK()	__asm__("ldx #0xff"); __asm__("txs");
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
-
-#define set_attributes(from, c, len)
 #endif
 
 #if !defined(CPC)
 #define select_palette(index, color)
+#endif
+
+#if defined(ZXS)
+#define set_attributes(from, c, len) \
+    memset(COLOUR(from), c, len);
+#define reset_attributes(color) \
+    set_attributes(0, color, 0x300)
 #endif
 
 #if defined(ZXS)
@@ -1434,8 +1435,8 @@ static void wait_and_update_seed(void) {
 }
 
 static void text_wall_color(void) {
+    reset_attributes(ZXS_C64(0x05, 0x30));
     select_palette(3, 0x4B);
-    reset_attributes(5);
 }
 
 static void wall_of_text(const Text *text) {

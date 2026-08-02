@@ -15,6 +15,9 @@ static void reset_attributes(byte color) {
     memset((byte *) 0x8c00, color, 1000);
 }
 
+static void set_attributes(byte from, byte c, byte len) {
+}
+
 static void clear_framebuffer(void) {
     reset_attributes(0x00);
     memset(SCREEN(0), 0, 0x2000);
