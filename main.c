@@ -1007,6 +1007,7 @@ static void show_lake(void) {
     cpc(attributes(1, 0x46));
     cpc(attributes(2, 0x40));
     cpc(attributes(3, 0x4B));
+    c64(memset(color[0], 0xf0, 5));
     draw_holes();
     put_fish();
     put_time();
