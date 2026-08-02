@@ -309,12 +309,20 @@ static void *convert_bitmap(unsigned char *buf) {
     unsigned char *color = pixel + pixel_size();
     unsigned short on[color_size()];
 
-    for (int i = 0; i < image_size(); i += 8) {
-	if (i / header.w % 8 == 0) {
-	    on[j++] = on_pixel(buf, i, header.w);
+    for (int y = 0; y < header.h; y++) {
+	for (int x = 0; x < header.w; x += 8) {
+	    int i = y * header.w + x;
+	    if (i / header.w % 8 == 0) {
+		on[j++] = on_pixel(buf, i, header.w);
+	    }
+	    unsigned char data = on[ink_index(i)] & 0xff;
+#if defined(C64)
+	    int pos = (y >> 3) * header.w + x + (y & 7);
+#else
+	    int pos = i / 8;
+#endif
+	    pixel[pos] = consume_pixels(buf + i, data);
 	}
-	unsigned char data = on[ink_index(i)] & 0xff;
-	pixel[i / 8] = consume_pixels(buf + i, data);
     }
     for (int i = 0; i < color_size(); i++) {
 	color[i] = encode_ink(on[i]);
