@@ -39,12 +39,18 @@ void _sdcc_indirect_jsr(void) __naked {
 
 static volatile byte vblank;
 static const byte *cached;
-static byte *map_y[192];
 static byte *line[96];
 static byte text_mask;
 static byte no_text;
 static byte hints;
 static word seed;
+
+#if defined(ZXS) || defined(CPC)
+static byte *map_y[192];
+#else
+static byte *map_y[24];
+static byte *color[24];
+#endif
 
 static void *decompress(byte *dst, const byte *src);
 
@@ -335,9 +341,10 @@ static void precalculate(void) {
 	map_y[y] = SCREEN(f);
 #endif
 #if defined(C64)
+	byte index = (y >> 3);
 	word offset = (y << 5) + (y << 3);
-	map_y[y + 0] = (byte *) (0xa020 + offset);
-	map_y[y + 1] = (byte *) (0x8c04 + (offset >> 3));
+	map_y[index] = (byte *) (0xa020 + offset);
+	color[index] = (byte *) (0x8c04 + (offset >> 3));
 	y = y + 7;
 #endif
     }
@@ -364,7 +371,7 @@ static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
 #if defined(C64)
     for (byte i = 0; i < n; i++) {
 	byte data = *addr++;
-	byte *ptr = map_y[y & 0xf8] + (y & 0x07) + (x & 0xf8);
+	byte *ptr = map_y[y >> 3] + (y & 0x07) + (x & 0xf8);
 	ptr[0] |= (data >> shift);
 	ptr[8] |= (data << (8 - shift));
 	y++;
@@ -561,7 +568,7 @@ static void draw_image(byte *ptr, byte x, byte y) {
 
 #if defined(C64)
     for (byte i = 0; i < h; i++) {
-	byte *dst = map_y[(y + i) << 3] + (x << 3);
+	byte *dst = map_y[y + i] + (x << 3);
 	memcpy(dst, ptr, w);
 	ptr += w ? w : 0x100;
     }
