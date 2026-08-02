@@ -154,13 +154,22 @@ static void wait_vblank(void) {
 #define out_fe(data)
 #endif
 
-static byte inc10(byte a) __naked {
 #if defined(__SDCC_z80)
+static byte inc10(byte a) __naked {
     __asm__("inc a"); a;
     __asm__("daa");
     __asm__("ret");
-#endif
 }
+#endif
+
+#if defined(__SDCC_mos6502)
+static byte inc10(byte a) {
+    __asm__("sed");
+    a = a + 1;
+    __asm__("cld");
+    return a;
+}
+#endif
 
 void memset(byte *ptr, byte data, word len) {
     while (len-- > 0) { *ptr++ = data; }
@@ -681,33 +690,39 @@ static void reset_cursor(void) {
 }
 
 static byte sky;
-static void put_digit(byte digit, byte x, byte y) {
+static void put_digit(byte digit, byte x) {
     byte *addr = FONT_ADDRESS;
     addr += (('0' + digit) << 3);
 #if defined(CPC)
     x = x << 1;
 #endif
+#if defined(C64)
+    byte *ptr = *map_y + (x << 3);
+#endif
     for (byte i = 0; i < 8; i++) {
 #if defined(CPC)
 	byte bits = *addr++;
-	BYTE(map_y[y + i] + x + 0) = mask_sym(sky, bits >> 4);
-	BYTE(map_y[y + i] + x + 1) = mask_sym(sky, bits & 0xf);
+	BYTE(map_y[i] + x + 0) = mask_sym(sky, bits >> 4);
+	BYTE(map_y[i] + x + 1) = mask_sym(sky, bits & 0xf);
 #endif
 #if defined(ZXS)
-	BYTE(map_y[y + i] + x) = *addr++;
+	BYTE(map_y[i] + x) = *addr++;
+#endif
+#if defined(C64)
+	*ptr++ = *addr++;
 #endif
     }
 }
 
-static void put_num(byte num, byte x, byte y) {
-    put_digit(num >> 4, x, y);
-    put_digit(num & 0xf, x + 1, y);
+static void put_num(byte num, byte x) {
+    put_digit(num >> 4, x);
+    put_digit(num & 0xf, x + 1);
 }
 
 static void put_time(void) {
-    put_num(hour, 0, 0);
-    put_num(minute, 3, 0);
-    put_digit(10, 2, 0);
+    put_num(hour, 0);
+    put_num(minute, 3);
+    put_digit(10, 2);
 }
 
 static void advance_time(byte amount) {
