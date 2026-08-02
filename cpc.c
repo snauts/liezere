@@ -1,3 +1,22 @@
+#define cpc(x)		(x)
+#define BP8_BP4(a, b)	(b)
+#define SETUP_STACK()	__asm__("ld sp, #0x81fc")
+#define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
+#define IRQ_BASE	0x8200
+
+#define SCREEN(x)	PTR(0xc000 + (x))
+#define SYMBOL(x) 	PTR(0xb800 + ((x) << 3))
+#define STAGING_AREA	PTR(0x8400)
+
+#define	CTRL_FIRE	0x10
+#define	CTRL_DIR	0x0f
+#define	CTRL_RIGHT	0x08
+#define	CTRL_LEFT	0x04
+#define	CTRL_DOWN	0x02
+#define	CTRL_UP		0x01
+
+#define reset_attributes(color)
+
 static word mul80(word x) {
     return (x << 6) + (x << 4);
 }
@@ -82,7 +101,7 @@ static void reset_palette(void) {
     for (byte i = 0; i < sizeof(pal); i++) gate_array(pal[i]);
 }
 
-static void cpc_attributes(byte index, byte color) {
+static void attributes(byte index, byte color) {
     gate_array(0x9d);
     gate_array(index);
     gate_array(color);

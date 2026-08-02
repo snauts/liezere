@@ -105,6 +105,7 @@ c64:
 	x64 -autostartprgmode 1 +confirmonexit liezere.d64
 
 zxs: prg tap
+	@echo zxs build done
 
 main.o: data.h
 

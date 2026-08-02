@@ -1,3 +1,19 @@
+#define c64(x)		(x)
+#define BP8_BP4(a, b)	(a)
+#define SETUP_STACK()	__asm__("ldx #0xff"); __asm__("txs");
+#define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
+
+#define SCREEN(x)	PTR(0xa000 + (x))
+#define SYMBOL(x) 	PTR(0x5c00 + ((x) << 3))
+#define STAGING_AREA	PTR(0x6000)
+
+#define	CTRL_FIRE	0x10
+#define	CTRL_DIR	0x0f
+#define	CTRL_RIGHT	0x08
+#define	CTRL_LEFT	0x04
+#define	CTRL_DOWN	0x02
+#define	CTRL_UP		0x01
+
 #define reset_attributes(color) \
     memset((byte *) 0x8c00, color, 1000);
 
@@ -14,7 +30,7 @@ static void interrupt(void) __naked {
     __asm__("rti");
 }
 
-static void c64_attributes(byte value, byte start, byte count) {
+static void attributes(byte value, byte start, byte count) {
     while (count-- != 0) memset(color[start++], value, 0x20);
 }
 

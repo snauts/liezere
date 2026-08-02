@@ -77,76 +77,21 @@ extern const byte symbols[];
 #endif
 
 #if defined(ZXS)
-#define ZXS_C64(a, b)	(a)
-#define BP8_BP4(a, b)	(a)
-#define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
-#define FONT_ADDRESS	PTR(0x3c00)
-#define IRQ_BASE	0xfe00
+#include "zxs.c"
+#else
+#define zxs(x)
 #endif
 
 #if defined(CPC)
-#define BP8_BP4(a, b)	(b)
-#define SETUP_STACK()	__asm__("ld sp, #0x81fc")
-#define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
-#define IRQ_BASE	0x8200
+#include "cpc.c"
+#else
+#define cpc(x)
 #endif
 
 #if defined(C64)
-#define ZXS_C64(a, b)	(b)
-#define BP8_BP4(a, b)	(a)
-#define SETUP_STACK()	__asm__("ldx #0xff"); __asm__("txs");
-#define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
-#endif
-
-#if defined(CPC)
-#define reset_attributes(color)
-#endif
-
-#if !defined(CPC)
-#define cpc_attributes(index, color)
-#endif
-
-#if !defined(C64)
-#define c64_attributes(color, start, count)
-#endif
-
-#if !defined(ZXS)
-#define zxs_attributes(from, c, len)
-#endif
-
-#if defined(ZXS)
-#define zxs_attributes(from, c, len) memset(COLOUR(from), c, len)
-#endif
-
-#if defined(ZXS)
-#define reset_attributes(color) zxs_attributes(0, color, 0x300)
-#endif
-
-#if defined(ZXS)
-#define	CTRL_FIRE	0x10
-#define	CTRL_DIR	0x0f
-#define	CTRL_UP		0x08
-#define	CTRL_DOWN	0x04
-#define	CTRL_LEFT	0x02
-#define	CTRL_RIGHT	0x01
-#endif
-
-#if defined(CPC)
-#define	CTRL_FIRE	0x10
-#define	CTRL_DIR	0x0f
-#define	CTRL_RIGHT	0x08
-#define	CTRL_LEFT	0x04
-#define	CTRL_DOWN	0x02
-#define	CTRL_UP		0x01
-#endif
-
-#if defined(C64)
-#define	CTRL_FIRE	0x10
-#define	CTRL_DIR	0x0f
-#define	CTRL_RIGHT	0x08
-#define	CTRL_LEFT	0x04
-#define	CTRL_DOWN	0x02
-#define	CTRL_UP		0x01
+#include "c64.c"
+#else
+#define c64(x)
 #endif
 
 #define	IMAGE_DATA(x)	((x) + 2)
@@ -198,14 +143,6 @@ static void setup_irq(byte base) {
     __asm__("im 2");
     __asm__("ei");
 }
-#endif
-
-#if defined(CPC)
-#include "cpc.c"
-#endif
-
-#if defined(C64)
-#include "c64.c"
 #endif
 
 static void wait_vblank(void) {
@@ -966,7 +903,7 @@ static void show_weight(byte weight) {
     if (weight > 0) {
 	clear_weight();
 	print_weight(weight);
-	zxs_attributes(0x40, 7, 8);
+	zxs(attributes(0x40, 7, 8));
     }
 }
 
@@ -1056,16 +993,16 @@ static void show_forest(void) {
     clear_screen();
     block_fill(0x00, 0x20, 0xf0);
     block_fill(0x70, 0xc0, 0xff);
-    zxs_attributes(0x000, 0x28, 0x80);
-    zxs_attributes(0x1c0, 0x7f, 0x140);
+    zxs(attributes(0x000, 0x28, 0x80));
+    zxs(attributes(0x1c0, 0x7f, 0x140));
     show_series(horizonts);
-    cpc_attributes(1, 0x46);
-    cpc_attributes(3, 0x4B);
+    cpc(attributes(1, 0x46));
+    cpc(attributes(3, 0x4B));
     wait_vblank();
 }
 
 static void animate_drill(void) {
-    cpc_attributes(2, 0x55);
+    cpc(attributes(2, 0x55));
     for (byte i = 0; i < DRILL_MOVES; i++) {
 	advance_time(1);
 	hint_symbol(SYMBOL(2));
@@ -1125,9 +1062,9 @@ static void show_lake(void) {
     hole_check = false;
     show_frame(IMG_EZERS);
     show_series(apkaime);
-    cpc_attributes(1, 0x46);
-    cpc_attributes(2, 0x40);
-    cpc_attributes(3, 0x4B);
+    cpc(attributes(1, 0x46));
+    cpc(attributes(2, 0x40));
+    cpc(attributes(3, 0x4B));
     draw_holes();
     put_fish();
     put_time();
@@ -1310,7 +1247,7 @@ static void moment_of_weight(byte fish, byte weight) {
 
     hole_now->weight = weight;
     put_str(str, center(str), 64);
-    zxs_attributes(0xe0, 5, 0x60);
+    zxs(attributes(0xe0, 5, 0x60));
     show_series(IMG_REPORT);
     draw_fish(fish);
 
@@ -1331,7 +1268,7 @@ static byte wait_pull(byte button, byte fast) {
 	return true;
     }
     if (ticks >= PULL_SLOW) {
-	cpc_attributes(2, 0x4c);
+	cpc(attributes(2, 0x4c));
 	moment_of_truth(FISH_ESCAPE);
 	return true;
     }
@@ -1343,7 +1280,7 @@ static byte get_weight(byte distance) {
 }
 
 static byte report_fish(byte distance) {
-    cpc_attributes(2, 0x59);
+    cpc(attributes(2, 0x59));
     hole_now->distance = distance;
 
     if (distance <= 1) {
@@ -1369,13 +1306,13 @@ static byte report_fish(byte distance) {
 	return false;
     }
     else if (distance < 150) {
-	cpc_attributes(2, 0x43);
+	cpc(attributes(2, 0x43));
 	moment_of_truth(FISH_RUFFE);
 	stats[STATS_RUFFES]++;
 	return false;
     }
     else {
-	cpc_attributes(2, 0x4F);
+	cpc(attributes(2, 0x4F));
 	moment_of_truth(FISH_WEEDS);
 	return false;
     }
@@ -1403,14 +1340,14 @@ static byte ice_fish(void) {
     sky = 0xff;
     clear_screen();
     reset_attributes(0x7d);
-    zxs_attributes(0x00, 0x78, 0x20);
+    zxs(attributes(0x00, 0x78, 0x20));
     decompress(COPENE1, IMG_COPENE(1)->img);
     decompress(COPENE2, IMG_COPENE(2)->img);
     block_fill(0x00, 0xc0, 0xff);
     show_series(IMG_HOLE);
-    cpc_attributes(1, 0x53);
-    cpc_attributes(2, 0x4c);
-    cpc_attributes(3, 0x4b);
+    cpc(attributes(1, 0x53));
+    cpc(attributes(2, 0x4c));
+    cpc(attributes(3, 0x4b));
     starting_line();
     put_time();
 
@@ -1448,8 +1385,8 @@ static void wait_and_update_seed(void) {
 }
 
 static void text_wall_color(void) {
-    reset_attributes(ZXS_C64(0x05, 0x30));
-    cpc_attributes(3, 0x4B);
+    reset_attributes(zxs(0x05) c64(0x30));
+    cpc(attributes(3, 0x4B));
 }
 
 static void wall_of_text(const Text *text) {
@@ -1501,7 +1438,7 @@ static byte show_stars(byte i, byte y) {
     byte rank = get_rank(i);
     static const char str[] = "&4&4&4";
     put_str(str + ((3 - rank) << 1), 196, y);
-    zxs_attributes(((y & ~7) << 2) + 0x18, 0x46, 4);
+    zxs(attributes(((y & ~7) << 2) + 0x18, 0x46, 4));
     text_mask = 0x0f;
     return rank;
 }
@@ -1534,8 +1471,8 @@ static void statistics(void) {
     clear_screen();
     text_mask = 0x0f;
     reset_attributes(0x4);
-    cpc_attributes(2, 0x59);
-    cpc_attributes(3, 0x43);
+    cpc(attributes(2, 0x59));
+    cpc(attributes(3, 0x43));
     show_text_series(stat_title);
     for (byte i = 0; i < STATS_COUNT; i++) {
 	const char *str = stat_strs[i];
@@ -1563,9 +1500,9 @@ static void fade_out_screen(void) {
 	    0x40, 0x40, 0x5E, 0x46, 0x56,
 	    0x58, 0x5C, 0x44, 0x54, 0x54,
 	};
-	cpc_attributes(1, pal[i + 0]);
-	cpc_attributes(2, pal[i + 1]);
-	cpc_attributes(3, pal[i + 2]);
+	cpc(attributes(1, pal[i + 0]));
+	cpc(attributes(2, pal[i + 1]));
+	cpc(attributes(3, pal[i + 2]));
 #endif
     }
 }
@@ -1577,9 +1514,9 @@ static void game_done(void) {
     fade_out_screen();
     text_mask = 0xf0;
     show_frame(IMG_ENDING);
-    cpc_attributes(1, 0x44);
-    cpc_attributes(2, 0x43);
-    cpc_attributes(3, 0x55);
+    cpc(attributes(1, 0x44));
+    cpc(attributes(2, 0x43));
+    cpc(attributes(3, 0x55));
     show_text(&the_end);
     wait_space();
     statistics();
@@ -1588,8 +1525,8 @@ static void game_done(void) {
 static void select_panel_color(byte num) {
     static const byte c1[] = { 0x5B, 0x55, 0x4C, 0x4C };
     static const byte c2[] = { 0x59, 0x4A, 0x59, 0x43 };
-    cpc_attributes(1, c1[num]); num;
-    cpc_attributes(2, c2[num]);
+    cpc(attributes(1, c1[num])); num;
+    cpc(attributes(2, c2[num]));
 }
 
 static void current_panel(byte num) {
@@ -1613,9 +1550,9 @@ static void show_tutorial(void) {
     clear_screen();
     show_frame(IMG_RANGES);
     show_text_series(fish_map);
-    cpc_attributes(1, 0x4F);
-    cpc_attributes(2, 0x43);
-    cpc_attributes(3, 0x59);
+    cpc(attributes(1, 0x4F));
+    cpc(attributes(2, 0x43));
+    cpc(attributes(3, 0x59));
     wait_space();
     reset();
 }
@@ -1625,9 +1562,9 @@ static void show_title(void) {
     show_frame(IMG_TITLE);
     show_text_series(choices);
 
-    cpc_attributes(3, 0x4B);
-    c64_attributes(0xf0, 10, 14);
-    zxs_attributes(0x140, 0x47, 0x1c0);
+    cpc(attributes(3, 0x4B));
+    c64(attributes(0xf0, 10, 14));
+    zxs(attributes(0x140, 0x47, 0x1c0));
 
     if (wait_123() & 4) show_tutorial();
 }
