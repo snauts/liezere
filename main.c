@@ -261,8 +261,8 @@ void memcpy(void *dst, const void *src, word len) __naked {
     dst; src; len;
 }
 #else
-static void memcpy(byte *dst, const byte *src, word len) {
-    while (len-- > 0) { *dst++ = *src++; }
+static void memcpy(byte *dst, const byte *src, byte len) {
+    do { *dst++ = *src++; } while (--len != 0);
 }
 #endif
 
@@ -559,6 +559,13 @@ static void draw_image(byte *ptr, byte x, byte y) {
     byte w = *(ptr++);
     byte h = *(ptr++);
 
+#if defined(C64)
+    for (byte i = 0; i < h; i++) {
+	byte *dst = map_y[(y + i) << 3] + (x << 3);
+	memcpy(dst, ptr, w);
+	ptr += w ? w : 0x100;
+    }
+#else
     y = y << 3;
 
     for (byte i = 0; i < h; i++) {
@@ -566,6 +573,7 @@ static void draw_image(byte *ptr, byte x, byte y) {
 	memcpy(dst, ptr, w);
 	ptr += w;
     }
+#endif
 
 #if defined(ZXS)
     byte *dst = COLOUR(y << 2) + x;
