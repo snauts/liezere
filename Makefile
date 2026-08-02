@@ -102,6 +102,8 @@ c64:
 		CODE=0x07ff DATA=0x5400 TYPE=-DC64 make prg
 	c1541 -format liezere,00 d64 liezere.d64 \
 		-attach liezere.d64 -write liezere.bin liezere
+
+vice: c64
 	x64 -autostartprgmode 1 +confirmonexit liezere.d64
 
 zxs: prg tap
