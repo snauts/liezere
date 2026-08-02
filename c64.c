@@ -97,7 +97,11 @@ static byte read_123(void) {
 
 static byte read_QAOP(void) {
     byte ret = 0;
-    ret = c64_key(BIT(7));
-    ret = (ret & 0x10) | (ret & 0x40 ? 0x01 : 0x00);
+    byte key = c64_key(BIT(7));
+    if (key & 0x40) ret |= CTRL_UP;
+    if (key & 0x10) ret |= CTRL_FIRE;
+    if (c64_key(BIT(1)) & BIT(2)) ret |= CTRL_DOWN;
+    if (c64_key(BIT(4)) & BIT(6)) ret |= CTRL_LEFT;
+    if (c64_key(BIT(5)) & BIT(1)) ret |= CTRL_RIGHT;
     return ~ret;
 }
