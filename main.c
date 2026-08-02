@@ -636,7 +636,11 @@ static byte read_123(void) {
 
 static void animate_title_line(void) {
     for (byte y = 0; y < 34; y++) {
+#if defined(C64)
+	byte *ptr = map_y[y >> 3] + (y & 7) + (22 * 8);
+#else
 	byte *ptr = map_y[y] + ZXS_CPC(22, 44);
+#endif
 	*ptr ^= ZXS_CPC(0x10, 0x11);
     }
 }
