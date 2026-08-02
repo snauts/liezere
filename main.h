@@ -32,6 +32,7 @@ typedef unsigned short word;
 #endif
 
 #if defined(C64)
+#define SCREEN(x)	PTR(0xa000 + (x))
 #define SYMBOL(x) 	PTR(0x5c00 + ((x) << 3))
 #define STAGING_AREA	PTR(0x6000)
 #endif

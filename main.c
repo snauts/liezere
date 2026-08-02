@@ -77,7 +77,7 @@ extern const byte symbols[];
 #endif
 
 #if defined(ZXS)
-#define ZXS_CPC(a, b)	(a)
+#define BP8_BP4(a, b)	(a)
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
 #define IRQ_BASE	0xfe00
@@ -87,7 +87,7 @@ extern const byte symbols[];
 #endif
 
 #if defined(CPC)
-#define ZXS_CPC(a, b)	(b)
+#define BP8_BP4(a, b)	(b)
 #define SETUP_STACK()	__asm__("ld sp, #0x81fc")
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
 #define IRQ_BASE	0x8200
@@ -97,12 +97,11 @@ extern const byte symbols[];
 #endif
 
 #if defined(C64)
-#define ZXS_CPC(a, b)	(a)
+#define BP8_BP4(a, b)	(a)
 #define SETUP_STACK()	__asm__("ldx #0xff"); __asm__("txs");
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
 
 #define set_attributes(from, c, len)
-#define reset_attributes(color)
 #endif
 
 #if !defined(CPC)
@@ -367,7 +366,7 @@ static void clear_screen(void) {
 }
 
 static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
-    byte shift = x & ZXS_CPC(7, 3);
+    byte shift = x & BP8_BP4(7, 3);
 #if defined(C64)
     for (byte i = 0; i < n; i++) {
 	byte data = *addr++;
@@ -377,7 +376,7 @@ static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
 	y++;
     }
 #else
-    byte offset = x >> ZXS_CPC(3, 2);
+    byte offset = x >> BP8_BP4(3, 2);
     for (byte i = 0; i < n; i++) {
 	byte data = *addr++;
 	byte *ptr = map_y[y + i] + offset;
@@ -586,7 +585,7 @@ static void draw_image(byte *ptr, byte x, byte y) {
     y = y << 3;
 
     for (byte i = 0; i < h; i++) {
-	byte *dst = map_y[y + i] + ZXS_CPC(x, x << 1);
+	byte *dst = map_y[y + i] + BP8_BP4(x, x << 1);
 	memcpy(dst, ptr, w);
 	ptr += w;
     }
@@ -639,9 +638,9 @@ static void animate_title_line(void) {
 #if defined(C64)
 	byte *ptr = map_y[y >> 3] + (y & 7) + (22 * 8);
 #else
-	byte *ptr = map_y[y] + ZXS_CPC(22, 44);
+	byte *ptr = map_y[y] + BP8_BP4(22, 44);
 #endif
-	*ptr ^= ZXS_CPC(0x10, 0x11);
+	*ptr ^= BP8_BP4(0x10, 0x11);
     }
 }
 
@@ -685,8 +684,8 @@ static const Text *show_text_series(const Text *text) {
     return text + 1;
 }
 
-#define PIXEL(x, y) BYTE(map_y[y] + ((x) >> ZXS_CPC(3, 2)))
-#define MASK(x) (ZXS_CPC(0x80, 0x88) >> ZXS_CPC((x) & 7, (x) & 3))
+#define PIXEL(x, y) BYTE(map_y[y] + ((x) >> BP8_BP4(3, 2)))
+#define MASK(x) (BP8_BP4(0x80, 0x88) >> BP8_BP4((x) & 7, (x) & 3))
 
 #if defined(ZXS)
 static byte is_white(byte x, byte y) {
@@ -939,7 +938,7 @@ static byte total_distance(void) {
 
 static void clear_weight(void) {
     for (byte y = 16; y < 24; y++) {
-	memset(map_y[y], 0, ZXS_CPC(8, 16));
+	memset(map_y[y], 0, BP8_BP4(8, 16));
     }
 }
 
@@ -1129,12 +1128,12 @@ static void draw_tip(byte *ptr) {
 
 static void starting_line(void) {
     for (byte y = 16; y < 152; y += 4) {
-	PIXEL(128, y) ^= ZXS_CPC(0x80, 0x08);
+	PIXEL(128, y) ^= BP8_BP4(0x80, 0x08);
     }
 }
 
 static byte *line_addr(byte y) {
-    return map_y[y] + ZXS_CPC(16, 32);
+    return map_y[y] + BP8_BP4(16, 32);
 }
 
 static void init_fishing_line(void) {
@@ -1154,7 +1153,7 @@ static void fishing_line(void) {
     byte i = 0;
     byte **ptr = line;
     while (*ptr != NULL) {
-	**(ptr++) ^= ZXS_CPC(0x80, i++ < 68 ? 0x08 : 0x88);
+	**(ptr++) ^= BP8_BP4(0x80, i++ < 68 ? 0x08 : 0x88);
     }
 }
 

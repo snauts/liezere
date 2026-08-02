@@ -11,9 +11,13 @@ static void interrupt(void) __naked {
     __asm__("rti");
 }
 
+static void reset_attributes(byte color) {
+    memset((byte *) 0x8c00, color, 1000);
+}
+
 static void clear_framebuffer(void) {
-    memset((byte *) 0x8c00, 0x00, 1000);
-    memset((byte *) 0xa000, 0x00, 8192);
+    reset_attributes(0x00);
+    memset(SCREEN(0), 0, 0x2000);
 }
 
 static void setup_system_c64(void) {
