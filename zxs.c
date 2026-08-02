@@ -19,3 +19,5 @@
 #define attributes(from, c, len) memset(COLOUR(from), c, len)
 
 #define reset_attributes(color) attributes(0, color, 0x300)
+
+#define corner_color(color) *COLOUR(0x2de) = color

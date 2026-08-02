@@ -456,18 +456,10 @@ static void corner_symbol(byte *sym) {
 #endif
 }
 
-#if defined(ZXS)
-static void corner_color(byte color) {
-    *COLOUR(0x2de) = color;
-}
-#else
-#define corner_color(color)
-#endif
-
 static void hint_symbol(byte *sym) {
     if (hints) {
 	corner_symbol(sym);
-	corner_color(0x78);
+	zxs(corner_color(0x78));
     }
 }
 
@@ -1261,7 +1253,7 @@ static void moment_of_truth(byte fish) {
 static byte wait_pull(byte button, byte fast) {
     byte ticks = wait_button(button, button, PULL_SLOW);
 
-    corner_color(0x7f);
+    zxs(corner_color(0x7f));
     if (fast && ticks <= PULL_FAST) {
 	advance_time(SNAP_PENALTY);
 	moment_of_truth(FISH_SNAP);
