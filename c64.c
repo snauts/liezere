@@ -83,7 +83,7 @@ static byte c64_read_key(byte row) {
     return BYTE(0xdc01);
 }
 
-#define c64_key(row) c64_read_key(~row)
+#define c64_key(row) c64_read_key((byte) ~row)
 
 static byte in_joy(byte a) {
     return a;
