@@ -611,7 +611,9 @@ static byte read_123(void) {
     return (~in_key(8) & 3) | ((~in_key(7) & 2) << 1);
 #endif
 #if defined(C64)
-    return c64_key(BIT(7), BIT(0));
+    byte three = c64_key(BIT(1), BIT(0));
+    byte one_two = c64_key(BIT(7), BIT(0) | BIT(3));
+    return (one_two & 1) | ((one_two >> 2) & 2) | (three << 2);
 #endif
 }
 
