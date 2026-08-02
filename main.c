@@ -362,7 +362,7 @@ static void clear_screen(void) {
     memset(SCREEN(0), 0, 0x4000);
 #endif
 #if defined(C64)
-    memset((byte *) 0x8c00, 0x00, 1000);
+    clear_framebuffer();
 #endif
 }
 
@@ -567,10 +567,20 @@ static void draw_image(byte *ptr, byte x, byte y) {
     byte h = *(ptr++);
 
 #if defined(C64)
+    byte **map = map_y + y;
+    byte offset = (x << 3);
     for (byte i = 0; i < h; i++) {
-	byte *dst = map_y[y + i] + (x << 3);
+	byte *dst = (*map++) + offset;
 	memcpy(dst, ptr, w);
 	ptr += w ? w : 0x100;
+    }
+
+    map = color + y;
+    byte count = w ? (w >> 3) : 0x20;
+    for (byte i = 0; i < h; i++) {
+	byte *dst = (*map++) + x;
+	memcpy(dst, ptr, count);
+	ptr += count;
     }
 #else
     y = y << 3;

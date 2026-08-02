@@ -11,6 +11,11 @@ static void interrupt(void) __naked {
     __asm__("rti");
 }
 
+static void clear_framebuffer(void) {
+    memset((byte *) 0x8c00, 0x00, 1000);
+    memset((byte *) 0xa000, 0x00, 8192);
+}
+
 static void setup_system_c64(void) {
     __asm__ ("sei");
     BYTE(0xdd00) = (BYTE(0xdc00) & ~3) | 1;
@@ -29,8 +34,7 @@ static void setup_system_c64(void) {
     BYTE(0xd01a) = 0x01; /* genereate raster irq */
     BYTE(0xd012) = 0x00; /* generate on line 0 */
     WORD(0xfffe) = (word) &interrupt;
-    memset((byte *) 0x8c00, 0x00, 1000);
-    memset((byte *) 0xa000, 0x00, 8192);
+    clear_framebuffer();
     BYTE(0xd011) = 0x3b;
 
     /* keyboard input */
