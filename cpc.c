@@ -1,6 +1,3 @@
-#define reset_attributes(color)
-#define set_attributes(from, c, len)
-
 static word mul80(word x) {
     return (x << 6) + (x << 4);
 }
@@ -85,7 +82,7 @@ static void reset_palette(void) {
     for (byte i = 0; i < sizeof(pal); i++) gate_array(pal[i]);
 }
 
-static void select_palette(byte index, byte color) {
+static void cpc_attributes(byte index, byte color) {
     gate_array(0x9d);
     gate_array(index);
     gate_array(color);

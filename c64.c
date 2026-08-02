@@ -1,3 +1,6 @@
+#define reset_attributes(color) \
+    memset((byte *) 0x8c00, color, 1000);
+
 void font_rom(void) {
     __asm__(".incbin \"font.rom\"");
 }
@@ -11,11 +14,8 @@ static void interrupt(void) __naked {
     __asm__("rti");
 }
 
-static void reset_attributes(byte color) {
-    memset((byte *) 0x8c00, color, 1000);
-}
-
-static void set_attributes(byte from, byte c, byte len) {
+static void c64_attributes(byte value, byte start, byte count) {
+    while (count-- != 0) memset(color[start++], value, 0x20);
 }
 
 static void clear_framebuffer(void) {
