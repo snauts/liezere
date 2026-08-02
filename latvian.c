@@ -68,7 +68,9 @@ const Text choices[] = {
     { .pos = POS(88, 112), .str = "2 - D~zoistiks" },
     { .pos = POS(88, 128), .str = "3 - Pam`ac`iba" },
     { .pos = POS( 6, 174), .str = "Sp`ele: snauts" },
+#if defined(AY)
     { .pos = POS( 1, 184), .str = "M`uzika: hazard_pht" },
+#endif
     TEXT_SENTINEL,
 };
 
