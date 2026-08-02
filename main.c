@@ -611,9 +611,9 @@ static byte read_123(void) {
     return (~in_key(8) & 3) | ((~in_key(7) & 2) << 1);
 #endif
 #if defined(C64)
-    byte three = c64_key(BIT(1), BIT(0));
-    byte one_two = c64_key(BIT(7), BIT(0) | BIT(3));
-    return (one_two & 1) | ((one_two >> 2) & 2) | (three << 2);
+    byte three = c64_key(BIT(1));
+    byte one_two = c64_key(BIT(7));
+    return ~((one_two & 1) | ((one_two >> 2) & 2) | (three << 2));
 #endif
 }
 
@@ -710,6 +710,9 @@ static byte read_QAOP(void) {
     ret |= (cpc_key(0x5) & 0x80) >> 3;
     ret |= (dir & 0x01) | ((dir & 0x04) >> 1);
     ret |= ((cpc_key(0x1) & 0x01) | (dir & 0x02)) << 2;
+#endif
+#if defined(C64)
+    ret = c64_key(BIT(7));
 #endif
     return ~ret;
 }

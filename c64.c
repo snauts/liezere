@@ -47,7 +47,9 @@ static void setup_system_c64(void) {
     __asm__ ("cli");
 }
 
-static byte c64_key(byte row, byte col) {
-    BYTE(0xdc00) = ~row;
-    return ~BYTE(0xdc01) & col;
+static byte c64_read_key(byte row) {
+    BYTE(0xdc00) = row;
+    return BYTE(0xdc01);
 }
+
+#define c64_key(row) c64_read_key(~row)
