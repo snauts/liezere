@@ -150,37 +150,7 @@ static void wait_vblank(void) {
     while (!vblank) { }
 }
 
-static byte in_key(byte a) {
-#if defined(ZXS)
-    __asm__("in a, (#0xfe)");
-#endif
-#if defined(CPC)
-    __asm__("di");
-    a = cpc_key(a);
-    __asm__("ei");
-#endif
-    return a;
-}
-
-static byte in_joy(byte a) {
-#if defined(ZXS)
-    __asm__("in a, (#0x1f)"); a;
-    return a;
-#elif defined(CPC)
-    __asm__("di");
-    a = cpc_key(9);
-    __asm__("ei");
-    return (~a & 0x1f) | ((~a >> 1) & 0x10);
-#elif defined(C64)
-    return a;
-#endif
-}
-
-#if defined(ZXS)
-static void out_fe(byte data) {
-    __asm__("out (#0xfe), a"); data;
-}
-#else
+#if !defined(ZXS)
 #define out_fe(data)
 #endif
 
@@ -562,20 +532,6 @@ static byte input_change(byte input) {
     return change;
 }
 
-static byte read_123(void) {
-#if defined(ZXS)
-    return ~in_key(0xf7) & 7;
-#endif
-#if defined(CPC)
-    return (~in_key(8) & 3) | ((~in_key(7) & 2) << 1);
-#endif
-#if defined(C64)
-    byte three = c64_key(BIT(1));
-    byte one_two = c64_key(BIT(7));
-    return ~((one_two & 1) | ((one_two >> 2) & 2) | (three << 2));
-#endif
-}
-
 static void animate_title_line(void) {
     for (byte y = 0; y < 34; y++) {
 #if defined(C64)
@@ -657,30 +613,6 @@ static byte good_spot(byte x, byte y) {
     byte pixel = get_pixel(x, y);
     return (pixel & 0x0f) && (pixel & 0xf0);
 #endif
-}
-
-static byte read_QAOP(void) {
-    byte ret = 0;
-#if defined(ZXS)
-    byte hit = in_key(0x7f);
-    ret |= hit & (hit >> 2);
-    ret <<= 1;
-    ret |= (in_key(0xfb) & 1);
-    ret <<= 1;
-    ret |= (in_key(0xfd) & 1);
-    ret <<= 2;
-    ret |= (in_key(0xdf) & 3);
-#endif
-#if defined(CPC)
-    byte dir = cpc_key(0x0);
-    ret |= (cpc_key(0x5) & 0x80) >> 3;
-    ret |= (dir & 0x01) | ((dir & 0x04) >> 1);
-    ret |= ((cpc_key(0x1) & 0x01) | (dir & 0x02)) << 2;
-#endif
-#if defined(C64)
-    ret = c64_key(BIT(7));
-#endif
-    return ~ret;
 }
 
 static byte read_input(void) {

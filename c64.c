@@ -84,3 +84,20 @@ static byte c64_read_key(byte row) {
 }
 
 #define c64_key(row) c64_read_key(~row)
+
+static byte in_joy(byte a) {
+    return a;
+}
+
+static byte read_123(void) {
+    byte three = c64_key(BIT(1));
+    byte one_two = c64_key(BIT(7));
+    return ~((one_two & 1) | ((one_two >> 2) & 2) | (three << 2));
+}
+
+static byte read_QAOP(void) {
+    byte ret = 0;
+    ret = c64_key(BIT(7));
+    ret = (ret & 0x10) | (ret & 0x40 ? 0x01 : 0x00);
+    return ~ret;
+}

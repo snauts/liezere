@@ -109,3 +109,29 @@ static void attributes(byte index, byte color) {
     gate_array(index);
     gate_array(color);
 }
+
+static byte in_key(byte a) {
+    __asm__("di");
+    a = cpc_key(a);
+    __asm__("ei");
+}
+
+static byte in_joy(byte a) {
+    __asm__("di");
+    a = cpc_key(9);
+    __asm__("ei");
+    return (~a & 0x1f) | ((~a >> 1) & 0x10);
+}
+
+static byte read_123(void) {
+    return (~in_key(8) & 3) | ((~in_key(7) & 2) << 1);
+}
+
+static byte read_QAOP(void) {
+    byte ret = 0;
+    byte dir = cpc_key(0x0);
+    ret |= (cpc_key(0x5) & 0x80) >> 3;
+    ret |= (dir & 0x01) | ((dir & 0x04) >> 1);
+    ret |= ((cpc_key(0x1) & 0x01) | (dir & 0x02)) << 2;
+    return ~ret;
+}

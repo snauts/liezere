@@ -24,3 +24,34 @@
 #define reset_attributes(color) attributes(0, color, 0x300)
 
 #define corner_color(color) *COLOUR(0x2de) = color
+
+static void out_fe(byte data) {
+    __asm__("out (#0xfe), a"); data;
+}
+
+static byte in_key(byte a) {
+    __asm__("in a, (#0xfe)");
+    return a;
+}
+
+static byte in_joy(byte a) {
+    __asm__("in a, (#0x1f)");
+    return a;
+}
+
+static byte read_123(void) {
+    return ~in_key(0xf7) & 7;
+}
+
+static byte read_QAOP(void) {
+    byte ret = 0;
+    byte hit = in_key(0x7f);
+    ret |= hit & (hit >> 2);
+    ret <<= 1;
+    ret |= (in_key(0xfb) & 1);
+    ret <<= 1;
+    ret |= (in_key(0xfd) & 1);
+    ret <<= 2;
+    ret |= (in_key(0xdf) & 3);
+    return ~ret;
+}
