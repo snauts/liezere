@@ -154,22 +154,9 @@ static void wait_vblank(void) {
 #define out_fe(data)
 #endif
 
-#if defined(__SDCC_z80)
-static byte inc10(byte a) __naked {
-    __asm__("inc a"); a;
-    __asm__("daa");
-    __asm__("ret");
-}
-#endif
-
-#if defined(__SDCC_mos6502)
 static byte inc10(byte a) {
-    __asm__("sed");
-    a = a + 1;
-    __asm__("cld");
-    return a;
+    return a + (((a & 0xf) == 0x9) ? 7 : 1);
 }
-#endif
 
 void memset(byte *ptr, byte data, word len) {
     while (len-- > 0) { *ptr++ = data; }
