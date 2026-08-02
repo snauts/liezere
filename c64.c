@@ -4,8 +4,12 @@
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
 
 #define SCREEN(x)	PTR(0xa000 + (x))
+#define COLOUR(x)	PTR(0x8c00 + (x))
 #define SYMBOL(x) 	PTR(0x5c00 + ((x) << 3))
 #define STAGING_AREA	PTR(0x6000)
+
+#define PIXEL(x, y)	BYTE(map_y[(y) >> 3] + ((y) & 0x07) + ((x) & 0xf8))
+#define MASK(x)		(0x80 >> ((x) & 7))
 
 #define	CTRL_FIRE	0x10
 #define	CTRL_DIR	0x0f
@@ -15,7 +19,7 @@
 #define	CTRL_UP		0x01
 
 #define reset_attributes(color) \
-    memset((byte *) 0x8c00, color, 1000);
+    memset(COLOUR(0), color, 1000);
 
 void font_rom(void) {
     __asm__(".incbin \"font.rom\"");

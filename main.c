@@ -627,13 +627,16 @@ static const Text *show_text_series(const Text *text) {
     return text + 1;
 }
 
-#define PIXEL(x, y) BYTE(map_y[y] + ((x) >> BP8_BP4(3, 2)))
-#define MASK(x) (BP8_BP4(0x80, 0x88) >> BP8_BP4((x) & 7, (x) & 3))
-
 #if defined(ZXS)
 static byte is_white(byte x, byte y) {
     word offset = ((y & ~7) << 2) + (x >> 3);
     return BYTE(COLOUR(offset)) == 0x47;
+}
+#endif
+
+#if defined(C64)
+static byte is_white(byte x, byte y) {
+    return BYTE(color[y >> 3] + (x >> 3)) == 0x10;
 }
 #endif
 
@@ -647,7 +650,7 @@ static void set_pixel(byte x, byte y) {
 
 static byte good_spot(byte x, byte y) {
     if (y >= 192) return false;
-#if defined(ZXS)
+#if defined(ZXS) || defined(C64)
     return is_white(x, y) && get_pixel(x, y);
 #endif
 #if defined(CPC)

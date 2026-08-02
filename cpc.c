@@ -8,6 +8,9 @@
 #define SYMBOL(x) 	PTR(0xb800 + ((x) << 3))
 #define STAGING_AREA	PTR(0x8400)
 
+#define PIXEL(x, y)	BYTE(map_y[y] + ((x) >> 2))
+#define MASK(x)		(0x88 >> ((x) & 3))
+
 #define	CTRL_FIRE	0x10
 #define	CTRL_DIR	0x0f
 #define	CTRL_RIGHT	0x08
