@@ -840,6 +840,7 @@ static void show_weight(byte weight) {
 	clear_weight();
 	print_weight(weight);
 	zxs(attributes(0x40, 7, 8));
+	c64(memset(color[2], 0xf0, 8));
     }
 }
 
