@@ -219,7 +219,12 @@ static int ink_index(int i) {
 }
 
 static unsigned short encode_pixel(unsigned char a, unsigned char b) {
-    return a > b ? (b << 8) | a : (a << 8) | b;
+#if defined(C64)
+    int test = a > b || (b == 1);
+#else
+    int test = a > b;
+#endif
+    return test ? (b << 8) | a : (a << 8) | b;
 }
 
 #if defined(ZXS)
