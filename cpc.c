@@ -10,6 +10,7 @@
 
 #define PIXEL(x, y)	BYTE(map_y[y] + ((x) >> 2))
 #define MASK(x)		(0x88 >> ((x) & 3))
+#define SHIFT		1
 
 #define	CTRL_FIRE	0x10
 #define	CTRL_DIR	0x0f

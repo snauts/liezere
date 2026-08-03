@@ -283,7 +283,7 @@ static void clear_screen(void) {
 }
 
 static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
-    byte shift = x & BP8_BP4(7, 3);
+    byte shift = x & (7 >> SHIFT);
 #if defined(C64)
     for (byte i = 0; i < n; i++) {
 	byte data = *addr++;
@@ -293,7 +293,7 @@ static void draw_symbol(const byte *addr, byte x, byte y, byte n) {
 	y++;
     }
 #else
-    byte offset = x >> BP8_BP4(3, 2);
+    byte offset = x >> (3 - SHIFT);
     for (byte i = 0; i < n; i++) {
 	byte data = *addr++;
 	byte *ptr = map_y[y + i] + offset;
@@ -533,7 +533,7 @@ static void animate_title_line(void) {
 #if defined(C64)
 	byte *ptr = map_y[y >> 3] + (y & 7) + (22 * 8);
 #else
-	byte *ptr = map_y[y] + BP8_BP4(22, 44);
+	byte *ptr = map_y[y] + (22 << SHIFT);
 #endif
 	*ptr ^= BP8_BP4(0x10, 0x11);
     }
@@ -818,7 +818,7 @@ static byte total_distance(void) {
 
 static void clear_weight(void) {
     for (byte y = 16; y < 24; y++) {
-	memset(map_y[y], 0, BP8_BP4(8, 16));
+	memset(map_y[y], 0, (8 << SHIFT));
     }
 }
 
@@ -1014,7 +1014,7 @@ static void starting_line(void) {
 }
 
 static byte *line_addr(byte y) {
-    return map_y[y] + BP8_BP4(16, 32);
+    return map_y[y] + (16 << SHIFT);
 }
 
 static void init_fishing_line(void) {
