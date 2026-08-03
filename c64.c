@@ -91,7 +91,7 @@ static byte in_joy(byte a) {
     BYTE(0xdc02) = 0x00;
     a = BYTE(0xdc00);
     BYTE(0xdc02) = 0xff;
-    return a;
+    return ~a;
 }
 
 static byte read_123(void) {
