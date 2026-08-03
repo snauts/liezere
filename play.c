@@ -1321,5 +1321,6 @@ void stop_music(void) {
 }
 
 void select_music(void *ptr) {
+    ptr;
 }
 #endif
