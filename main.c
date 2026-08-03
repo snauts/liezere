@@ -1327,7 +1327,8 @@ static void wait_and_update_seed(void) {
 }
 
 static void text_wall_color(void) {
-    reset_attributes(zxs(0x05) c64(0x30));
+    zxs(reset_attributes(0x05));
+    c64(reset_attributes(0x30));
     cpc(attributes(3, 0x4B));
 }
 
@@ -1381,6 +1382,7 @@ static byte show_stars(byte i, byte y) {
     static const char str[] = "&4&4&4";
     put_str(str + ((3 - rank) << 1), 196, y);
     zxs(attributes(((y & ~7) << 2) + 0x18, 0x46, 4));
+    c64(memset(color[y >> 3] + 0x18, 0x70, 4));
     text_mask = 0x0f;
     return rank;
 }
@@ -1412,9 +1414,10 @@ static void statistics(void) {
 
     clear_screen();
     text_mask = 0x0f;
-    reset_attributes(0x4);
     cpc(attributes(2, 0x59));
     cpc(attributes(3, 0x43));
+    zxs(reset_attributes(0x04));
+    c64(reset_attributes(0x50));
     show_text_series(stat_title);
     for (byte i = 0; i < STATS_COUNT; i++) {
 	const char *str = stat_strs[i];

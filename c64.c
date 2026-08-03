@@ -19,7 +19,7 @@
 #define	CTRL_UP		0x01
 
 #define reset_attributes(color) \
-    memset(COLOUR(0), color, 1000);
+    memset(COLOUR(0), color, 1000)
 
 void font_rom(void) {
     __asm__(".incbin \"font.rom\"");
