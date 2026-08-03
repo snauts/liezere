@@ -109,8 +109,27 @@ static byte read_QAOP(void) {
     return ~ret;
 }
 
+static const byte wheel[] = {
+    0x00, 0x0f, 0x04, 0x06, 0x03, 0x0b, 0x00, 0x08,
+    0x09, 0x06, 0x02, 0x06, 0x0b, 0x05, 0x06, 0x0c,
+};
+
+static byte fade_color(byte color) {
+    return wheel[color & 0xf] | (wheel[color >> 4] << 4);
+}
+
+static void fade_step(void) {
+    for (byte y = 0; y < 24; y++) {
+	byte *ptr = color[y];
+	for (byte x = 0; x < 32; x++, ptr++) {
+	    *ptr = fade_color(*ptr);
+	}
+    }
+}
+
 static void fade_out_screen(void) {
     for (byte i = 0; i < 8; i++) {
 	wait_vblank();
+	fade_step();
     }
 }
