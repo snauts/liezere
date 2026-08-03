@@ -1210,6 +1210,7 @@ static byte wait_pull(byte button, byte fast) {
 
     zxs(corner_color(0x7f));
     c64(corner_color(0x11));
+    cpc(hint_symbol(SYMBOL(8)));
     if (fast && ticks <= PULL_FAST) {
 	advance_time(SNAP_PENALTY);
 	moment_of_truth(FISH_SNAP);
