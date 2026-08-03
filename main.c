@@ -1187,6 +1187,7 @@ static void moment_of_weight(byte fish, byte weight) {
     hole_now->weight = weight;
     put_str(str, center(str), 64);
     zxs(attributes(0xe0, 5, 0x60));
+    c64(attributes(0x30, 7, 1));
     show_series(IMG_REPORT);
     draw_fish(fish);
 
