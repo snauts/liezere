@@ -1012,7 +1012,11 @@ static void starting_line(void) {
 }
 
 static byte *line_addr(byte y) {
+#if defined(C64)
+    return map_y[y >> 3] + (y & 7) + 128;
+#else
     return map_y[y] + (16 << SHIFT);
+#endif
 }
 
 static void init_fishing_line(void) {
