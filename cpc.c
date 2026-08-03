@@ -114,6 +114,7 @@ static byte in_key(byte a) {
     __asm__("di");
     a = cpc_key(a);
     __asm__("ei");
+    return a;
 }
 
 static byte in_joy(byte a) {

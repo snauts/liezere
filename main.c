@@ -150,10 +150,6 @@ static void setup_irq(byte base) {
 }
 #endif
 
-#if !defined(ZXS)
-#define out_fe(data)
-#endif
-
 static byte inc10(byte a) {
     return a + (((a & 0xf) == 0x9) ? 7 : 1);
 }
@@ -210,10 +206,10 @@ static void beep(byte p) {
     byte c = 0;
     vblank = 0;
     while (!vblank) {
-	out_fe((c >> 3) & 0x10);
+	zxs(out_fe((c >> 3) & 0x10));
 	c += p;
     }
-    out_fe(0x00);
+    zxs(out_fe(0x00));
 }
 
 static void swoosh(int8 f, int8 n, int8 s) {
@@ -267,7 +263,7 @@ static void precalculate(void) {
 }
 
 static void clear_screen(void) {
-    out_fe(0);
+    zxs(out_fe(0));
     cached = NULL;
 #if defined(ZXS)
     reset_attributes(0);
@@ -1151,7 +1147,7 @@ static void jerk_tip(byte *img, byte dir) {
 	reset_jerk();
     }
     else {
-	out_fe(dir ? 0x10 : 0);
+	zxs(out_fe(dir ? 0x10 : 0));
     }
     wait_vblank();
     draw_tip(img);
