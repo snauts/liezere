@@ -492,9 +492,9 @@ static void draw_image(byte *ptr, byte x, byte y) {
     }
 #else
     y = y << 3;
-
+    cpc(x = x << 1);
     for (byte i = 0; i < h; i++) {
-	byte *dst = map_y[y + i] + BP8_BP4(x, x << 1);
+	byte *dst = map_y[y + i] + x;
 	memcpy(dst, ptr, w);
 	ptr += w;
     }
