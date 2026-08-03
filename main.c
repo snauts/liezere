@@ -163,7 +163,7 @@ void memset(byte *ptr, byte data, word len) {
 }
 
 static void strcpy(char *dst, const char *src) {
-    do { *(dst++) = *(src++); } while (src[-1]);
+    do { *(dst++) = *(src++); } while (*(src - 1));
 }
 
 #if defined(__SDCC_z80)
