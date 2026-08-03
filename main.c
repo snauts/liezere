@@ -928,6 +928,8 @@ static void show_forest(void) {
     block_fill(0x70, 0xc0, 0xff);
     zxs(attributes(0x000, 0x28, 0x80));
     zxs(attributes(0x1c0, 0x7f, 0x140));
+    c64(attributes(0x01, 14, 10));
+    c64(attributes(0x03, 0, 3));
     show_series(horizonts);
     cpc(attributes(1, 0x46));
     cpc(attributes(3, 0x4B));
