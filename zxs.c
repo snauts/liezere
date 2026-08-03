@@ -1,5 +1,4 @@
 #define zxs(x)		(x)
-#define BP8_BP4(a, b)	(a)
 #define SETUP_STACK()	__asm__("ld sp, #0xfdfc")
 #define FONT_ADDRESS	PTR(0x3c00)
 #define IRQ_BASE	0xfe00

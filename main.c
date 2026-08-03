@@ -535,7 +535,7 @@ static void animate_title_line(void) {
 #else
 	byte *ptr = map_y[y] + (22 << SHIFT);
 #endif
-	*ptr ^= BP8_BP4(0x10, 0x11);
+	*ptr ^= SHIFT ? 0x11 : 0x10;
     }
 }
 
@@ -1009,7 +1009,7 @@ static void draw_tip(byte *ptr) {
 
 static void starting_line(void) {
     for (byte y = 16; y < 152; y += 4) {
-	PIXEL(128, y) ^= BP8_BP4(0x80, 0x08);
+	PIXEL(128, y) ^= SHIFT ? 0x08 : 0x80;
     }
 }
 
@@ -1034,7 +1034,11 @@ static void fishing_line(void) {
     byte i = 0;
     byte **ptr = line;
     while (*ptr != NULL) {
-	**(ptr++) ^= BP8_BP4(0x80, i++ < 68 ? 0x08 : 0x88);
+#if defined(CPC)
+	**(ptr++) ^= i++ < 68 ? 0x08 : 0x88;
+#else
+	**(ptr++) ^= 0x80;
+#endif
     }
 }
 

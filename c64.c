@@ -1,5 +1,4 @@
 #define c64(x)		(x)
-#define BP8_BP4(a, b)	(a)
 #define SETUP_STACK()	__asm__("ldx #0xff"); __asm__("txs");
 #define FONT_ADDRESS	(((byte *) &font_rom) - 0x100)
 
