@@ -86,7 +86,10 @@ static byte c64_read_key(byte row) {
 #define c64_key(row) c64_read_key((byte) ~row)
 
 static byte in_joy(byte a) {
-    return a;
+    BYTE(0xdc02) = 0x00;
+    byte state = BYTE(0xdc00);
+    BYTE(0xdc02) = 0xff;
+    return state;
 }
 
 static byte read_123(void) {
