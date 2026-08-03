@@ -1103,6 +1103,13 @@ static void clear_tip(void) {
 	ptr += 0x100;
     }
 #endif
+#if defined(C64)
+    BYTE(color[2] + 16) = 0x31;
+    byte *ptr = map_y[2] + 128;
+    for (byte i = 0; i < 8; i++) {
+	*(ptr++) = i & 3 ? 0x00 : 0x80;
+    }
+#endif
 #if defined(CPC)
     for (byte i = 16; i < 24; i++) {
 	BYTE(map_y[i] + 32) = i & 3 ? 0xff : 0xf7;
