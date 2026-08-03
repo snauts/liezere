@@ -21,6 +21,8 @@
 #define reset_attributes(color) \
     memset(COLOUR(0), color, 1000)
 
+#define corner_color(value) BYTE(color[22] + 30) = value
+
 void font_rom(void) {
     __asm__(".incbin \"font.rom\"");
 }

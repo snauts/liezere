@@ -428,7 +428,7 @@ static void hint_symbol(byte *sym) {
     if (hints) {
 	corner_symbol(sym);
 	zxs(corner_color(0x78));
-	c64(*(color[22] + 30) = 0x01);
+	c64(corner_color(0x01));
     }
 }
 
@@ -1209,6 +1209,7 @@ static byte wait_pull(byte button, byte fast) {
     byte ticks = wait_button(button, button, PULL_SLOW);
 
     zxs(corner_color(0x7f));
+    c64(corner_color(0x11));
     if (fast && ticks <= PULL_FAST) {
 	advance_time(SNAP_PENALTY);
 	moment_of_truth(FISH_SNAP);
