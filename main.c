@@ -76,6 +76,11 @@ extern const byte symbols[];
 #define DISABLE_IRQ()	__asm__ ("sei");
 #endif
 
+static void wait_vblank(void) {
+    vblank = 0;
+    while (!vblank) { }
+}
+
 #if defined(ZXS)
 #include "zxs.c"
 #else
@@ -144,11 +149,6 @@ static void setup_irq(byte base) {
     __asm__("ei");
 }
 #endif
-
-static void wait_vblank(void) {
-    vblank = 0;
-    while (!vblank) { }
-}
 
 #if !defined(ZXS)
 #define out_fe(data)
