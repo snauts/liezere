@@ -135,3 +135,7 @@ static byte read_QAOP(void) {
     ret |= ((cpc_key(0x1) & 0x01) | (dir & 0x02)) << 2;
     return ~ret;
 }
+
+static void block_fill(byte y1, byte y2, byte color) {
+    for (; y1 < y2; y1++) memset(map_y[y1], color, 0x40);
+}

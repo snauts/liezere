@@ -913,19 +913,11 @@ static void walk_lake(void) {
     draw_cursor();
 }
 
-#if defined(CPC)
-static void block_fill(byte y1, byte y2, byte color) {
-    for (; y1 < y2; y1++) memset(map_y[y1], color, 0x40);
-}
-#else
-#define block_fill(y1, y2, color)
-#endif
-
 static void show_forest(void) {
     sky = 0xf0;
     clear_screen();
-    block_fill(0x00, 0x20, 0xf0);
-    block_fill(0x70, 0xc0, 0xff);
+    cpc(block_fill(0x00, 0x20, 0xf0));
+    cpc(block_fill(0x70, 0xc0, 0xff));
     zxs(attributes(0x000, 0x28, 0x80));
     zxs(attributes(0x1c0, 0x7f, 0x140));
     c64(attributes(0x01, 14, 10));
@@ -1279,11 +1271,13 @@ static byte pull_fish(void) {
 static byte ice_fish(void) {
     sky = 0xff;
     clear_screen();
-    reset_attributes(0x7d);
+    zxs(reset_attributes(0x7d));
     zxs(attributes(0x00, 0x78, 0x20));
     decompress(COPENE1, IMG_COPENE(1)->img);
     decompress(COPENE2, IMG_COPENE(2)->img);
-    block_fill(0x00, 0xc0, 0xff);
+    c64(attributes(0x31, 0, 24));
+    c64(memset(color[0], 0x01, 5));
+    cpc(block_fill(0x00, 0xc0, 0xff));
     show_series(IMG_HOLE);
     cpc(attributes(1, 0x53));
     cpc(attributes(2, 0x4c));
