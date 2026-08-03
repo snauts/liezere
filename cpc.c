@@ -139,3 +139,16 @@ static byte read_QAOP(void) {
 static void block_fill(byte y1, byte y2, byte color) {
     for (; y1 < y2; y1++) memset(map_y[y1], color, 0x40);
 }
+
+static void fade_out_screen(void) {
+    for (byte i = 0; i < 8; i++) {
+	wait_vblank();
+	static const byte pal[] = {
+	    0x40, 0x40, 0x5E, 0x46, 0x56,
+	    0x58, 0x5C, 0x44, 0x54, 0x54,
+	};
+	cpc(attributes(1, pal[i + 0]));
+	cpc(attributes(2, pal[i + 1]));
+	cpc(attributes(3, pal[i + 2]));
+    }
+}

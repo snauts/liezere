@@ -1428,30 +1428,6 @@ static void statistics(void) {
     wait_space();
 }
 
-static void fade_out_screen(void) {
-    for (byte i = 0; i < 8; i++) {
-	wait_vblank();
-#if defined(ZXS)
-	for (word addr = 0x5800; addr < 0x5b00; addr++) {
-	    byte x = BYTE(addr);
-	    if (x & 0x07) x -= 0x01;
-	    if (x & 0x38) x -= 0x08;
-	    BYTE(addr) = x;
-	}
-#endif
-
-#if defined(CPC)
-	static const byte pal[] = {
-	    0x40, 0x40, 0x5E, 0x46, 0x56,
-	    0x58, 0x5C, 0x44, 0x54, 0x54,
-	};
-	cpc(attributes(1, pal[i + 0]));
-	cpc(attributes(2, pal[i + 1]));
-	cpc(attributes(3, pal[i + 2]));
-#endif
-    }
-}
-
 static void game_done(void) {
     fade_out_screen();
     text_mask = 0xff;

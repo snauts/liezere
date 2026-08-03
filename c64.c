@@ -108,3 +108,9 @@ static byte read_QAOP(void) {
     if (c64_key(BIT(5)) & BIT(1)) ret |= CTRL_RIGHT;
     return ~ret;
 }
+
+static void fade_out_screen(void) {
+    for (byte i = 0; i < 8; i++) {
+	wait_vblank();
+    }
+}

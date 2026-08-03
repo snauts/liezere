@@ -55,3 +55,15 @@ static byte read_QAOP(void) {
     ret |= (in_key(0xdf) & 3);
     return ~ret;
 }
+
+static void fade_out_screen(void) {
+    for (byte i = 0; i < 8; i++) {
+	wait_vblank();
+	for (word addr = 0x5800; addr < 0x5b00; addr++) {
+	    byte x = BYTE(addr);
+	    if (x & 0x07) x -= 0x01;
+	    if (x & 0x38) x -= 0x08;
+	    BYTE(addr) = x;
+	}
+    }
+}
