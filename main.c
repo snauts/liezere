@@ -407,7 +407,9 @@ static byte mask_sym(byte b, byte f) {
 }
 
 static void corner_symbol(byte *sym) {
-#if defined(ZXS)
+#if defined(C64)
+    memcpy(map_y[22] + 30 * 8, sym, 8);
+#elif defined(ZXS)
     for (byte *ptr = SCREEN(0x10de); ptr < SCREEN(0x1800); ptr += 0x100) {
 	*ptr = *sym++;
     }
@@ -426,6 +428,7 @@ static void hint_symbol(byte *sym) {
     if (hints) {
 	corner_symbol(sym);
 	zxs(corner_color(0x78));
+	c64(*(color[22] + 30) = 0x01);
     }
 }
 
