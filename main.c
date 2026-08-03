@@ -206,10 +206,12 @@ static void beep(byte p) {
     byte c = 0;
     vblank = 0;
     while (!vblank) {
+	c64(set_psg(0, (300 << p)));
 	zxs(out_fe((c >> 3) & 0x10));
 	c += p;
     }
-    zxs(out_fe(0x00));
+    c64(sound_off());
+    zxs(out_fe(0));
 }
 
 static void swoosh(int8 f, int8 n, int8 s) {
@@ -263,6 +265,7 @@ static void precalculate(void) {
 }
 
 static void clear_screen(void) {
+    c64(sound_off());
     zxs(out_fe(0));
     cached = NULL;
 #if defined(ZXS)
@@ -1147,9 +1150,11 @@ static void jerk_tip(byte *img, byte dir) {
 	reset_jerk();
     }
     else {
+	c64(set_psg(0, dir ? 100 : 200));
 	zxs(out_fe(dir ? 0x10 : 0));
     }
     wait_vblank();
+    c64(sound_off());
     draw_tip(img);
     fishing_line();
 }

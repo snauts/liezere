@@ -135,3 +135,15 @@ static void fade_out_screen(void) {
 	fade_step();
     }
 }
+
+static void sound_off(void) {
+    BYTE(0xd404) = 0x40;
+    BYTE(0xd40b) = 0x40;
+}
+
+static void set_psg(byte channel, word frequency) {
+    byte offset = channel ? 7 : 0;
+    BYTE(0xd400 + offset + 0) = frequency & 0xff;
+    BYTE(0xd400 + offset + 1) = frequency >> 8;
+    BYTE(0xd400 + offset + 4) = 0x41;
+}
