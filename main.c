@@ -817,9 +817,13 @@ static byte total_distance(void) {
 }
 
 static void clear_weight(void) {
+#if defined(C64)
+    memset(map_y[2], 0, 64);
+#else
     for (byte y = 16; y < 24; y++) {
 	memset(map_y[y], 0, (8 << SHIFT));
     }
+#endif
 }
 
 static void print_weight(byte weight) {
