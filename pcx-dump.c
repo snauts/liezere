@@ -219,12 +219,7 @@ static int ink_index(int i) {
 }
 
 static unsigned short encode_pixel(unsigned char a, unsigned char b) {
-#if defined(C64)
-    int test = a > b || (b == 1);
-#else
-    int test = a > b;
-#endif
-    return test ? (b << 8) | a : (a << 8) | b;
+    return a > b ? (b << 8) | a : (a << 8) | b;
 }
 
 #if defined(ZXS)
@@ -254,7 +249,11 @@ static unsigned char consume_pixels(unsigned char *buf, unsigned char on) {
 
 static unsigned short on_pixel(unsigned char *buf, int i, int w) {
     static unsigned char prev_n = 0x00;
+#if defined(C64)
+    static unsigned char prev_p = 0x01;
+#else
     static unsigned char prev_p = 0x47;
+#endif
     unsigned char pixel = buf[i];
     for (int y = 0; y < 8; y++) {
 	for (int x = 0; x < 8; x++) {
