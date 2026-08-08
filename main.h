@@ -3,7 +3,7 @@ typedef signed short int16;
 typedef unsigned char byte;
 typedef unsigned short word;
 
-#if defined(__SDCC_z80)
+#if defined(ZXS)
 #define AY
 #endif
 
