@@ -84,6 +84,7 @@ static void setup_system_amstrad_cpc(void) {
 
     cpc_psg(7, 0xB8);
     cpc_psg(8, 0x00);
+    cpc_psg(9, 0x00);
     sfx_on = false;
 }
 
@@ -159,12 +160,12 @@ static void fade_out_screen(void) {
 static void sound_fx(word period) {
     if (!sfx_on) {
 	silence_music();
-	cpc_psg(0x7, 0x3E);
-	cpc_psg(0x8, 0x0F);
+	cpc_psg(0x7, 0x3D);
+	cpc_psg(0x9, 0x0F);
 	sfx_on = true;
     }
-    cpc_psg(0, period & 0xff);
-    cpc_psg(1, period >> 8);
+    cpc_psg(2, period & 0xff);
+    cpc_psg(3, period >> 8);
 }
 
 static void sound_off(void) {

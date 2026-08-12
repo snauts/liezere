@@ -206,7 +206,7 @@ static void beep(byte p) {
     byte c = 0;
     vblank = 0;
     while (!vblank) {
-	cpc(sound_fx(300 << p));
+	cpc(sound_fx(50 << p));
 	c64(set_psg(0, (300 << p)));
 	zxs(out_fe((c >> 3) & 0x10));
 	c += p;
@@ -1153,7 +1153,7 @@ static void jerk_tip(byte *img, byte dir) {
     }
     else {
 	c64(set_psg(0, dir ? 100 : 200));
-	cpc(sound_fx(dir ? 2000 : 4000));
+	cpc(sound_fx(dir ? 1000 : 2000));
 	zxs(out_fe(dir ? 0x10 : 0));
     }
     wait_vblank();
