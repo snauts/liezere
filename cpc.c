@@ -70,6 +70,7 @@ static byte cpc_key(byte line) __naked {
     __asm__("ret");
 }
 
+static byte sfx_on;
 static void setup_system_amstrad_cpc(void) {
     __asm__("ld bc, #0xbc0c");
     __asm__("out (c), c");
@@ -83,6 +84,7 @@ static void setup_system_amstrad_cpc(void) {
 
     cpc_psg(7, 0xB8);
     cpc_psg(8, 0x00);
+    sfx_on = false;
 }
 
 static void font_rom(void) {
@@ -154,18 +156,21 @@ static void fade_out_screen(void) {
     }
 }
 
-static void sound_on(void) {
-    silence_music();
-    cpc_psg(0x7, 0x3E);
-    cpc_psg(0x8, 0x0F);
-}
-
 static void sound_fx(word period) {
+    if (!sfx_on) {
+	silence_music();
+	cpc_psg(0x7, 0x3E);
+	cpc_psg(0x8, 0x0F);
+	sfx_on = true;
+    }
     cpc_psg(0, period & 0xff);
     cpc_psg(1, period >> 8);
 }
 
 static void sound_off(void) {
-    cpc_psg(0x7, 0x3F);
-    resume_music();
+    if (sfx_on) {
+	sfx_on = false;
+	cpc_psg(0x7, 0x3F);
+	resume_music();
+    }
 }
