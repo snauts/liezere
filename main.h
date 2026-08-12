@@ -26,6 +26,8 @@ typedef unsigned short word;
 void put_diacritic(const byte *addr, byte x, byte y);
 void memset(byte *ptr, byte data, word len);
 void select_music(void *ptr);
+void silence_music(void);
+void resume_music(void);
 void stop_music(void);
 
 typedef struct {

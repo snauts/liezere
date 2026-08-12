@@ -153,3 +153,19 @@ static void fade_out_screen(void) {
 	cpc(attributes(3, pal[i + 2]));
     }
 }
+
+static void sound_on(void) {
+    silence_music();
+    cpc_psg(0x7, 0x3E);
+    cpc_psg(0x8, 0x0F);
+}
+
+static void sound_fx(word period) {
+    cpc_psg(0, period & 0xff);
+    cpc_psg(1, period >> 8);
+}
+
+static void sound_off(void) {
+    cpc_psg(0x7, 0x3F);
+    resume_music();
+}

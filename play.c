@@ -1320,6 +1320,12 @@ void select_music(void *ptr) {
 void stop_music(void) {
 }
 
+void silence_music(void) {
+}
+
+void resume_music(void) {
+}
+
 void select_music(void *ptr) {
     ptr;
 }
